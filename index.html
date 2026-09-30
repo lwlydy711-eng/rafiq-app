@@ -295,7 +295,7 @@ if(!d)return 0;
 let count=0;
 
 habits.forEach(h=>{
-if(d.done&&d.done[h.id])count++;
+if(d.done&&d.done[String(h.id)])count++;
 });
 
 if(!habits.length)return 0;
@@ -325,7 +325,7 @@ list.innerHTML="";
 
 habits.forEach(h=>{
 
-const checked=!!d.done[h.id];
+const checked=!!d.done[String(h.id)];
 
 const div=document.createElement("div");
 
@@ -350,12 +350,20 @@ document.getElementById("tomorrow").value=d.tomorrow||"";
 document.getElementById("rating").value=d.rating||0;
 }
 
+/* =========================
+   إصلاح حفظ العادات
+========================= */
+
 function toggleHabit(id,value){
 
 const key=keyDate();
 const d=ensureDay(key);
 
-d.done[id]=value;
+if(!d.done){
+d.done={};
+}
+
+d.done[String(id)]=Boolean(value);
 
 saveAll();
 
@@ -670,7 +678,7 @@ const percent=getPercent(key);
 const completed=
 habits
 .filter(
-h=>d.done&&d.done[h.id]
+h=>d.done&&d.done[String(h.id)]
 )
 .map(h=>h.name);
 
@@ -1635,7 +1643,7 @@ days.forEach(day=>{
 if(
 day.data&&
 day.data.done&&
-day.data.done[h.id]
+day.data.done[String(h.id)]
 ){
 
 done++;
@@ -1887,8 +1895,6 @@ goalAverage+
 
 let planSteps=[];
 
-/* الخطوة الأولى */
-
 if(recurringWeakness){
 
 let action=
@@ -1953,8 +1959,6 @@ habits[0].name+
 
 }
 
-/* الخطوة الثانية */
-
 let secondHabit=null;
 
 if(weakest){
@@ -1994,8 +1998,6 @@ secondHabit.name+
 
 }
 
-/* الخطوة الثالثة */
-
 if(goals.length){
 
 const nextGoal=
@@ -2028,10 +2030,6 @@ text:
 
 planSteps=
 planSteps.slice(0,3);
-
-/* =========================
-   حفظ الخطة مع حالة الإنجاز
-========================= */
 
 const currentPlan=
 saveDailyPlan(planSteps);
@@ -2186,7 +2184,6 @@ document.getElementById("aiResult").innerHTML=`
 
 </div>
 
-
 <div class="aiSection">
 
 <h3>📈 تقدمك يومًا بيوم</h3>
@@ -2204,7 +2201,6 @@ ${days.map(d=>`
 `).join("")}
 
 </div>
-
 
 <div class="aiSection">
 
@@ -2234,7 +2230,6 @@ ${strongest.done} من 7 أيام
 
 </div>
 
-
 <div class="aiSection">
 
 <h3>⚠️ ما يحتاج اهتمامًا</h3>
@@ -2262,7 +2257,6 @@ ${weakest.done} من 7 أيام
 }
 
 </div>
-
 
 <div class="aiSection">
 
@@ -2307,7 +2301,6 @@ ${g.progress}%
 }
 
 </div>
-
 
 <div class="aiSection">
 
@@ -2384,7 +2377,6 @@ ${lastTomorrowItem?lastTomorrowItem.date:""}
 
 </div>
 
-
 <div class="aiSection">
 
 <h3>🗓️ خطة رفيق لليوم</h3>
@@ -2397,7 +2389,6 @@ ${lastTomorrowItem?lastTomorrowItem.date:""}
 
 </div>
 
-
 <div class="aiSection">
 
 <h3>💡 توصية رفيق اليوم</h3>
@@ -2407,7 +2398,6 @@ ${escapeHTML(advice)}
 </div>
 
 </div>
-
 
 <div class="aiSection">
 
