@@ -7,367 +7,300 @@
 
 <style>
 *{box-sizing:border-box}
-
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f5f7f6;
-color:#17252f;
+  margin:0;
+  font-family:Arial,"Tahoma",sans-serif;
+  background:#f4f7f5;
+  color:#172b24;
 }
-
 header{
-background:#075b4d;
-color:white;
-padding:25px 18px;
-border-radius:0 0 25px 25px;
+  background:#073b32;
+  color:white;
+  padding:18px 15px;
+  text-align:center;
+  position:sticky;
+  top:0;
+  z-index:10;
 }
-
-h1{margin:0 0 6px;font-size:28px}
-header p{margin:0;opacity:.85}
+header h1{margin:0;font-size:23px}
+header p{margin:6px 0 0;color:#d8e8e2;font-size:13px}
 
 main{
-padding:18px;
-padding-bottom:95px;
+  max-width:700px;
+  margin:auto;
+  padding:15px 15px 90px;
 }
+
+.page{display:none}
+.page.active{display:block}
 
 .card{
-background:white;
-border-radius:18px;
-padding:18px;
-margin-bottom:15px;
-box-shadow:0 3px 12px #0000000d;
+  background:white;
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 3px 14px rgba(0,0,0,.06);
 }
 
-.progress{
-height:12px;
-background:#e4e9e7;
-border-radius:20px;
-overflow:hidden;
-margin:8px 0;
+.title{
+  font-size:19px;
+  font-weight:bold;
+  margin-bottom:12px;
 }
 
-.bar{
-height:100%;
-background:#0b806d;
-width:0%;
-transition:.3s;
+.date{
+  text-align:center;
+  font-size:15px;
+  color:#557066;
+  margin-bottom:12px;
+}
+
+.progressBox{
+  background:#e8efec;
+  border-radius:20px;
+  height:13px;
+  overflow:hidden;
+  margin:10px 0;
+}
+.progressBar{
+  height:100%;
+  background:#087f5b;
+  width:0%;
+  transition:.3s;
+}
+
+.percent{
+  text-align:center;
+  font-size:28px;
+  font-weight:bold;
+  color:#087f5b;
 }
 
 .habit{
-display:flex;
-align-items:center;
-gap:12px;
-padding:13px 5px;
-border-bottom:1px solid #eee;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 5px;
+  border-bottom:1px solid #edf1ef;
+}
+.habit:last-child{border-bottom:0}
+
+.habit input{
+  width:22px;
+  height:22px;
+  accent-color:#087f5b;
 }
 
-.habit:last-child{border:0}
-
-.check{
-width:30px;
-height:30px;
-border:2px solid #0b806d;
-border-radius:9px;
-background:white;
-font-size:18px;
-padding:0;
-}
-
-.done .check{
-background:#0b806d;
-color:white;
-}
-
-.done .name{
-text-decoration:line-through;
-opacity:.55;
+.habit.done label{
+  text-decoration:line-through;
+  color:#7a8983;
 }
 
 button{
-border:0;
-border-radius:12px;
-padding:12px 16px;
-background:#075b4d;
-color:white;
-font-size:15px;
+  border:0;
+  border-radius:12px;
+  padding:11px 15px;
+  cursor:pointer;
+  font-size:14px;
+  background:#087f5b;
+  color:white;
+}
+button.secondary{
+  background:#e7efeb;
+  color:#17483b;
+}
+button.danger{
+  background:#b42318;
+}
+button.gold{
+  background:#b78a22;
 }
 
-button:active{transform:scale(.97)}
-
-.add{
-width:100%;
-margin-top:10px;
+input,select,textarea{
+  width:100%;
+  border:1px solid #d8e2de;
+  border-radius:11px;
+  padding:12px;
+  margin:6px 0 10px;
+  font-size:14px;
+  background:white;
 }
 
-nav{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:7px 2px;
-box-shadow:0 -3px 15px #0002;
-z-index:100;
-overflow-x:auto;
-}
+textarea{min-height:90px;resize:vertical}
 
-nav button{
-background:transparent;
-color:#555;
-padding:6px 3px;
-font-size:9px;
-min-width:55px;
+.formRow{
+  display:flex;
+  gap:8px;
 }
+.formRow>*{flex:1}
 
-nav button.active{
-color:#075b4d;
-font-weight:bold;
+.statGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
 }
-
 .stat{
-display:inline-block;
-width:48%;
-text-align:center;
-background:#f1f5f3;
-border-radius:15px;
-padding:15px;
-margin:1%;
+  background:#eef5f1;
+  border-radius:14px;
+  padding:14px;
+  text-align:center;
 }
-
-.big{
-font-size:28px;
-font-weight:bold;
-color:#075b4d;
+.stat strong{
+  display:block;
+  font-size:25px;
+  color:#087f5b;
+  margin-bottom:4px;
 }
-
-textarea,input,select{
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:12px;
-margin:7px 0;
-font-size:15px;
-background:white;
-}
-
-.hidden{display:none}
-
-.calendar-head{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:15px;
-}
-
-.calendar-head button{padding:9px 13px}
-
-.month-title{
-font-size:18px;
-font-weight:bold;
-}
-
-.calendar{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:5px;
-}
-
-.weekday{
-text-align:center;
-font-size:12px;
-font-weight:bold;
-color:#777;
-padding:6px 0;
-}
-
-.day{
-min-height:48px;
-border-radius:12px;
-background:#f5f7f6;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:14px;
-cursor:pointer;
-border:1px solid transparent;
-}
-
-.day.empty{
-background:transparent;
-cursor:default;
-}
-
-.day.today{
-border:2px solid #075b4d;
-font-weight:bold;
-}
-
-.day.green{background:#bfe8d9;color:#075b4d}
-.day.yellow{background:#fff0b8;color:#705800}
-.day.red{background:#ffd0d0;color:#9b2020}
-
-.legend{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:15px;
-font-size:12px;
-}
-
-.legend span{
-display:flex;
-align-items:center;
-gap:5px;
-}
-
-.dot{
-width:12px;
-height:12px;
-border-radius:50%;
-display:inline-block;
-}
-
-.dot.green{background:#66bd9e}
-.dot.yellow{background:#e8c84c}
-.dot.red{background:#e97979}
 
 .goal{
-background:#f7f9f8;
-border-radius:15px;
-padding:15px;
-margin-bottom:12px;
-border:1px solid #edf0ee;
+  padding:13px;
+  border:1px solid #e0e8e4;
+  border-radius:14px;
+  margin-bottom:10px;
 }
-
-.goal-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
+.goalTop{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
 }
-
-.goal-name{
-font-size:17px;
-font-weight:bold;
+.goalName{font-weight:bold}
+.goalCat{font-size:12px;color:#71827b}
+.goalProgress{
+  height:9px;
+  background:#e8efec;
+  border-radius:20px;
+  overflow:hidden;
+  margin:10px 0;
 }
-
-.goal-category{
-font-size:12px;
-background:#e5f2ee;
-color:#075b4d;
-padding:5px 9px;
-border-radius:8px;
-}
-
-.goal-progress{
-height:10px;
-background:#e3e8e6;
-border-radius:20px;
-overflow:hidden;
-margin:10px 0;
-}
-
-.goal-progress-bar{
-height:100%;
-background:#0b806d;
-}
-
-.goal-actions{
-display:flex;
-gap:7px;
-margin-top:10px;
-}
-
-.goal-actions button{
-padding:8px 10px;
-font-size:13px;
-}
-
-.delete{
-background:#9b2020;
+.goalProgress div{
+  height:100%;
+  background:#b78a22;
 }
 
 .reminder{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-background:#f7f9f8;
-border-radius:15px;
-padding:14px;
-margin-bottom:10px;
-border:1px solid #edf0ee;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid #edf1ef;
+  padding:12px 0;
+}
+.reminder:last-child{border-bottom:0}
+
+.aiBox{
+  background:linear-gradient(135deg,#073b32,#0b6250);
+  color:white;
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:14px;
+}
+.aiBox h2{margin-top:0}
+.aiSection{
+  background:white;
+  border-radius:16px;
+  padding:15px;
+  margin-bottom:12px;
+}
+.aiSection h3{
+  margin-top:0;
+  color:#087f5b;
+}
+.advice{
+  background:#fff8df;
+  border-right:4px solid #b78a22;
+  padding:13px;
+  border-radius:10px;
+  color:#554616;
 }
 
-.reminder-info{flex:1}
+.dayRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid #edf1ef;
+}
+.dayRow:last-child{border-bottom:0}
 
-.reminder-name{
-font-weight:bold;
-font-size:16px;
+.calendarGrid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+}
+.calHead{
+  text-align:center;
+  font-size:11px;
+  color:#74837d;
+  padding:5px 0;
+}
+.calDay{
+  min-height:45px;
+  border:1px solid #e2e9e6;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  background:white;
+  font-size:13px;
+}
+.calDay.hasData{
+  background:#e2f3ec;
+  border-color:#8ccbb7;
+}
+.calDay.today{
+  outline:2px solid #b78a22;
 }
 
-.reminder-time{
-color:#075b4d;
-font-size:13px;
-margin-top:4px;
+nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  border-top:1px solid #dfe8e4;
+  display:flex;
+  justify-content:center;
+  z-index:20;
+  overflow-x:auto;
+}
+nav button{
+  background:white;
+  color:#456057;
+  border-radius:0;
+  min-width:75px;
+  padding:9px 5px;
+  font-size:11px;
+}
+nav button.active{
+  color:#087f5b;
+  font-weight:bold;
+  background:#eef7f3;
 }
 
-.reminder-actions{
-display:flex;
-gap:5px;
-}
-
-.reminder-actions button{
-padding:7px 9px;
-font-size:12px;
-}
-
-.on{background:#0b806d}
-.off{background:#777}
-
-.ai-box{
-background:#eef8f4;
-border:1px solid #cde9df;
-border-radius:17px;
-padding:16px;
-margin-bottom:12px;
-}
-
-.ai-title{
-font-size:19px;
-font-weight:bold;
-color:#075b4d;
-margin-bottom:8px;
-}
-
-.ai-number{
-font-size:30px;
-font-weight:bold;
-color:#075b4d;
-}
-
-.ai-item{
-background:white;
-border-radius:13px;
-padding:12px;
-margin:8px 0;
-border-right:4px solid #0b806d;
-}
-
-.ai-warning{
-border-right-color:#e8a928;
-}
-
-.ai-success{
-border-right-color:#0b806d;
+.small{
+  font-size:12px;
+  color:#708078;
 }
 
 .empty{
-text-align:center;
-color:#777;
-padding:20px;
+  text-align:center;
+  color:#7b8984;
+  padding:15px;
+}
+
+.badge{
+  display:inline-block;
+  background:#e8f4ef;
+  color:#087f5b;
+  border-radius:20px;
+  padding:5px 9px;
+  font-size:12px;
+}
+
+@media(max-width:420px){
+  nav button{min-width:68px;font-size:10px}
+  .statGrid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -375,300 +308,219 @@ padding:20px;
 <body>
 
 <header>
-<h1>رفيق</h1>
-<p>متابعتي اليومية — خطوة صغيرة كل يوم</p>
+  <h1>رَفِيق</h1>
+  <p>متابعتي اليومية • دينك • صحتك • مستقبلك</p>
 </header>
 
 <main>
 
-<!-- يومي -->
-<section id="home">
+<!-- اليومي -->
+<section id="home" class="page active">
 
-<div class="card">
-<h2>🏠 يومي</h2>
-<p id="date"></p>
+  <div class="card">
+    <div class="title">📅 يومي</div>
+    <div class="date" id="todayText"></div>
 
-<p>
-نسبة الإنجاز:
-<b id="percent">0%</b>
-</p>
+    <div class="percent" id="todayPercent">0%</div>
+    <div class="progressBox">
+      <div class="progressBar" id="todayBar"></div>
+    </div>
 
-<div class="progress">
-<div class="bar" id="bar"></div>
-</div>
+    <div id="habitList"></div>
+  </div>
 
-<p>
-🔥 السلسلة الحالية:
-<b id="streak">0</b> يوم
-</p>
-</div>
+  <div class="card">
+    <div class="title">📝 مراجعة اليوم</div>
 
-<div class="card">
-<h3>✅ عادات اليوم</h3>
-<div id="habits"></div>
+    <label>ما الذي أنجزته اليوم؟</label>
+    <textarea id="achievement" placeholder="اكتب إنجازاتك..."></textarea>
 
-<button class="add" onclick="addHabit()">
-＋ إضافة عادة
-</button>
-</div>
+    <label>ما الذي يحتاج اهتمامًا؟</label>
+    <textarea id="weakness" placeholder="اكتب ما تحتاج تحسينه..."></textarea>
 
-<div class="card">
-<h3>📝 مراجعة اليوم</h3>
+    <label>ماذا ستفعل غدًا؟</label>
+    <textarea id="tomorrow" placeholder="اكتب خطتك للغد..."></textarea>
 
-<textarea id="achievement"
-placeholder="أهم إنجاز اليوم"></textarea>
+    <label>تقييم اليوم</label>
+    <select id="rating">
+      <option value="0">اختر التقييم</option>
+      <option value="1">⭐</option>
+      <option value="2">⭐⭐</option>
+      <option value="3">⭐⭐⭐</option>
+      <option value="4">⭐⭐⭐⭐</option>
+      <option value="5">⭐⭐⭐⭐⭐</option>
+    </select>
 
-<textarea id="weakness"
-placeholder="ما الذي قصّرت فيه؟"></textarea>
-
-<textarea id="tomorrow"
-placeholder="أهم مهمة غدًا"></textarea>
-
-<label>⭐ تقييم اليوم من 1 إلى 10</label>
-
-<input
-type="number"
-id="rating"
-min="1"
-max="10"
-placeholder="مثلاً: 8">
-
-<button onclick="saveReview()">
-حفظ المراجعة
-</button>
-</div>
+    <button onclick="saveReview()">💾 حفظ مراجعة اليوم</button>
+  </div>
 
 </section>
 
 
 <!-- التقويم -->
-<section id="calendar" class="hidden">
+<section id="calendar" class="page">
 
-<div class="card">
+  <div class="card">
+    <div class="title">📆 التقويم</div>
 
-<div class="calendar-head">
-<button onclick="changeMonth(-1)">‹</button>
-<div class="month-title" id="monthTitle"></div>
-<button onclick="changeMonth(1)">›</button>
-</div>
+    <div class="formRow">
+      <button class="secondary" onclick="changeMonth(-1)">الشهر السابق</button>
+      <button class="secondary" onclick="changeMonth(1)">الشهر التالي</button>
+    </div>
 
-<div class="calendar">
-<div class="weekday">الأحد</div>
-<div class="weekday">الإثنين</div>
-<div class="weekday">الثلاثاء</div>
-<div class="weekday">الأربعاء</div>
-<div class="weekday">الخميس</div>
-<div class="weekday">الجمعة</div>
-<div class="weekday">السبت</div>
-</div>
+    <h3 id="calendarTitle" style="text-align:center"></h3>
 
-<div class="calendar" id="calendarDays"></div>
+    <div class="calendarGrid" id="calendarGrid"></div>
+  </div>
 
-<div class="legend">
-<span><i class="dot green"></i> مكتمل</span>
-<span><i class="dot yellow"></i> متوسط</span>
-<span><i class="dot red"></i> ضعيف</span>
-</div>
+  <div class="card" id="selectedDay"></div>
 
-<div id="dayDetails"></div>
-
-</div>
 </section>
 
 
 <!-- الإحصائيات -->
-<section id="stats" class="hidden">
+<section id="stats" class="page">
 
-<div class="card">
+  <div class="card">
+    <div class="title">📊 الإحصائيات</div>
 
-<h2>📊 الإحصائيات</h2>
+    <div class="statGrid">
+      <div class="stat">
+        <strong id="statDays">0</strong>
+        أيام مسجلة
+      </div>
 
-<div class="stat">
-<div class="big" id="todayDone">0</div>
-عادات مكتملة
-</div>
+      <div class="stat">
+        <strong id="statAverage">0%</strong>
+        متوسط الإنجاز
+      </div>
 
-<div class="stat">
-<div class="big" id="todayTotal">0</div>
-عادات اليوم
-</div>
+      <div class="stat">
+        <strong id="statStreak">0</strong>
+        السلسلة الحالية
+      </div>
 
-<div class="stat">
-<div class="big" id="days">0</div>
-أيام مسجلة
-</div>
+      <div class="stat">
+        <strong id="statRating">0</strong>
+        متوسط التقييم
+      </div>
+    </div>
+  </div>
 
-<div class="stat">
-<div class="big" id="average">0%</div>
-متوسط الإنجاز
-</div>
-
-<div class="stat">
-<div class="big" id="bestStreak">0</div>
-أطول سلسلة
-</div>
-
-<div class="stat">
-<div class="big" id="ratingAverage">0</div>
-متوسط التقييم
-</div>
-
-</div>
-
-<div class="card">
-<h3>📈 أداء العادات</h3>
-<div id="habitStats"></div>
-</div>
+  <div class="card">
+    <div class="title">📈 آخر الأيام</div>
+    <div id="statsDays"></div>
+  </div>
 
 </section>
 
 
 <!-- الأهداف -->
-<section id="goals" class="hidden">
+<section id="goals" class="page">
 
-<div class="card">
+  <div class="card">
+    <div class="title">🎯 أهدافي</div>
 
-<h2>🎯 أهدافي</h2>
+    <input id="goalName" placeholder="اسم الهدف">
 
-<p>
-الأهداف التي أريد تحقيقها خطوة بخطوة.
-</p>
+    <select id="goalCategory">
+      <option value="ديني">1 ديني</option>
+      <option value="صحتي">2 صحتي</option>
+      <option value="مستقبلي">3 مستقبلي</option>
+      <option value="شخصي">4 شخصي</option>
+    </select>
 
-<button class="add" onclick="addGoal()">
-＋ إضافة هدف جديد
-</button>
+    <label>نسبة التقدم: <span id="goalProgressValue">0%</span></label>
+    <input id="goalProgress" type="range" min="0" max="100" value="0"
+           oninput="goalProgressValue.textContent=this.value+'%'">
 
-</div>
+    <button onclick="addGoal()">➕ إضافة هدف</button>
+  </div>
 
-<div class="card">
-<div id="goalsList"></div>
-</div>
+  <div id="goalList"></div>
 
 </section>
 
 
 <!-- رفيق الذكي -->
-<section id="ai" class="hidden">
+<section id="ai" class="page">
 
-<div class="card">
+  <div class="aiBox">
+    <h2>🤖 رفيق الذكي</h2>
+    <p>تحليل آخر 7 أيام من تقدمك وعاداتك وأهدافك.</p>
 
-<h2>🤖 رفيق الذكي</h2>
+    <button class="gold" onclick="analyzeAI()">
+      ✨ حلّل تقدمي الآن
+    </button>
+  </div>
 
-<p>
-تحليل بسيط مبني على بياناتك المحفوظة في التطبيق.
-</p>
-
-<button class="add" onclick="analyzeAI()">
-✨ حلّل تقدمي الآن
-</button>
-
-</div>
-
-<div id="aiResult"></div>
+  <div id="aiResult"></div>
 
 </section>
 
 
 <!-- التذكيرات -->
-<section id="reminders" class="hidden">
+<section id="reminders" class="page">
 
-<div class="card">
+  <div class="card">
+    <div class="title">🔔 التذكيرات</div>
 
-<h2>🔔 التذكيرات</h2>
+    <input id="reminderName" placeholder="اسم التذكير">
+    <input id="reminderTime" type="time">
 
-<p>
-أضف تذكيرًا لعاداتك ومهامك اليومية.
-</p>
+    <button onclick="addReminder()">➕ إضافة تذكير</button>
 
-<button class="add" onclick="addReminder()">
-＋ إضافة تذكير
-</button>
+    <button class="secondary" onclick="requestNotificationPermission()">
+      🔔 السماح بالإشعارات
+    </button>
+  </div>
 
-<button
-class="add"
-onclick="requestNotificationPermission()">
-🔔 تفعيل إشعارات الهاتف
-</button>
-
-</div>
-
-<div class="card">
-<div id="remindersList"></div>
-</div>
+  <div class="card">
+    <div id="reminderList"></div>
+  </div>
 
 </section>
 
 
 <!-- الإعدادات -->
-<section id="settings" class="hidden">
+<section id="settings" class="page">
 
-<div class="card">
+  <div class="card">
+    <div class="title">⚙️ الإعدادات</div>
 
-<h2>⚙️ الإعدادات</h2>
+    <button onclick="backupData()">📋 نسخ بياناتي</button>
 
-<p>العادات الحالية:</p>
+    <br><br>
 
-<div id="manage"></div>
+    <button class="danger" onclick="resetData()">
+      🗑️ إعادة ضبط البيانات
+    </button>
 
-<button class="add" onclick="addHabit()">
-＋ إضافة عادة جديدة
-</button>
-
-</div>
-
-<div class="card">
-
-<h3>💾 البيانات</h3>
-
-<p>بياناتك محفوظة على هذا الجهاز.</p>
-
-<button onclick="exportData()">
-نسخ احتياطي
-</button>
-
-<button
-onclick="resetData()"
-style="background:#9b2020">
-حذف البيانات
-</button>
-
-</div>
+    <p class="small">
+      بياناتك الحالية محفوظة على هذا الجهاز.
+    </p>
+  </div>
 
 </section>
 
 </main>
 
 
-<!-- القائمة -->
 <nav>
 
-<button class="active" onclick="show('home',this)">
-🏠<br>يومي
-</button>
+  <button onclick="show('home')" id="nav-home">🏠<br>يومي</button>
 
-<button onclick="show('calendar',this)">
-📅<br>التقويم
-</button>
+  <button onclick="show('calendar')" id="nav-calendar">📆<br>التقويم</button>
 
-<button onclick="show('stats',this)">
-📊<br>الإحصائيات
-</button>
+  <button onclick="show('stats')" id="nav-stats">📊<br>الإحصائيات</button>
 
-<button onclick="show('goals',this)">
-🎯<br>أهدافي
-</button>
+  <button onclick="show('goals')" id="nav-goals">🎯<br>أهدافي</button>
 
-<button onclick="show('ai',this)">
-🤖<br>رفيق الذكي
-</button>
+  <button onclick="show('ai')" id="nav-ai">🤖<br>رفيق الذكي</button>
 
-<button onclick="show('reminders',this)">
-🔔<br>التذكيرات
-</button>
+  <button onclick="show('reminders')" id="nav-reminders">🔔<br>التذكيرات</button>
 
-<button onclick="show('settings',this)">
-⚙️<br>الإعدادات
-</button>
+  <button onclick="show('settings')" id="nav-settings">⚙️<br>الإعدادات</button>
 
 </nav>
 
@@ -676,117 +528,41 @@ style="background:#9b2020">
 <script>
 
 /* =========================
-   العادات
+   البيانات
 ========================= */
 
 const defaults=[
-"الصلاة والعبادة",
-"القرآن 15 دقيقة",
-"المشي",
-"التمرين",
-"المحاسبة",
-"الذكاء الاصطناعي",
-"العمل",
-"النوم"
+  "الصلاة والعبادة",
+  "القرآن 15 دقيقة",
+  "المشي",
+  "التمرين",
+  "المحاسبة",
+  "الذكاء الاصطناعي",
+  "العمل",
+  "النوم"
 ];
 
-let oldHabits=
-JSON.parse(localStorage.getItem("habits")||"null");
-
-let habits=
-oldHabits||defaults.map((name,index)=>({
-id:"habit_"+Date.now()+"_"+index,
-name:name
+let habits=JSON.parse(localStorage.getItem("habits")||"null")||defaults.map((name,i)=>({
+  id:"h"+i+Date.now(),
+  name:name
 }));
 
-if(oldHabits && oldHabits.length &&
-typeof oldHabits[0]==="string"){
+let daily=JSON.parse(localStorage.getItem("daily")||"{}");
+let goals=JSON.parse(localStorage.getItem("goals")||"[]");
+let reminders=JSON.parse(localStorage.getItem("reminders")||"[]");
 
-habits=oldHabits.map((name,index)=>({
-id:"habit_old_"+index+"_"+Date.now(),
-name:name
-}));
-
-}
-
-
-/* =========================
-   البيانات اليومية
-========================= */
-
-let data=
-JSON.parse(localStorage.getItem("daily")||"{}");
-
-function localDateKey(date=new Date()){
-
-let y=date.getFullYear();
-let m=String(date.getMonth()+1).padStart(2,"0");
-let d=String(date.getDate()).padStart(2,"0");
-
-return `${y}-${m}-${d}`;
-}
-
-let today=localDateKey();
-
-function ensureDay(key){
-
-if(!data[key]){
-
-data[key]={
-done:[],
-achievement:"",
-weakness:"",
-tomorrow:"",
-rating:""
-};
-
-}
-
-}
-
-
-/* =========================
-   الأهداف
-========================= */
-
-let goals=
-JSON.parse(localStorage.getItem("goals")||"[]");
-
-
-/* =========================
-   التذكيرات
-========================= */
-
-let reminders=
-JSON.parse(localStorage.getItem("reminders")||"[]");
+let calendarDate=new Date();
 
 
 /* =========================
    الحفظ
 ========================= */
 
-function save(){
-
-localStorage.setItem(
-"habits",
-JSON.stringify(habits)
-);
-
-localStorage.setItem(
-"daily",
-JSON.stringify(data)
-);
-
-localStorage.setItem(
-"goals",
-JSON.stringify(goals)
-);
-
-localStorage.setItem(
-"reminders",
-JSON.stringify(reminders)
-);
-
+function saveAll(){
+  localStorage.setItem("habits",JSON.stringify(habits));
+  localStorage.setItem("daily",JSON.stringify(daily));
+  localStorage.setItem("goals",JSON.stringify(goals));
+  localStorage.setItem("reminders",JSON.stringify(reminders));
 }
 
 
@@ -794,276 +570,163 @@ JSON.stringify(reminders)
    التاريخ
 ========================= */
 
-document.getElementById("date").textContent=
-new Date().toLocaleDateString(
-"ar-YE",
-{
-weekday:"long",
-year:"numeric",
-month:"long",
-day:"numeric"
+function keyDate(d=new Date()){
+  return d.getFullYear()+"-"+
+    String(d.getMonth()+1).padStart(2,"0")+"-"+
+    String(d.getDate()).padStart(2,"0");
 }
-);
+
+function arabicDate(d=new Date()){
+  return d.toLocaleDateString("ar-YE",{
+    weekday:"long",
+    year:"numeric",
+    month:"long",
+    day:"numeric"
+  });
+}
+
+function ensureDay(key){
+  if(!daily[key]){
+    daily[key]={
+      done:{},
+      achievement:"",
+      weakness:"",
+      tomorrow:"",
+      rating:0
+    };
+  }
+  return daily[key];
+}
 
 
 /* =========================
    نسبة اليوم
 ========================= */
 
-function getDayPercent(key){
+function getPercent(key){
+  const d=daily[key];
 
-ensureDay(key);
+  if(!d)return 0;
 
-let total=habits.length;
+  let count=0;
 
-if(total===0)return 0;
+  habits.forEach(h=>{
+    if(d.done && d.done[h.id])count++;
+  });
 
-let done=data[key].done||[];
+  if(!habits.length)return 0;
 
-let valid=done.filter(id=>
-habits.some(h=>h.id===id)
-);
-
-return Math.round(valid.length/total*100);
+  return Math.round((count/habits.length)*100);
 }
 
 
 /* =========================
-   عرض التطبيق
+   الصفحة اليومية
 ========================= */
 
-function render(){
+function renderHome(){
 
-ensureDay(today);
+  const key=keyDate();
+  const d=ensureDay(key);
 
-let box=document.getElementById("habits");
+  document.getElementById("todayText").textContent=arabicDate();
 
-box.innerHTML="";
+  const percent=getPercent(key);
 
-habits.forEach(h=>{
+  document.getElementById("todayPercent").textContent=percent+"%";
+  document.getElementById("todayBar").style.width=percent+"%";
 
-let done=
-data[today].done.includes(h.id);
+  const list=document.getElementById("habitList");
 
-box.innerHTML+=`
+  list.innerHTML="";
 
-<div class="habit ${done?'done':''}">
+  habits.forEach(h=>{
 
-<button
-class="check"
-onclick="toggle('${h.id}')">
-${done?'✓':''}
-</button>
+    const checked=d.done[h.id]?"checked":"";
 
-<span class="name">
-${escapeHTML(h.name)}
-</span>
+    const div=document.createElement("div");
+    div.className="habit "+(checked?"done":"");
 
-</div>
+    div.innerHTML=`
+      <input type="checkbox" ${checked}
+        onchange="toggleHabit('${h.id}',this.checked)">
+      <label>${escapeHTML(h.name)}</label>
+    `;
 
-`;
+    list.appendChild(div);
+  });
 
-});
+  document.getElementById("achievement").value=d.achievement||"";
+  document.getElementById("weakness").value=d.weakness||"";
+  document.getElementById("tomorrow").value=d.tomorrow||"";
+  document.getElementById("rating").value=d.rating||0;
+}
 
 
-let total=habits.length;
+function toggleHabit(id,value){
 
-let doneCount=
-data[today].done.filter(id=>
-habits.some(h=>h.id===id)
-).length;
+  const key=keyDate();
 
-let p=total?
-Math.round(doneCount/total*100):0;
+  const d=ensureDay(key);
 
-document.getElementById("percent")
-.textContent=p+"%";
+  d.done[id]=value;
 
-document.getElementById("bar")
-.style.width=p+"%";
+  saveAll();
 
-document.getElementById("todayDone")
-.textContent=doneCount;
-
-document.getElementById("todayTotal")
-.textContent=total;
-
-document.getElementById("achievement")
-.value=data[today].achievement||"";
-
-document.getElementById("weakness")
-.value=data[today].weakness||"";
-
-document.getElementById("tomorrow")
-.value=data[today].tomorrow||"";
-
-document.getElementById("rating")
-.value=data[today].rating||"";
-
-document.getElementById("streak")
-.textContent=getCurrentStreak();
-
-renderManage();
-renderStats();
-renderGoals();
-renderReminders();
+  renderHome();
+  renderStats();
 
 }
 
 
 /* =========================
-   إكمال عادة
-========================= */
-
-function toggle(id){
-
-ensureDay(today);
-
-let a=data[today].done;
-
-let n=a.indexOf(id);
-
-if(n>=0){
-a.splice(n,1);
-}else{
-a.push(id);
-}
-
-save();
-render();
-
-}
-
-
-/* =========================
-   إضافة عادة
-========================= */
-
-function addHabit(){
-
-let n=prompt("اكتب اسم العادة الجديدة:");
-
-if(n&&n.trim()){
-
-habits.push({
-id:"habit_"+Date.now()+"_"+Math.random()
-.toString(36)
-.substring(2,8),
-name:n.trim()
-});
-
-save();
-render();
-
-}
-
-}
-
-
-/* =========================
-   حذف عادة
-========================= */
-
-function deleteHabit(id){
-
-let h=habits.find(x=>x.id===id);
-
-if(!h)return;
-
-if(confirm("هل تريد حذف عادة: "+h.name+" ؟")){
-
-habits=habits.filter(x=>x.id!==id);
-
-save();
-render();
-
-}
-
-}
-
-
-function renderManage(){
-
-document.getElementById("manage")
-.innerHTML=habits.map(h=>`
-
-<div class="habit">
-
-<span style="flex:1">
-${escapeHTML(h.name)}
-</span>
-
-<button
-class="delete"
-onclick="deleteHabit('${h.id}')">
-حذف
-</button>
-
-</div>
-
-`).join("");
-
-}
-
-
-/* =========================
-   المراجعة
+   مراجعة اليوم
 ========================= */
 
 function saveReview(){
 
-ensureDay(today);
+  const key=keyDate();
 
-data[today].achievement=
-document.getElementById("achievement").value;
+  const d=ensureDay(key);
 
-data[today].weakness=
-document.getElementById("weakness").value;
+  d.achievement=document.getElementById("achievement").value;
+  d.weakness=document.getElementById("weakness").value;
+  d.tomorrow=document.getElementById("tomorrow").value;
+  d.rating=Number(document.getElementById("rating").value);
 
-data[today].tomorrow=
-document.getElementById("tomorrow").value;
+  saveAll();
 
-let rating=
-Number(document.getElementById("rating").value);
+  alert("تم حفظ مراجعة اليوم ✅");
 
-if(rating>=1 && rating<=10){
-data[today].rating=rating;
-}else{
-data[today].rating="";
-}
-
-save();
-
-alert("تم حفظ مراجعة اليوم ✅");
-
-render();
-
+  renderStats();
 }
 
 
 /* =========================
-   التنقل
+   عرض الصفحات
 ========================= */
 
-function show(id,btn){
+function show(page){
 
-document.querySelectorAll("main section")
-.forEach(x=>x.classList.add("hidden"));
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
 
-document.getElementById(id)
-.classList.remove("hidden");
+  document.getElementById(page).classList.add("active");
 
-document.querySelectorAll("nav button")
-.forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll("nav button").forEach(b=>{
+    b.classList.remove("active");
+  });
 
-btn.classList.add("active");
+  const nav=document.getElementById("nav-"+page);
 
-if(id==="calendar")renderCalendar();
-if(id==="stats")renderStats();
-if(id==="goals")renderGoals();
-if(id==="ai")analyzeAI();
-if(id==="reminders")renderReminders();
+  if(nav)nav.classList.add("active");
 
+  if(page==="calendar")renderCalendar();
+  if(page==="stats")renderStats();
+  if(page==="goals")renderGoals();
+  if(page==="reminders")renderReminders();
+  if(page==="ai")analyzeAI();
 }
 
 
@@ -1071,173 +734,125 @@ if(id==="reminders")renderReminders();
    التقويم
 ========================= */
 
-let calendarDate=new Date();
+function changeMonth(n){
 
-function changeMonth(amount){
+  calendarDate.setMonth(calendarDate.getMonth()+n);
 
-calendarDate.setMonth(
-calendarDate.getMonth()+amount
-);
-
-renderCalendar();
-
+  renderCalendar();
 }
 
 
 function renderCalendar(){
 
-let title=
-document.getElementById("monthTitle");
+  const year=calendarDate.getFullYear();
+  const month=calendarDate.getMonth();
 
-let box=
-document.getElementById("calendarDays");
+  document.getElementById("calendarTitle").textContent=
+    calendarDate.toLocaleDateString("ar-YE",{
+      month:"long",
+      year:"numeric"
+    });
 
-if(!title||!box)return;
+  const grid=document.getElementById("calendarGrid");
 
-title.textContent=
-calendarDate.toLocaleDateString(
-"ar-YE",
-{
-month:"long",
-year:"numeric"
-}
-);
+  grid.innerHTML="";
 
-box.innerHTML="";
+  const names=["أحد","اثن","ثلا","أرب","خمي","جمع","سبت"];
 
-let year=calendarDate.getFullYear();
-let month=calendarDate.getMonth();
+  names.forEach(n=>{
+    const h=document.createElement("div");
+    h.className="calHead";
+    h.textContent=n;
+    grid.appendChild(h);
+  });
 
-let firstDay=
-new Date(year,month,1).getDay();
+  const first=new Date(year,month,1).getDay();
+  const days=new Date(year,month+1,0).getDate();
 
-let daysInMonth=
-new Date(year,month+1,0).getDate();
+  for(let i=0;i<first;i++){
+    const blank=document.createElement("div");
+    grid.appendChild(blank);
+  }
 
-for(let i=0;i<firstDay;i++){
+  for(let day=1;day<=days;day++){
 
-box.innerHTML+=
-`<div class="day empty"></div>`;
+    const d=new Date(year,month,day);
+    const key=keyDate(d);
 
-}
+    const cell=document.createElement("div");
 
-for(let day=1;day<=daysInMonth;day++){
+    cell.className="calDay";
 
-let date=
-new Date(year,month,day);
+    if(daily[key] && getPercent(key)>0){
+      cell.classList.add("hasData");
+    }
 
-let key=localDateKey(date);
+    if(key===keyDate()){
+      cell.classList.add("today");
+    }
 
-let p=getDayPercent(key);
+    cell.textContent=day;
 
-let cls="";
+    cell.onclick=()=>showSelectedDay(key);
 
-if(p>=80)cls="green";
-else if(p>=40)cls="yellow";
-else if(p>0)cls="red";
+    grid.appendChild(cell);
+  }
 
-let isToday=
-key===today?"today":"";
-
-box.innerHTML+=`
-
-<div
-class="day ${cls} ${isToday}"
-onclick="showDayDetails('${key}')">
-
-${day}
-
-</div>
-
-`;
-
-}
-
+  showSelectedDay(keyDate());
 }
 
 
-function showDayDetails(key){
+function showSelectedDay(key){
 
-ensureDay(key);
+  const box=document.getElementById("selectedDay");
 
-let box=
-document.getElementById("dayDetails");
+  const d=daily[key];
 
-let percent=getDayPercent(key);
+  if(!d){
 
-let done=data[key].done||[];
+    box.innerHTML=`
+      <div class="title">📅 ${key}</div>
+      <div class="empty">لا توجد بيانات لهذا اليوم.</div>
+    `;
 
-let completed=habits
-.filter(h=>done.includes(h.id));
+    return;
+  }
 
-let missing=habits
-.filter(h=>!done.includes(h.id));
+  const percent=getPercent(key);
 
-let dateText=
-new Date(key+"T12:00:00")
-.toLocaleDateString(
-"ar-YE",
-{
-weekday:"long",
-year:"numeric",
-month:"long",
-day:"numeric"
-}
-);
+  const completed=habits
+    .filter(h=>d.done && d.done[h.id])
+    .map(h=>h.name);
 
-box.innerHTML=`
+  box.innerHTML=`
+    <div class="title">📅 ${key}</div>
 
-<div class="card">
+    <p>
+      <span class="badge">
+        نسبة الإنجاز: ${percent}%
+      </span>
+    </p>
 
-<h3>📅 ${dateText}</h3>
+    <p><b>✅ العادات المكتملة</b></p>
 
-<p>
-نسبة الإنجاز:
-<strong>${percent}%</strong>
-</p>
+    <p>
+      ${completed.length
+        ? completed.map(escapeHTML).join("، ")
+        : "لا توجد"}
+    </p>
 
-<p>
-<b>✅ العادات المكتملة</b><br>
-${
-completed.length
-?completed.map(h=>escapeHTML(h.name)).join("، ")
-:"لا توجد"
-}
-</p>
+    <p><b>📝 الإنجاز</b></p>
+    <p>${escapeHTML(d.achievement||"لا يوجد")}</p>
 
-<p>
-<b>⭕ العادات غير المكتملة</b><br>
-${
-missing.length
-?missing.map(h=>escapeHTML(h.name)).join("، ")
-:"تم إكمال جميع العادات 🎉"
-}
-</p>
+    <p><b>⚠️ يحتاج اهتمامًا</b></p>
+    <p>${escapeHTML(d.weakness||"لا يوجد")}</p>
 
-<p>
-<b>📝 أهم إنجاز</b><br>
-${escapeHTML(data[key].achievement||"لم يتم تسجيله")}
-</p>
+    <p><b>🎯 غدًا</b></p>
+    <p>${escapeHTML(d.tomorrow||"لا يوجد")}</p>
 
-<p>
-<b>ما الذي قصّرت فيه؟</b><br>
-${escapeHTML(data[key].weakness||"لم يتم تسجيله")}
-</p>
-
-<p>
-<b>🎯 مهمة الغد</b><br>
-${escapeHTML(data[key].tomorrow||"لم يتم تسجيلها")}
-</p>
-
-<p>
-<b>⭐ تقييم اليوم:</b>
-${data[key].rating||"لم يتم التقييم"} / 10
-</p>
-
-</div>
-
-`;
-
+    <p><b>⭐ التقييم</b></p>
+    <p>${"⭐".repeat(Number(d.rating)||0)||"لا يوجد"}</p>
+  `;
 }
 
 
@@ -1247,190 +862,74 @@ ${data[key].rating||"لم يتم التقييم"} / 10
 
 function renderStats(){
 
-let dates=Object.keys(data);
+  const entries=Object.keys(daily)
+    .map(key=>({
+      key,
+      percent:getPercent(key),
+      rating:Number(daily[key].rating)||0
+    }))
+    .sort((a,b)=>a.key.localeCompare(b.key));
 
-let totalPercent=0;
-let recordedDays=0;
-let ratingTotal=0;
-let ratingCount=0;
+  const positive=entries.filter(x=>x.percent>0);
 
-dates.forEach(key=>{
+  const average=positive.length
+    ?Math.round(
+      positive.reduce((a,b)=>a+b.percent,0)/positive.length
+    )
+    :0;
 
-let p=getDayPercent(key);
+  const ratings=entries.filter(x=>x.rating>0);
 
-if(p>0){
+  const avgRating=ratings.length
+    ?(
+      ratings.reduce((a,b)=>a+b.rating,0)/ratings.length
+    ).toFixed(1)
+    :0;
 
-totalPercent+=p;
-recordedDays++;
+  const streak=getCurrentStreak();
 
+  document.getElementById("statDays").textContent=positive.length;
+  document.getElementById("statAverage").textContent=average+"%";
+  document.getElementById("statStreak").textContent=streak;
+  document.getElementById("statRating").textContent=avgRating;
+
+  const box=document.getElementById("statsDays");
+
+  const last=entries.slice(-7).reverse();
+
+  if(!last.length){
+    box.innerHTML='<div class="empty">لا توجد بيانات بعد.</div>';
+    return;
+  }
+
+  box.innerHTML=last.map(x=>`
+    <div class="dayRow">
+      <span>${x.key}</span>
+      <b>${x.percent}%</b>
+    </div>
+  `).join("");
 }
 
-let r=Number(data[key].rating);
-
-if(r>=1&&r<=10){
-
-ratingTotal+=r;
-ratingCount++;
-
-}
-
-});
-
-let average=
-recordedDays?
-Math.round(totalPercent/recordedDays):0;
-
-let ratingAverage=
-ratingCount?
-(ratingTotal/ratingCount).toFixed(1):0;
-
-document.getElementById("days")
-.textContent=recordedDays;
-
-document.getElementById("average")
-.textContent=average+"%";
-
-document.getElementById("ratingAverage")
-.textContent=ratingAverage;
-
-document.getElementById("bestStreak")
-.textContent=getBestStreak();
-
-}
-
-
-function renderHabitStats(){
-
-let box=
-document.getElementById("habitStats");
-
-if(!box)return;
-
-if(!habits.length){
-
-box.innerHTML=
-'<div class="empty">لا توجد عادات</div>';
-
-return;
-
-}
-
-box.innerHTML=habits.map(h=>{
-
-let recorded=0;
-let done=0;
-
-Object.keys(data).forEach(key=>{
-
-if(data[key].done){
-
-recorded++;
-
-if(data[key].done.includes(h.id)){
-done++;
-}
-
-}
-
-});
-
-let p=
-recorded?
-Math.round(done/recorded*100):0;
-
-return `
-
-<div class="habit">
-
-<span style="flex:1">
-${escapeHTML(h.name)}
-</span>
-
-<b>${p}%</b>
-
-</div>
-
-`;
-
-}).join("");
-
-}
-
-
-/* =========================
-   السلسلة
-========================= */
 
 function getCurrentStreak(){
 
-let streak=0;
-let d=new Date();
+  let count=0;
 
-while(true){
+  let d=new Date();
 
-let key=localDateKey(d);
+  while(true){
 
-if(getDayPercent(key)>0){
+    const key=keyDate(d);
 
-streak++;
+    if(getPercent(key)>0){
+      count++;
+      d.setDate(d.getDate()-1);
+    }else{
+      break;
+    }
+  }
 
-d.setDate(d.getDate()-1);
-
-}else{
-
-break;
-
-}
-
-if(streak>1000)break;
-
-}
-
-return streak;
-
-}
-
-
-function getBestStreak(){
-
-let keys=
-Object.keys(data)
-.filter(key=>getDayPercent(key)>0)
-.sort();
-
-if(!keys.length)return 0;
-
-let best=1;
-let current=1;
-
-for(let i=1;i<keys.length;i++){
-
-let previous=
-new Date(keys[i-1]+"T12:00:00");
-
-let currentDate=
-new Date(keys[i]+"T12:00:00");
-
-let diff=
-Math.round(
-(currentDate-previous)/86400000
-);
-
-if(diff===1){
-
-current++;
-best=Math.max(best,current);
-
-}else{
-
-current=1;
-
-}
-
-}
-
-return best;
-
+  return count;
 }
 
 
@@ -1438,173 +937,111 @@ return best;
    الأهداف
 ========================= */
 
-function addGoal(){
-
-let name=prompt(
-"ما اسم الهدف؟\nمثال: حفظ جزء عم"
-);
-
-if(!name||!name.trim())return;
-
-let category=prompt(
-"اختر التصنيف:\n1 ديني\n2 صحتي\n3 مستقبلي\n4 شخصي"
-);
-
-let categories={
-"1":"ديني",
-"2":"صحتي",
-"3":"مستقبلي",
-"4":"شخصي"
-};
-
-category=categories[category]||"شخصي";
-
-let target=prompt(
-"ما نسبة التقدم الحالية؟\nاكتب رقمًا من 0 إلى 100"
-);
-
-target=Number(target);
-
-if(isNaN(target))target=0;
-
-target=Math.max(
-0,
-Math.min(100,target)
-);
-
-goals.push({
-
-id:"goal_"+Date.now(),
-
-name:name.trim(),
-
-category:category,
-
-progress:target,
-
-created:localDateKey()
-
+document.getElementById("goalProgress").addEventListener("input",function(){
+  document.getElementById("goalProgressValue").textContent=this.value+"%";
 });
 
-save();
 
-renderGoals();
+function addGoal(){
 
-alert("تمت إضافة الهدف 🎯");
+  const name=document.getElementById("goalName").value.trim();
 
+  if(!name){
+    alert("اكتب اسم الهدف أولًا.");
+    return;
+  }
+
+  const category=document.getElementById("goalCategory").value;
+
+  const progress=Number(
+    document.getElementById("goalProgress").value
+  );
+
+  goals.push({
+    id:"goal"+Date.now(),
+    name,
+    category,
+    progress
+  });
+
+  saveAll();
+
+  document.getElementById("goalName").value="";
+  document.getElementById("goalProgress").value=0;
+  document.getElementById("goalProgressValue").textContent="0%";
+
+  renderGoals();
 }
 
 
 function renderGoals(){
 
-let box=
-document.getElementById("goalsList");
+  const box=document.getElementById("goalList");
 
-if(!box)return;
+  if(!goals.length){
+    box.innerHTML=`
+      <div class="card">
+        <div class="empty">لا توجد أهداف بعد.</div>
+      </div>
+    `;
+    return;
+  }
 
-if(!goals.length){
+  box.innerHTML=goals.map((g,i)=>`
 
-box.innerHTML=`
-<div class="empty">
-لا توجد أهداف حتى الآن.<br>
-ابدأ بإضافة أول هدف لك 🎯
-</div>
-`;
+    <div class="card goal">
 
-return;
+      <div class="goalTop">
 
-}
+        <div>
+          <div class="goalName">${escapeHTML(g.name)}</div>
+          <div class="goalCat">${escapeHTML(g.category)}</div>
+        </div>
 
-box.innerHTML=
-goals.map(g=>`
+        <b>${g.progress}%</b>
 
-<div class="goal">
+      </div>
 
-<div class="goal-top">
+      <div class="goalProgress">
+        <div style="width:${g.progress}%"></div>
+      </div>
 
-<div class="goal-name">
-${escapeHTML(g.name)}
-</div>
+      <button onclick="increaseGoal(${i})">
+        ➕ زيادة 5%
+      </button>
 
-<span class="goal-category">
-${escapeHTML(g.category)}
-</span>
+      <button class="danger" onclick="deleteGoal(${i})">
+        حذف
+      </button>
 
-</div>
+    </div>
 
-<p>
-التقدم:
-<b>${g.progress}%</b>
-</p>
-
-<div class="goal-progress">
-
-<div
-class="goal-progress-bar"
-style="width:${g.progress}%">
-</div>
-
-</div>
-
-<div class="goal-actions">
-
-<button onclick="increaseGoal('${g.id}')">
-＋ تقدم
-</button>
-
-<button
-class="delete"
-onclick="deleteGoal('${g.id}')">
-حذف
-</button>
-
-</div>
-
-</div>
-
-`).join("");
-
+  `).join("");
 }
 
 
-function increaseGoal(id){
+function increaseGoal(i){
 
-let goal=goals.find(g=>g.id===id);
+  goals[i].progress=Math.min(
+    100,
+    Number(goals[i].progress)+5
+  );
 
-if(!goal)return;
-
-let value=prompt(
-"اكتب نسبة التقدم الجديدة من 0 إلى 100",
-goal.progress
-);
-
-if(value===null)return;
-
-value=Number(value);
-
-if(isNaN(value))return;
-
-goal.progress=
-Math.max(0,Math.min(100,value));
-
-save();
-
-renderGoals();
-
+  saveAll();
+  renderGoals();
 }
 
 
-function deleteGoal(id){
+function deleteGoal(i){
 
-if(!confirm("هل تريد حذف هذا الهدف؟"))return;
+  if(confirm("هل تريد حذف هذا الهدف؟")){
 
-goals=
-goals.filter(g=>g.id!==id);
+    goals.splice(i,1);
 
-save();
+    saveAll();
 
-renderGoals();
-
+    renderGoals();
+  }
 }
 
 
@@ -1614,220 +1051,147 @@ renderGoals();
 
 function addReminder(){
 
-let name=prompt(
-"ما الذي تريد أن تتذكره؟\nمثال: قراءة القرآن"
-);
+  const name=document.getElementById("reminderName").value.trim();
+  const time=document.getElementById("reminderTime").value;
 
-if(!name||!name.trim())return;
+  if(!name || !time){
+    alert("أدخل اسم التذكير والوقت.");
+    return;
+  }
 
-let time=prompt(
-"اكتب وقت التذكير بصيغة 24 ساعة\nمثال: 06:30"
-);
+  reminders.push({
+    id:"rem"+Date.now(),
+    name,
+    time,
+    active:true,
+    lastTriggered:""
+  });
 
-if(!time)return;
+  saveAll();
 
-if(!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(time)){
+  document.getElementById("reminderName").value="";
+  document.getElementById("reminderTime").value="";
 
-alert("الوقت غير صحيح.\nاستخدم مثال: 06:30");
-
-return;
-
-}
-
-reminders.push({
-
-id:"reminder_"+Date.now(),
-
-name:name.trim(),
-
-time:time,
-
-active:true,
-
-lastTriggered:""
-
-});
-
-save();
-
-renderReminders();
-
-alert("تمت إضافة التذكير 🔔");
-
+  renderReminders();
 }
 
 
 function renderReminders(){
 
-let box=
-document.getElementById("remindersList");
+  const box=document.getElementById("reminderList");
 
-if(!box)return;
+  if(!reminders.length){
+    box.innerHTML='<div class="empty">لا توجد تذكيرات.</div>';
+    return;
+  }
 
-if(!reminders.length){
+  box.innerHTML=reminders.map((r,i)=>`
 
-box.innerHTML=`
-<div class="empty">
-لا توجد تذكيرات حتى الآن.<br>
-أضف أول تذكير لك 🔔
-</div>
-`;
+    <div class="reminder">
 
-return;
+      <div>
+        <b>${escapeHTML(r.name)}</b>
+        <div class="small">${r.time}</div>
+      </div>
 
-}
+      <div>
 
-box.innerHTML=
-reminders.map(r=>`
+        <button
+          class="${r.active?'':'secondary'}"
+          onclick="toggleReminder(${i})">
+          ${r.active?'مفعّل':'متوقف'}
+        </button>
 
-<div class="reminder">
+        <button class="danger" onclick="deleteReminder(${i})">
+          حذف
+        </button>
 
-<div class="reminder-info">
+      </div>
 
-<div class="reminder-name">
-${escapeHTML(r.name)}
-</div>
+    </div>
 
-<div class="reminder-time">
-⏰ ${escapeHTML(r.time)}
-</div>
-
-</div>
-
-<div class="reminder-actions">
-
-<button
-class="${r.active?'on':'off'}"
-onclick="toggleReminder('${r.id}')">
-${r.active?'تشغيل':'متوقف'}
-</button>
-
-<button
-class="delete"
-onclick="deleteReminder('${r.id}')">
-حذف
-</button>
-
-</div>
-
-</div>
-
-`).join("");
-
+  `).join("");
 }
 
 
-function toggleReminder(id){
+function toggleReminder(i){
 
-let r=
-reminders.find(x=>x.id===id);
+  reminders[i].active=!reminders[i].active;
 
-if(!r)return;
+  saveAll();
 
-r.active=!r.active;
-
-save();
-
-renderReminders();
-
+  renderReminders();
 }
 
 
-function deleteReminder(id){
+function deleteReminder(i){
 
-if(!confirm("هل تريد حذف هذا التذكير؟"))return;
+  reminders.splice(i,1);
 
-reminders=
-reminders.filter(r=>r.id!==id);
+  saveAll();
 
-save();
-
-renderReminders();
-
+  renderReminders();
 }
 
 
 function requestNotificationPermission(){
 
-if(!("Notification" in window)){
+  if(!("Notification" in window)){
+    alert("المتصفح لا يدعم الإشعارات.");
+    return;
+  }
 
-alert(
-"هذا المتصفح لا يدعم إشعارات الويب."
-);
+  Notification.requestPermission().then(p=>{
 
-return;
+    if(p==="granted"){
+      alert("تم السماح بالإشعارات ✅");
+    }else{
+      alert("لم يتم السماح بالإشعارات.");
+    }
 
-}
-
-Notification.requestPermission()
-.then(permission=>{
-
-if(permission==="granted"){
-
-alert("تم تفعيل الإشعارات 🔔");
-
-}else{
-
-alert("لم يتم السماح بالإشعارات.");
-
-}
-
-});
-
+  });
 }
 
 
 function checkReminders(){
 
-let now=new Date();
+  const now=new Date();
 
-let hh=
-String(now.getHours()).padStart(2,"0");
+  const time=
+    String(now.getHours()).padStart(2,"0")+":"+
+    String(now.getMinutes()).padStart(2,"0");
 
-let mm=
-String(now.getMinutes()).padStart(2,"0");
+  const today=keyDate();
 
-let current=hh+":"+mm;
+  reminders.forEach(r=>{
 
-let dateKey=localDateKey();
+    if(
+      r.active &&
+      r.time===time &&
+      r.lastTriggered!==today
+    ){
 
-reminders.forEach(r=>{
+      r.lastTriggered=today;
 
-if(
-r.active &&
-r.time===current &&
-r.lastTriggered!==dateKey+"_"+current
-){
+      if(
+        "Notification" in window &&
+        Notification.permission==="granted"
+      ){
 
-r.lastTriggered=
-dateKey+"_"+current;
+        new Notification(
+          "رفيق 🔔",
+          {
+            body:r.name
+          }
+        );
 
-save();
+      }
 
-if(
-"Notification" in window &&
-Notification.permission==="granted"
-){
+    }
 
-new Notification(
-"رفيق 🔔",
-{
-body:r.name
-}
-);
+  });
 
-}else{
-
-alert(
-"🔔 تذكير رفيق\n\n"+r.name
-);
-
-}
-
-}
-
-});
-
+  saveAll();
 }
 
 setInterval(checkReminders,30000);
@@ -1835,389 +1199,342 @@ setInterval(checkReminders,30000);
 
 /* =========================
    🤖 رفيق الذكي
+   تحليل آخر 7 أيام
 ========================= */
+
+function getLast7Days(){
+
+  const arr=[];
+
+  const today=new Date();
+
+  for(let i=6;i>=0;i--){
+
+    const d=new Date(today);
+
+    d.setDate(today.getDate()-i);
+
+    const key=keyDate(d);
+
+    arr.push({
+      key,
+      date:d,
+      percent:getPercent(key),
+      data:daily[key]||null
+    });
+
+  }
+
+  return arr;
+}
+
 
 function analyzeAI(){
 
-let box=
-document.getElementById("aiResult");
+  const days=getLast7Days();
 
-if(!box)return;
+  const recorded=days.filter(d=>d.percent>0);
 
-let todayPercent=getDayPercent(today);
+  const totalPercent=days.reduce(
+    (sum,d)=>sum+d.percent,
+    0
+  );
 
-let streak=getCurrentStreak();
+  const weeklyAverage=Math.round(totalPercent/7);
 
-let totalDays=0;
-let percentSum=0;
+  const recordedAverage=recorded.length
+    ?Math.round(
+      recorded.reduce((a,b)=>a+b.percent,0)/
+      recorded.length
+    )
+    :0;
 
-let ratingSum=0;
-let ratingCount=0;
+  const streak=getCurrentStreak();
 
-let habitCounts={};
+  const ratings=days
+    .filter(d=>d.data && Number(d.data.rating)>0)
+    .map(d=>Number(d.data.rating));
 
-habits.forEach(h=>{
-habitCounts[h.id]={
-name:h.name,
-done:0,
-days:0
-};
-});
+  const avgRating=ratings.length
+    ?(
+      ratings.reduce((a,b)=>a+b,0)/ratings.length
+    ).toFixed(1)
+    :0;
 
 
-Object.keys(data).forEach(key=>{
+  /* تحليل العادات */
 
-let p=getDayPercent(key);
+  const habitStats=habits.map(h=>{
 
-if(p>0){
+    let done=0;
 
-totalDays++;
-percentSum+=p;
+    days.forEach(day=>{
 
-}
+      if(
+        day.data &&
+        day.data.done &&
+        day.data.done[h.id]
+      ){
+        done++;
+      }
 
-let rating=Number(data[key].rating);
+    });
 
-if(rating>=1&&rating<=10){
+    return{
+      name:h.name,
+      done,
+      percent:Math.round((done/7)*100)
+    };
 
-ratingSum+=rating;
-ratingCount++;
+  });
 
-}
 
-if(data[key].done){
+  const strongest=[...habitStats]
+    .sort((a,b)=>b.percent-a.percent)[0];
 
-habits.forEach(h=>{
+  const weakest=[...habitStats]
+    .sort((a,b)=>a.percent-b.percent)[0];
 
-habitCounts[h.id].days++;
 
-if(data[key].done.includes(h.id)){
+  /* الأهداف */
 
-habitCounts[h.id].done++;
+  const goalAverage=goals.length
+    ?Math.round(
+      goals.reduce(
+        (sum,g)=>sum+Number(g.progress||0),
+        0
+      )/goals.length
+    )
+    :0;
 
-}
 
-});
+  /* الأيام */
 
-}
+  let trend="مستقر";
 
-});
+  if(days.length>=2){
 
+    const first=days.slice(0,3)
+      .reduce((a,b)=>a+b.percent,0)/3;
 
-let average=
-totalDays?
-Math.round(percentSum/totalDays):0;
+    const last=days.slice(-3)
+      .reduce((a,b)=>a+b.percent,0)/3;
 
-let ratingAverage=
-ratingCount?
-(ratingSum/ratingCount).toFixed(1):0;
+    if(last>first+5)trend="يتحسن";
+    else if(last<first-5)trend="يتراجع";
+  }
 
 
-let habitResults=
-Object.values(habitCounts)
-.map(h=>{
+  let advice="استمر على خطوات صغيرة وثابتة اليوم.";
 
-let p=
-h.days?
-Math.round(h.done/h.days*100):0;
+  if(weeklyAverage===0){
+    advice="ابدأ اليوم بعادة واحدة سهلة، ثم أضف عادة ثانية.";
+  }
+  else if(weeklyAverage<30){
+    advice="ركّز على 2–3 عادات أساسية بدل محاولة إنجاز كل شيء دفعة واحدة.";
+  }
+  else if(weeklyAverage<60){
+    advice="أداؤك يتحرك؛ حاول تثبيت العادات التي بدأت بها وزيادة عادة واحدة.";
+  }
+  else if(weeklyAverage<80){
+    advice="مستواك جيد؛ ركّز الآن على العادة الأضعف لرفع ثباتك.";
+  }
+  else{
+    advice="استمر بهذا الثبات، وحافظ على التوازن بين دينك وصحتك ومستقبلك.";
+  }
 
-return {
-name:h.name,
-percent:p
-};
 
-});
+  document.getElementById("aiResult").innerHTML=`
 
+    <div class="aiSection">
 
-let strongest=
-[...habitResults]
-.sort((a,b)=>b.percent-a.percent)[0];
+      <h3>📊 ملخص آخر 7 أيام</h3>
 
-let weakest=
-[...habitResults]
-.sort((a,b)=>a.percent-b.percent)[0];
+      <div class="statGrid">
 
+        <div class="stat">
+          <strong>${weeklyAverage}%</strong>
+          متوسط الأسبوع
+        </div>
 
-let goalAverage=0;
+        <div class="stat">
+          <strong>${recordedAverage}%</strong>
+          متوسط الأيام المسجلة
+        </div>
 
-if(goals.length){
+        <div class="stat">
+          <strong>${streak}</strong>
+          السلسلة الحالية
+        </div>
 
-goalAverage=Math.round(
-goals.reduce(
-(sum,g)=>sum+Number(g.progress||0),0
-)/goals.length
-);
+        <div class="stat">
+          <strong>${avgRating}</strong>
+          متوسط التقييم
+        </div>
 
-}
+      </div>
 
+      <p>
+        الاتجاه العام:
+        <b>${trend}</b>
+      </p>
 
-let advice="";
+      <p>
+        الأيام التي أنجزت فيها عادة واحدة على الأقل:
+        <b>${recorded.length} من 7</b>
+      </p>
 
-if(todayPercent===100){
+    </div>
 
-advice=
-"رائع جدًا! أكملت عادات اليوم بالكامل. حافظ على هذا الإيقاع.";
 
-}else if(todayPercent>=60){
+    <div class="aiSection">
 
-advice=
-"يومك جيد. ركّز على عادة أو عادتين متبقيتين قبل نهاية اليوم.";
+      <h3>📈 تقدمك يومًا بيوم</h3>
 
-}else if(todayPercent>0){
+      ${days.map(d=>`
 
-advice=
-"بدأت اليوم بشكل جيد. اختر عادة واحدة فقط وأكملها الآن.";
+        <div class="dayRow">
 
-}else{
+          <span>${d.key}</span>
 
-advice=
-"لم تسجل إنجازًا اليوم بعد. ابدأ بأصغر عادة ممكنة لمدة 5 دقائق.";
+          <b>${d.percent}%</b>
 
-}
+        </div>
 
+      `).join("")}
 
-let goalAdvice="";
+    </div>
 
-if(goals.length){
 
-if(goalAverage>=75){
+    <div class="aiSection">
 
-goalAdvice=
-"أهدافك في تقدم جيد. استمر بخطوات صغيرة وثابتة.";
+      <h3>💪 نقاط القوة</h3>
 
-}else if(goalAverage>0){
+      ${
+        strongest && strongest.done>0
+        ?`
+          <p>
+            أكثر عادة التزمت بها خلال الأسبوع:
+            <b>${escapeHTML(strongest.name)}</b>
+          </p>
 
-goalAdvice=
-"لديك أهداف بدأت فيها. خصص خطوة صغيرة يومية لأحد أهدافك.";
+          <span class="badge">
+            ${strongest.done} من 7 أيام
+            (${strongest.percent}%)
+          </span>
+        `
+        :
+        `<p>لم تظهر عادة ملتزم بها بشكل كافٍ خلال آخر 7 أيام.</p>`
+      }
 
-}else{
+    </div>
 
-goalAdvice=
-"لم تبدأ تقدم أهدافك بعد. اختر هدفًا واحدًا وابدأ بنسبة بسيطة.";
 
-}
+    <div class="aiSection">
 
-}else{
+      <h3>⚠️ ما يحتاج اهتمامًا</h3>
 
-goalAdvice=
-"أضف هدفًا واحدًا على الأقل حتى أستطيع متابعة تقدمك.";
+      ${
+        weakest
+        ?`
+          <p>
+            العادة التي تحتاج متابعة أكثر:
+            <b>${escapeHTML(weakest.name)}</b>
+          </p>
 
-}
+          <span class="badge">
+            ${weakest.done} من 7 أيام
+            (${weakest.percent}%)
+          </span>
+        `
+        :
+        `<p>لا توجد بيانات كافية بعد.</p>`
+      }
 
+    </div>
 
-box.innerHTML=`
 
-<div class="ai-box">
+    <div class="aiSection">
 
-<div class="ai-title">
-📊 ملخصك الحالي
-</div>
+      <h3>🎯 أهدافك</h3>
 
-<div class="stat">
-<div class="ai-number">${todayPercent}%</div>
-إنجاز اليوم
-</div>
+      ${
+        goals.length
+        ?
+        `
+          <p>
+            لديك <b>${goals.length}</b> هدفًا.
+          </p>
 
-<div class="stat">
-<div class="ai-number">${average}%</div>
-متوسط الإنجاز
-</div>
+          <p>
+            متوسط تقدم الأهداف:
+            <b>${goalAverage}%</b>
+          </p>
 
-<div class="stat">
-<div class="ai-number">${streak}</div>
-السلسلة الحالية
-</div>
+          ${goals.map(g=>`
+            <div class="dayRow">
+              <span>${escapeHTML(g.name)}</span>
+              <b>${g.progress}%</b>
+            </div>
+          `).join("")}
+        `
+        :
+        `<p>لم تضف أهدافًا بعد. يمكنك إضافة هدف من صفحة أهدافي.</p>`
+      }
 
-<div class="stat">
-<div class="ai-number">${ratingAverage}</div>
-متوسط التقييم
-</div>
+    </div>
 
-</div>
 
+    <div class="aiSection">
 
-<div class="ai-box">
+      <h3>💡 توصية رفيق اليوم</h3>
 
-<div class="ai-title">
-💪 نقاط القوة
-</div>
+      <div class="advice">
+        ${advice}
+      </div>
 
-<div class="ai-item ai-success">
+    </div>
 
-${
-strongest && strongest.percent>0
-?
-"أكثر عادة ملتزم بها حاليًا: <b>"+
-escapeHTML(strongest.name)+
-"</b> بنسبة <b>"+
-strongest.percent+
-"%</b>."
-:
-"لم تتوفر بيانات كافية لتحديد عادة قوية بعد."
-}
-
-</div>
-
-<div class="ai-item ai-success">
-
-🔥 السلسلة الحالية:
-<b>${streak}</b> يوم
-
-</div>
-
-</div>
-
-
-<div class="ai-box">
-
-<div class="ai-title">
-⚠️ ما يحتاج اهتمامًا
-</div>
-
-<div class="ai-item ai-warning">
-
-${
-weakest
-?
-"العادة التي تحتاج متابعة أكبر حاليًا: <b>"+
-escapeHTML(weakest.name)+
-"</b> بنسبة <b>"+
-weakest.percent+
-"%</b>."
-:
-"أضف بعض العادات وسأبدأ بتحليلها."
-}
-
-</div>
-
-</div>
-
-
-<div class="ai-box">
-
-<div class="ai-title">
-🎯 أهدافك
-</div>
-
-<div class="ai-item">
-
-عدد الأهداف:
-<b>${goals.length}</b>
-
-<br><br>
-
-متوسط تقدم الأهداف:
-<b>${goalAverage}%</b>
-
-</div>
-
-<div class="ai-item ai-success">
-
-${goalAdvice}
-
-</div>
-
-</div>
-
-
-<div class="ai-box">
-
-<div class="ai-title">
-💡 توصية رفيق اليوم
-</div>
-
-<div class="ai-item ai-success">
-
-${advice}
-
-</div>
-
-<div class="ai-item">
-
-🎯 اقتراح عملي:
-اختر <b>مهمة واحدة</b> فقط الآن، وأنجزها قبل الانتقال إلى المهمة التالية.
-
-</div>
-
-</div>
-
-`;
-
+  `;
 }
 
 
 /* =========================
-   النسخ الاحتياطي
+   الإعدادات
 ========================= */
 
-function exportData(){
+function backupData(){
 
-let backup={
+  const backup={
+    habits,
+    daily,
+    goals,
+    reminders,
+    date:new Date().toISOString()
+  };
 
-habits:habits,
+  const text=JSON.stringify(backup,null,2);
 
-daily:data,
-
-goals:goals,
-
-reminders:reminders,
-
-exportedAt:new Date().toISOString()
-
-};
-
-let text=
-JSON.stringify(
-backup,
-null,
-2
-);
-
-if(
-navigator.clipboard &&
-navigator.clipboard.writeText
-){
-
-navigator.clipboard.writeText(text)
-.then(()=>alert(
-"تم نسخ بياناتك الاحتياطية ✅"
-))
-.catch(()=>{
-prompt(
-"انسخ البيانات واحفظها:",
-text
-);
-});
-
-}else{
-
-prompt(
-"انسخ البيانات واحفظها:",
-text
-);
-
+  navigator.clipboard.writeText(text)
+    .then(()=>{
+      alert("تم نسخ بياناتك 📋");
+    })
+    .catch(()=>{
+      alert("تعذر النسخ التلقائي.");
+    });
 }
 
-}
-
-
-/* =========================
-   حذف البيانات
-========================= */
 
 function resetData(){
 
-if(!confirm(
-"تحذير: سيتم حذف جميع العادات والمراجعات والأهداف والتذكيرات والإحصائيات. هل أنت متأكد؟"
-))return;
+  if(!confirm("هل أنت متأكد من حذف بياناتك؟"))return;
 
-localStorage.removeItem("habits");
-localStorage.removeItem("daily");
-localStorage.removeItem("goals");
-localStorage.removeItem("reminders");
+  localStorage.removeItem("habits");
+  localStorage.removeItem("daily");
+  localStorage.removeItem("goals");
+  localStorage.removeItem("reminders");
 
-location.reload();
-
+  location.reload();
 }
 
 
@@ -2227,27 +1544,26 @@ location.reload();
 
 function escapeHTML(text){
 
-return String(text)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
+  return String(text||"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 
 /* =========================
-   التشغيل
+   تشغيل التطبيق
 ========================= */
 
-ensureDay(today);
+document.getElementById("nav-home").classList.add("active");
 
-save();
-
-render();
-
-analyzeAI();
+renderHome();
+renderCalendar();
+renderStats();
+renderGoals();
+renderReminders();
 
 </script>
 
