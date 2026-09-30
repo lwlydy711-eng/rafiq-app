@@ -247,6 +247,21 @@ textarea{
   border-radius:20px;
 }
 
+.planProgressBox{
+  background:#e8efec;
+  border-radius:20px;
+  height:10px;
+  overflow:hidden;
+  margin:10px 0 14px;
+}
+
+.planProgressBar{
+  height:100%;
+  background:#087f5b;
+  width:0%;
+  transition:.3s;
+}
+
 .planStep{
   display:flex;
   align-items:center;
@@ -288,6 +303,23 @@ textarea{
   text-align:center;
   font-weight:bold;
   margin-top:10px;
+}
+
+.planRemaining{
+  background:#fff8df;
+  color:#554616;
+  padding:10px;
+  border-radius:10px;
+  font-size:13px;
+  margin-top:10px;
+}
+
+.memoryPlan{
+  padding:10px;
+  background:#f5f8f6;
+  border-radius:10px;
+  margin-top:8px;
+  line-height:1.7;
 }
 
 .dayRow{
@@ -734,7 +766,8 @@ JSON.parse(localStorage.getItem("rafiqMemory")||"null")
   tomorrowHistory:[],
   achievementHistory:[],
   adviceHistory:[],
-  dailyPlans:[]
+  dailyPlans:[],
+  planHistory:[]
 };
 
 if(!Array.isArray(rafiqMemory.weaknessHistory))
@@ -751,6 +784,9 @@ if(!Array.isArray(rafiqMemory.adviceHistory))
 
 if(!Array.isArray(rafiqMemory.dailyPlans))
   rafiqMemory.dailyPlans=[];
+
+if(!Array.isArray(rafiqMemory.planHistory))
+  rafiqMemory.planHistory=[];
 
 let calendarDate=new Date();
 
@@ -1147,6 +1183,81 @@ function getTrend(){
   return "stable";
 }
 
+function getDailyPlan(key){
+
+  return rafiqMemory.dailyPlans.find(
+    x=>x.date===key
+  )||null;
+}
+
+function getPlanProgress(plan){
+
+  if(
+    !plan ||
+    !Array.isArray(plan.steps) ||
+    !plan.steps.length
+  ){
+    return {
+      completed:0,
+      total:0,
+      percent:0,
+      remaining:0,
+      complete:false
+    };
+  }
+
+  const total=plan.steps.length;
+
+  const completed=
+    plan.steps.filter(s=>s.done).length;
+
+  return {
+    completed,
+    total,
+    percent:Math.round(completed/total*100),
+    remaining:total-completed,
+    complete:completed===total
+  };
+}
+
+function archiveCompletedPlan(key){
+
+  const plan=getDailyPlan(key);
+
+  if(!plan || !Array.isArray(plan.steps))
+    return;
+
+  const progress=getPlanProgress(plan);
+
+  if(!progress.complete)
+    return;
+
+  const exists=
+    rafiqMemory.planHistory.some(
+      x=>x.date===key
+    );
+
+  if(!exists){
+
+    rafiqMemory.planHistory.push({
+      date:key,
+      steps:plan.steps.map(s=>({
+        text:s.text,
+        done:true
+      })),
+      completed:progress.completed,
+      total:progress.total,
+      percent:100,
+      completedAt:new Date().toISOString()
+    });
+
+    rafiqMemory.planHistory=
+      rafiqMemory.planHistory.slice(-30);
+
+    saveAll();
+  }
+}
+
 function upsertDailyPlan(key,steps,reason){
 
   steps=steps
@@ -1156,6 +1267,7 @@ function upsertDailyPlan(key,steps,reason){
   const unique=[];
 
   steps.forEach(step=>{
+
     const k=normalizeArabic(step);
 
     if(
@@ -1165,6 +1277,7 @@ function upsertDailyPlan(key,steps,reason){
     ){
       unique.push(step);
     }
+
   });
 
   steps=unique.slice(0,3);
@@ -1206,7 +1319,9 @@ function upsertDailyPlan(key,steps,reason){
         id:i+1,
         text,
         done:false
-      }))
+      })),
+
+      createdAt:new Date().toISOString()
 
     };
 
@@ -1222,11 +1337,37 @@ function upsertDailyPlan(key,steps,reason){
   return plan;
 }
 
-function getDailyPlan(key){
+function togglePlanStep(index){
 
-  return rafiqMemory.dailyPlans.find(
-    x=>x.date===key
-  )||null;
+  const plan=getDailyPlan(todayKey());
+
+  if(!plan || !plan.steps[index])
+    return;
+
+  plan.steps[index].done=
+    !plan.steps[index].done;
+
+  saveAll();
+
+  const progress=getPlanProgress(plan);
+
+  if(progress.complete){
+
+    archiveCompletedPlan(todayKey());
+
+    renderAIPlan();
+
+    setTimeout(()=>{
+      alert(
+        "🎉 أحسنت يا رفيق! أكملت خطة اليوم بالكامل."
+      );
+    },50);
+
+  }else{
+
+    renderAIPlan();
+
+  }
 }
 
 function buildDailyPlan(
@@ -1411,34 +1552,22 @@ function buildDailyPlan(
   );
 }
 
-function togglePlanStep(index){
-
-  const plan=getDailyPlan(todayKey());
-
-  if(!plan || !plan.steps[index])return;
-
-  plan.steps[index].done=
-    !plan.steps[index].done;
-
-  saveAll();
-
-  renderAIPlan();
-}
-
 function renderAIPlan(){
 
   const plan=getDailyPlan(todayKey());
 
-  if(!plan || !plan.steps || !plan.steps.length)
+  if(
+    !plan ||
+    !plan.steps ||
+    !plan.steps.length
+  ){
     return "";
+  }
 
-  const completed=
-    plan.steps.filter(s=>s.done).length;
+  const progress=
+    getPlanProgress(plan);
 
-  const total=plan.steps.length;
-
-  const allDone=
-    completed===total;
+  const percent=progress.percent;
 
   return `
     <div class="aiSection">
@@ -1448,10 +1577,25 @@ function renderAIPlan(){
         <h3>📋 خطة رفيق لليوم</h3>
 
         <span class="planProgress">
-          ${completed}/${total}
+          ${progress.completed}/${progress.total}
         </span>
 
       </div>
+
+      <div class="planProgressBox">
+
+        <div
+          class="planProgressBar"
+          style="width:${percent}%"
+        ></div>
+
+      </div>
+
+      <div class="small">
+        إنجاز الخطة: ${percent}%
+      </div>
+
+      <br>
 
       <div class="planReason">
         ${esc(plan.reason||"")}
@@ -1478,12 +1622,15 @@ function renderAIPlan(){
       </div>
 
       ${
-        allDone
+        progress.complete
         ?
         `<div class="planComplete">
-          🎉 أحسنت! أكملت خطة رفيق لليوم.
+          🎉 أحسنت! أكملت خطة رفيق لليوم بالكامل.
         </div>`
-        :""
+        :
+        `<div class="planRemaining">
+          ⏳ متبقي لك ${progress.remaining} خطوة لإكمال خطة اليوم.
+        </div>`
       }
 
     </div>
@@ -1495,8 +1642,6 @@ function analyzeAI(){
   const stats=getWeeklyStats();
 
   const todayPercent=getPercent(todayKey());
-
-  const habitStats=getHabitStats();
 
   const weakest=
     getTodayUnfinishedHabit();
@@ -1710,7 +1855,7 @@ function analyzeAI(){
 
   }
 
-  const plan=buildDailyPlan(
+  buildDailyPlan(
     todayPercent,
     recurringWeakness,
     lastTomorrowItem,
@@ -1823,11 +1968,32 @@ function analyzeAI(){
         :""
       }
 
+      ${
+        rafiqMemory.planHistory.length
+        ?
+        `<div class="memoryPlan">
+          📋 آخر خطة مكتملة:
+          <strong>
+            ${rafiqMemory.planHistory[rafiqMemory.planHistory.length-1].percent}%
+          </strong>
+          في ${esc(rafiqMemory.planHistory[rafiqMemory.planHistory.length-1].date)}
+          <br>
+          <span class="small">
+            أكملتها في
+            ${rafiqMemory.planHistory[rafiqMemory.planHistory.length-1].completed}
+            خطوات.
+          </span>
+        </div>`
+        :""
+      }
+
       <p class="small">
         عدد ذكريات الضعف:
         ${rafiqMemory.weaknessHistory.length}
         • عدد الخطط اليومية:
         ${rafiqMemory.dailyPlans.length}
+        • الخطط المكتملة:
+        ${rafiqMemory.planHistory.length}
       </p>
 
     </div>
@@ -2410,7 +2576,7 @@ function saveEditedDay(key){
 function backupData(){
 
   const data={
-    version:2,
+    version:3,
     exportedAt:new Date().toISOString(),
     habits,
     daily,
