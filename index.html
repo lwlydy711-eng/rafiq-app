@@ -4,30 +4,307 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>رفيق — متابعتي اليومية</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f7f6;color:#17252f}
-header{background:#075b4d;color:white;padding:25px 18px;border-radius:0 0 25px 25px}
-h1{margin:0 0 6px;font-size:28px}
-header p{margin:0;opacity:.85}
-main{padding:18px;padding-bottom:85px}
-.card{background:white;border-radius:18px;padding:18px;margin-bottom:15px;box-shadow:0 3px 12px #0000000d}
-.progress{height:12px;background:#e4e9e7;border-radius:20px;overflow:hidden}
-.bar{height:100%;background:#0b806d;width:0%;transition:.3s}
-.habit{display:flex;align-items:center;gap:12px;padding:14px 5px;border-bottom:1px solid #eee}
-.habit:last-child{border:0}
-.check{width:28px;height:28px;border:2px solid #0b806d;border-radius:9px;background:white;font-size:18px}
-.done .check{background:#0b806d;color:white}
-.done .name{text-decoration:line-through;opacity:.55}
-button{border:0;border-radius:12px;padding:12px 16px;background:#075b4d;color:white;font-size:15px}
-.add{width:100%;margin-top:10px}
-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px 5px;box-shadow:0 -3px 15px #0002}
-nav button{background:transparent;color:#555;padding:8px;font-size:13px}
-nav button.active{color:#075b4d;font-weight:bold}
-.stat{display:inline-block;width:48%;text-align:center;background:#f1f5f3;border-radius:15px;padding:15px;margin:1%}
-.big{font-size:28px;font-weight:bold;color:#075b4d}
-textarea,input{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;margin:7px 0;font-size:15px}
-.hidden{display:none}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#f5f7f6;
+color:#17252f;
+}
+
+header{
+background:#075b4d;
+color:white;
+padding:25px 18px;
+border-radius:0 0 25px 25px;
+}
+
+h1{
+margin:0 0 6px;
+font-size:28px;
+}
+
+header p{
+margin:0;
+opacity:.85;
+}
+
+main{
+padding:18px;
+padding-bottom:90px;
+}
+
+.card{
+background:white;
+border-radius:18px;
+padding:18px;
+margin-bottom:15px;
+box-shadow:0 3px 12px #0000000d;
+}
+
+.progress{
+height:12px;
+background:#e4e9e7;
+border-radius:20px;
+overflow:hidden;
+}
+
+.bar{
+height:100%;
+background:#0b806d;
+width:0%;
+transition:.3s;
+}
+
+.habit{
+display:flex;
+align-items:center;
+gap:12px;
+padding:13px 5px;
+border-bottom:1px solid #eee;
+}
+
+.habit:last-child{
+border:0;
+}
+
+.check{
+width:30px;
+height:30px;
+border:2px solid #0b806d;
+border-radius:9px;
+background:white;
+font-size:18px;
+padding:0;
+}
+
+.done .check{
+background:#0b806d;
+color:white;
+}
+
+.done .name{
+text-decoration:line-through;
+opacity:.55;
+}
+
+button{
+border:0;
+border-radius:12px;
+padding:12px 16px;
+background:#075b4d;
+color:white;
+font-size:15px;
+}
+
+button:active{
+transform:scale(.97);
+}
+
+.add{
+width:100%;
+margin-top:10px;
+}
+
+nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:white;
+display:flex;
+justify-content:space-around;
+padding:9px 5px;
+box-shadow:0 -3px 15px #0002;
+z-index:100;
+}
+
+nav button{
+background:transparent;
+color:#555;
+padding:8px 5px;
+font-size:12px;
+}
+
+nav button.active{
+color:#075b4d;
+font-weight:bold;
+}
+
+.stat{
+display:inline-block;
+width:48%;
+text-align:center;
+background:#f1f5f3;
+border-radius:15px;
+padding:15px;
+margin:1%;
+}
+
+.big{
+font-size:28px;
+font-weight:bold;
+color:#075b4d;
+}
+
+textarea,
+input,
+select{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:12px;
+margin:7px 0;
+font-size:15px;
+background:white;
+}
+
+.hidden{
+display:none;
+}
+
+/* التقويم */
+
+.calendar-head{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:15px;
+}
+
+.calendar-head button{
+padding:9px 13px;
+}
+
+.month-title{
+font-size:18px;
+font-weight:bold;
+}
+
+.calendar{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:5px;
+}
+
+.weekday{
+text-align:center;
+font-size:12px;
+font-weight:bold;
+color:#777;
+padding:6px 0;
+}
+
+.day{
+min-height:48px;
+border-radius:12px;
+background:#f5f7f6;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:14px;
+cursor:pointer;
+position:relative;
+border:1px solid transparent;
+}
+
+.day.empty{
+background:transparent;
+cursor:default;
+}
+
+.day.today{
+border:2px solid #075b4d;
+font-weight:bold;
+}
+
+.day.green{
+background:#bfe8d9;
+color:#075b4d;
+}
+
+.day.yellow{
+background:#fff0b8;
+color:#705800;
+}
+
+.day.red{
+background:#ffd0d0;
+color:#9b2020;
+}
+
+.day.selected{
+box-shadow:0 0 0 3px #075b4d55;
+}
+
+.legend{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:15px;
+font-size:12px;
+}
+
+.legend span{
+display:flex;
+align-items:center;
+gap:5px;
+}
+
+.dot{
+width:12px;
+height:12px;
+border-radius:50%;
+display:inline-block;
+}
+
+.dot.green{
+background:#66bd9e;
+}
+
+.dot.yellow{
+background:#e8c84c;
+}
+
+.dot.red{
+background:#e97979;
+}
+
+.day-details{
+margin-top:15px;
+border-top:1px solid #eee;
+padding-top:15px;
+}
+
+.detail-item{
+padding:9px 0;
+border-bottom:1px solid #eee;
+}
+
+.detail-item:last-child{
+border:0;
+}
+
+.badge{
+display:inline-block;
+padding:5px 9px;
+border-radius:8px;
+font-size:12px;
+background:#f1f5f3;
+}
+
+.danger{
+background:#9b2020;
+}
+
+.empty-message{
+text-align:center;
+color:#777;
+padding:15px;
+}
 </style>
 </head>
 
@@ -40,57 +317,279 @@ textarea,input{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;
 
 <main>
 
+<!-- الصفحة الرئيسية -->
+
 <section id="home">
+
 <div class="card">
-<h2>يومي</h2>
+<h2>🏠 يومي</h2>
 <p id="date"></p>
-<p>نسبة الإنجاز: <b id="percent">0%</b></p>
-<div class="progress"><div class="bar" id="bar"></div></div>
+
+<p>
+نسبة الإنجاز:
+<b id="percent">0%</b>
+</p>
+
+<div class="progress">
+<div class="bar" id="bar"></div>
 </div>
 
+<p style="margin-bottom:0">
+🔥 السلسلة الحالية:
+<b id="streak">0</b> يوم
+</p>
+</div>
+
+
 <div class="card">
-<h3>عادات اليوم</h3>
+
+<h3>✅ عادات اليوم</h3>
+
 <div id="habits"></div>
-<button class="add" onclick="addHabit()">＋ إضافة عادة</button>
+
+<button class="add" onclick="addHabit()">
+＋ إضافة عادة
+</button>
+
 </div>
 
+
 <div class="card">
+
 <h3>📝 مراجعة اليوم</h3>
-<textarea id="achievement" placeholder="أهم إنجاز اليوم"></textarea>
-<textarea id="weakness" placeholder="ما الذي قصّرت فيه؟"></textarea>
-<textarea id="tomorrow" placeholder="أهم مهمة غدًا"></textarea>
-<button onclick="saveReview()">حفظ المراجعة</button>
+
+<textarea
+id="achievement"
+placeholder="أهم إنجاز اليوم">
+</textarea>
+
+<textarea
+id="weakness"
+placeholder="ما الذي قصّرت فيه؟">
+</textarea>
+
+<textarea
+id="tomorrow"
+placeholder="أهم مهمة غدًا">
+</textarea>
+
+<label>⭐ تقييم اليوم من 1 إلى 10</label>
+
+<input
+type="number"
+id="rating"
+min="1"
+max="10"
+placeholder="مثلاً: 8">
+
+<button onclick="saveReview()">
+حفظ المراجعة
+</button>
+
 </div>
+
 </section>
+
+
+<!-- التقويم -->
+
+<section id="calendar" class="hidden">
+
+<div class="card">
+
+<div class="calendar-head">
+
+<button onclick="changeMonth(-1)">‹</button>
+
+<div class="month-title" id="monthTitle"></div>
+
+<button onclick="changeMonth(1)">›</button>
+
+</div>
+
+<div class="calendar">
+
+<div class="weekday">الأحد</div>
+<div class="weekday">الإثنين</div>
+<div class="weekday">الثلاثاء</div>
+<div class="weekday">الأربعاء</div>
+<div class="weekday">الخميس</div>
+<div class="weekday">الجمعة</div>
+<div class="weekday">السبت</div>
+
+</div>
+
+<div
+class="calendar"
+id="calendarDays">
+</div>
+
+<div class="legend">
+
+<span>
+<i class="dot green"></i>
+مكتمل
+</span>
+
+<span>
+<i class="dot yellow"></i>
+متوسط
+</span>
+
+<span>
+<i class="dot red"></i>
+ضعيف
+</span>
+
+</div>
+
+<div
+id="dayDetails"
+class="day-details hidden">
+</div>
+
+</div>
+
+</section>
+
+
+<!-- الإحصائيات -->
 
 <section id="stats" class="hidden">
+
 <div class="card">
+
 <h2>📊 الإحصائيات</h2>
-<div class="stat"><div class="big" id="todayDone">0</div>عادات مكتملة</div>
-<div class="stat"><div class="big" id="todayTotal">0</div>عادات اليوم</div>
-<div class="stat"><div class="big" id="days">0</div>أيام مسجلة</div>
+
+<div class="stat">
+<div class="big" id="todayDone">0</div>
+عادات مكتملة
 </div>
+
+<div class="stat">
+<div class="big" id="todayTotal">0</div>
+عادات اليوم
+</div>
+
+<div class="stat">
+<div class="big" id="days">0</div>
+أيام مسجلة
+</div>
+
+<div class="stat">
+<div class="big" id="average">0%</div>
+متوسط الإنجاز
+</div>
+
+<div class="stat">
+<div class="big" id="bestStreak">0</div>
+أطول سلسلة
+</div>
+
+<div class="stat">
+<div class="big" id="ratingAverage">0</div>
+متوسط التقييم
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>📈 أداء العادات</h3>
+
+<div id="habitStats"></div>
+
+</div>
+
 </section>
 
+
+<!-- الإعدادات -->
+
 <section id="settings" class="hidden">
+
 <div class="card">
+
 <h2>⚙️ الإعدادات</h2>
+
 <p>العادات الحالية:</p>
+
 <div id="manage"></div>
-<button class="add" onclick="addHabit()">＋ إضافة عادة جديدة</button>
+
+<button class="add" onclick="addHabit()">
+＋ إضافة عادة جديدة
+</button>
+
 </div>
+
+
+<div class="card">
+
+<h3>💾 البيانات</h3>
+
+<p>
+بياناتك محفوظة على هذا الجهاز.
+</p>
+
+<button onclick="exportData()">
+نسخ احتياطي
+</button>
+
+<button onclick="resetData()" style="background:#9b2020">
+حذف البيانات
+</button>
+
+</div>
+
 </section>
 
 </main>
 
+
+<!-- القائمة السفلية -->
+
 <nav>
-<button class="active" onclick="show('home',this)">🏠 يومي</button>
-<button onclick="show('stats',this)">📊 الإحصائيات</button>
-<button onclick="show('settings',this)">⚙️ الإعدادات</button>
+
+<button
+class="active"
+onclick="show('home',this)">
+🏠
+<br>
+يومي
+</button>
+
+<button
+onclick="show('calendar',this)">
+📅
+<br>
+التقويم
+</button>
+
+<button
+onclick="show('stats',this)">
+📊
+<br>
+الإحصائيات
+</button>
+
+<button
+onclick="show('settings',this)">
+⚙️
+<br>
+الإعدادات
+</button>
+
 </nav>
 
+
 <script>
-const defaults=[
+
+/* =========================
+   العادات الافتراضية
+========================= */
+
+const defaults = [
 "الصلاة والعبادة",
 "القرآن 15 دقيقة",
 "المشي",
@@ -101,89 +600,1040 @@ const defaults=[
 "النوم"
 ];
 
-let habits=JSON.parse(localStorage.getItem("habits")||"null")||defaults;
-let data=JSON.parse(localStorage.getItem("daily")||"{}");
-let today=new Date().toISOString().slice(0,10);
 
-if(!data[today]) data[today]={done:[],achievement:"",weakness:"",tomorrow:""};
+/* =========================
+   أدوات التاريخ
+========================= */
 
-document.getElementById("date").textContent=
-new Date().toLocaleDateString("ar-YE",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+function localDateKey(date = new Date()){
+
+let y = date.getFullYear();
+
+let m = String(date.getMonth()+1).padStart(2,"0");
+
+let d = String(date.getDate()).padStart(2,"0");
+
+return `${y}-${m}-${d}`;
+
+}
+
+
+/* =========================
+   تحميل البيانات
+========================= */
+
+let oldHabits =
+JSON.parse(localStorage.getItem("habits") || "null");
+
+let habits =
+oldHabits || defaults.map((name,index)=>({
+id:"habit_"+Date.now()+"_"+index,
+name:name
+}));
+
+
+/*
+تحويل العادات القديمة إلى عادات
+بمعرّفات ثابتة
+*/
+
+if(oldHabits && oldHabits.length){
+
+if(typeof oldHabits[0] === "string"){
+
+habits = oldHabits.map((name,index)=>({
+id:"habit_old_"+index+"_"+Date.now(),
+name:name
+}));
+
+}
+
+}
+
+
+let data =
+JSON.parse(localStorage.getItem("daily") || "{}");
+
+
+let today = localDateKey();
+
+
+if(!data[today]){
+
+data[today] = {
+done:[],
+achievement:"",
+weakness:"",
+tomorrow:"",
+rating:""
+};
+
+}
+
+
+/* =========================
+   حفظ البيانات
+========================= */
 
 function save(){
-localStorage.setItem("habits",JSON.stringify(habits));
-localStorage.setItem("daily",JSON.stringify(data));
+
+localStorage.setItem(
+"habits",
+JSON.stringify(habits)
+);
+
+localStorage.setItem(
+"daily",
+JSON.stringify(data)
+);
+
 }
+
+
+/* =========================
+   التاريخ في الصفحة الرئيسية
+========================= */
+
+document.getElementById("date").textContent =
+new Date().toLocaleDateString(
+"ar-YE",
+{
+weekday:"long",
+year:"numeric",
+month:"long",
+day:"numeric"
+}
+);
+
+
+/* =========================
+   إنشاء سجل اليوم
+========================= */
+
+function ensureDay(key){
+
+if(!data[key]){
+
+data[key]={
+done:[],
+achievement:"",
+weakness:"",
+tomorrow:"",
+rating:""
+};
+
+}
+
+}
+
+
+/* =========================
+   حساب إنجاز يوم
+========================= */
+
+function getDayPercent(key){
+
+ensureDay(key);
+
+let total=habits.length;
+
+if(total===0)return 0;
+
+let done=data[key].done || [];
+
+let validDone=done.filter(id =>
+habits.some(h=>h.id===id)
+);
+
+return Math.round(
+validDone.length / total * 100
+);
+
+}
+
+
+/* =========================
+   عرض الصفحة الرئيسية
+========================= */
 
 function render(){
+
 let box=document.getElementById("habits");
+
 box.innerHTML="";
-habits.forEach((h,i)=>{
-let d=data[today].done.includes(i);
-box.innerHTML+=`
+
+
+habits.forEach(h=>{
+
+let d =
+(data[today].done || []).includes(h.id);
+
+box.innerHTML += `
+
 <div class="habit ${d?'done':''}">
-<button class="check" onclick="toggle(${i})">${d?'✓':''}</button>
-<span class="name">${h}</span>
-</div>`;
+
+<button
+class="check"
+onclick="toggle('${h.id}')">
+${d?'✓':''}
+</button>
+
+<span class="name">
+${escapeHTML(h.name)}
+</span>
+
+</div>
+
+`;
+
 });
+
+
 let total=habits.length;
-let done=data[today].done.length;
-let p=total?Math.round(done/total*100):0;
-document.getElementById("percent").textContent=p+"%";
-document.getElementById("bar").style.width=p+"%";
-document.getElementById("todayDone").textContent=done;
-document.getElementById("todayTotal").textContent=total;
 
-document.getElementById("manage").innerHTML=habits.map((h,i)=>
-`<div class="habit"><span>${h}</span>
-<button onclick="deleteHabit(${i})">حذف</button></div>`).join("");
+let done=(data[today].done || [])
+.filter(id=>habits.some(h=>h.id===id))
+.length;
 
-document.getElementById("achievement").value=data[today].achievement||"";
-document.getElementById("weakness").value=data[today].weakness||"";
-document.getElementById("tomorrow").value=data[today].tomorrow||"";
 
-let days=Object.keys(data).filter(x=>data[x].done.length>0).length;
-document.getElementById("days").textContent=days;
+let p=total
+?Math.round(done/total*100)
+:0;
+
+
+document.getElementById("percent")
+.textContent=p+"%";
+
+
+document.getElementById("bar")
+.style.width=p+"%";
+
+
+document.getElementById("todayDone")
+.textContent=done;
+
+
+document.getElementById("todayTotal")
+.textContent=total;
+
+
+document.getElementById("achievement")
+.value=data[today].achievement||"";
+
+
+document.getElementById("weakness")
+.value=data[today].weakness||"";
+
+
+document.getElementById("tomorrow")
+.value=data[today].tomorrow||"";
+
+
+document.getElementById("rating")
+.value=data[today].rating||"";
+
+
+renderManage();
+
+renderStats();
+
+renderCalendar();
+
+document.getElementById("streak")
+.textContent=getCurrentStreak();
+
 }
 
-function toggle(i){
-let a=data[today].done;
-let n=a.indexOf(i);
-if(n>=0)a.splice(n,1);else a.push(i);
-save();render();
+
+/* =========================
+   إكمال عادة
+========================= */
+
+function toggle(id){
+
+ensureDay(today);
+
+let a=data[today].done || [];
+
+let n=a.indexOf(id);
+
+if(n>=0){
+
+a.splice(n,1);
+
+}else{
+
+a.push(id);
+
 }
 
-function addHabit(){
-let n=prompt("اكتب اسم العادة الجديدة:");
-if(n&&n.trim()){
-habits.push(n.trim());
-save();render();
-}
-}
+data[today].done=a;
 
-function deleteHabit(i){
-if(confirm("هل تريد حذف هذه العادة؟")){
-habits.splice(i,1);
-save();render();
-}
-}
-
-function saveReview(){
-data[today].achievement=document.getElementById("achievement").value;
-data[today].weakness=document.getElementById("weakness").value;
-data[today].tomorrow=document.getElementById("tomorrow").value;
 save();
-alert("تم حفظ مراجعة اليوم ✅");
-}
-
-function show(id,btn){
-document.querySelectorAll("main section").forEach(x=>x.classList.add("hidden"));
-document.getElementById(id).classList.remove("hidden");
-document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
-btn.classList.add("active");
-}
 
 render();
+
+}
+
+
+/* =========================
+   إضافة عادة
+========================= */
+
+function addHabit(){
+
+let n=prompt(
+"اكتب اسم العادة الجديدة:"
+);
+
+if(n && n.trim()){
+
+habits.push({
+
+id:
+"habit_"+Date.now()+"_"+Math.random()
+.toString(36)
+.substring(2,8),
+
+name:n.trim()
+
+});
+
+save();
+
+render();
+
+}
+
+}
+
+
+/* =========================
+   حذف عادة
+========================= */
+
+function deleteHabit(id){
+
+let h=habits.find(x=>x.id===id);
+
+if(!h)return;
+
+if(confirm(
+"هل تريد حذف عادة: "+h.name+" ؟"
+)){
+
+habits=habits.filter(
+x=>x.id!==id
+);
+
+save();
+
+render();
+
+}
+
+}
+
+
+/* =========================
+   إدارة العادات
+========================= */
+
+function renderManage(){
+
+document.getElementById("manage")
+.innerHTML=
+
+habits.map(h=>`
+
+<div class="habit">
+
+<span style="flex:1">
+${escapeHTML(h.name)}
+</span>
+
+<button
+class="danger"
+onclick="deleteHabit('${h.id}')">
+حذف
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================
+   مراجعة اليوم
+========================= */
+
+function saveReview(){
+
+ensureDay(today);
+
+data[today].achievement =
+document.getElementById("achievement").value;
+
+data[today].weakness =
+document.getElementById("weakness").value;
+
+data[today].tomorrow =
+document.getElementById("tomorrow").value;
+
+let rating =
+document.getElementById("rating").value;
+
+if(rating){
+
+rating=Math.max(
+1,
+Math.min(10,Number(rating))
+);
+
+}
+
+data[today].rating=rating;
+
+save();
+
+alert(
+"تم حفظ مراجعة اليوم ✅"
+);
+
+render();
+
+}
+
+
+/* =========================
+   التنقل بين الصفحات
+========================= */
+
+function show(id,btn){
+
+document
+.querySelectorAll("main section")
+.forEach(x=>
+x.classList.add("hidden")
+);
+
+document
+.getElementById(id)
+.classList.remove("hidden");
+
+
+document
+.querySelectorAll("nav button")
+.forEach(x=>
+x.classList.remove("active")
+);
+
+btn.classList.add("active");
+
+
+if(id==="calendar"){
+
+renderCalendar();
+
+}
+
+if(id==="stats"){
+
+renderStats();
+
+}
+
+}
+
+
+/* =========================
+   التقويم
+========================= */
+
+let calendarDate=new Date();
+
+function changeMonth(amount){
+
+calendarDate.setMonth(
+calendarDate.getMonth()+amount
+);
+
+renderCalendar();
+
+}
+
+
+function renderCalendar(){
+
+let title=document.getElementById(
+"monthTitle"
+);
+
+let box=document.getElementById(
+"calendarDays"
+);
+
+if(!title || !box)return;
+
+
+title.textContent=
+calendarDate.toLocaleDateString(
+"ar-YE",
+{
+month:"long",
+year:"numeric"
+}
+);
+
+
+box.innerHTML="";
+
+
+let year=calendarDate.getFullYear();
+
+let month=calendarDate.getMonth();
+
+
+let firstDay=
+new Date(year,month,1)
+.getDay();
+
+
+let daysInMonth=
+new Date(year,month+1,0)
+.getDate();
+
+
+for(let i=0;i<firstDay;i++){
+
+box.innerHTML+=`
+<div class="day empty"></div>
+`;
+
+}
+
+
+for(let day=1;day<=daysInMonth;day++){
+
+let date=
+new Date(year,month,day);
+
+let key=localDateKey(date);
+
+let percent=getDayPercent(key);
+
+let cls="";
+
+if(percent>=80){
+
+cls="green";
+
+}else if(percent>=40){
+
+cls="yellow";
+
+}else if(percent>0){
+
+cls="red";
+
+}
+
+
+let isToday=
+key===today
+?"today"
+:"";
+
+
+box.innerHTML+=`
+
+<div
+class="day ${cls} ${isToday}"
+onclick="showDayDetails('${key}')">
+
+${day}
+
+</div>
+
+`;
+
+}
+
+}
+
+
+/* =========================
+   تفاصيل اليوم
+========================= */
+
+function showDayDetails(key){
+
+ensureDay(key);
+
+let box=document.getElementById(
+"dayDetails"
+);
+
+let percent=getDayPercent(key);
+
+let done=data[key].done || [];
+
+let doneNames=habits
+.filter(h=>done.includes(h.id))
+.map(h=>h.name);
+
+
+let missingNames=habits
+.filter(h=>!done.includes(h.id))
+.map(h=>h.name);
+
+
+let dateText=
+new Date(key+"T12:00:00")
+.toLocaleDateString(
+"ar-YE",
+{
+weekday:"long",
+year:"numeric",
+month:"long",
+day:"numeric"
+}
+);
+
+
+box.classList.remove("hidden");
+
+
+box.innerHTML=`
+
+<h3>📅 ${dateText}</h3>
+
+<p>
+نسبة الإنجاز:
+<strong>${percent}%</strong>
+</p>
+
+<div class="detail-item">
+
+<b>✅ العادات المكتملة</b>
+
+<p>
+${
+doneNames.length
+?doneNames.map(x=>
+`<span class="badge">${escapeHTML(x)}</span>`
+).join(" ")
+:"لا توجد"
+}
+</p>
+
+</div>
+
+
+<div class="detail-item">
+
+<b>⭕ العادات غير المكتملة</b>
+
+<p>
+${
+missingNames.length
+?missingNames.map(x=>
+`<span class="badge">${escapeHTML(x)}</span>`
+).join(" ")
+:"تم إكمال جميع العادات 🎉"
+}
+</p>
+
+</div>
+
+
+<div class="detail-item">
+
+<b>📝 أهم إنجاز</b>
+
+<p>
+${escapeHTML(data[key].achievement || "لم يتم تسجيله")}
+</p>
+
+</div>
+
+
+<div class="detail-item">
+
+<b>ما الذي قصّرت فيه؟</b>
+
+<p>
+${escapeHTML(data[key].weakness || "لم يتم تسجيله")}
+</p>
+
+</div>
+
+
+<div class="detail-item">
+
+<b>🎯 مهمة الغد</b>
+
+<p>
+${escapeHTML(data[key].tomorrow || "لم يتم تسجيلها")}
+</p>
+
+</div>
+
+
+<div class="detail-item">
+
+<b>⭐ تقييم اليوم</b>
+
+<p>
+${data[key].rating || "لم يتم التقييم"} / 10
+</p>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   الإحصائيات
+========================= */
+
+function renderStats(){
+
+let dates=Object.keys(data);
+
+let totalPercent=0;
+
+let recordedDays=0;
+
+let ratingTotal=0;
+
+let ratingCount=0;
+
+
+dates.forEach(key=>{
+
+let p=getDayPercent(key);
+
+if(p>0){
+
+totalPercent+=p;
+
+recordedDays++;
+
+}
+
+let r=Number(data[key].rating);
+
+if(r>=1 && r<=10){
+
+ratingTotal+=r;
+
+ratingCount++;
+
+}
+
+});
+
+
+let average=
+recordedDays
+?Math.round(totalPercent/recordedDays)
+:0;
+
+
+let ratingAverage=
+ratingCount
+?(ratingTotal/ratingCount).toFixed(1)
+:0;
+
+
+document.getElementById("days")
+.textContent=recordedDays;
+
+
+document.getElementById("average")
+.textContent=average+"%";
+
+
+document.getElementById("ratingAverage")
+.textContent=ratingAverage;
+
+
+document.getElementById("bestStreak")
+.textContent=getBestStreak();
+
+
+renderHabitStats();
+
+}
+
+
+/* =========================
+   إحصائيات كل عادة
+========================= */
+
+function renderHabitStats(){
+
+let box=
+document.getElementById("habitStats");
+
+if(!habits.length){
+
+box.innerHTML=
+'<div class="empty-message">لا توجد عادات</div>';
+
+return;
+
+}
+
+
+box.innerHTML=
+habits.map(h=>{
+
+let recorded=0;
+
+let done=0;
+
+
+Object.keys(data).forEach(key=>{
+
+if(data[key].done){
+
+recorded++;
+
+if(data[key].done.includes(h.id)){
+
+done++;
+
+}
+
+}
+
+});
+
+
+let percent=
+recorded
+?Math.round(done/recorded*100)
+:0;
+
+
+return `
+
+<div class="habit">
+
+<span style="flex:1">
+${escapeHTML(h.name)}
+</span>
+
+<b>${percent}%</b>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =========================
+   السلسلة الحالية
+========================= */
+
+function getCurrentStreak(){
+
+let streak=0;
+
+let d=new Date();
+
+
+while(true){
+
+let key=localDateKey(d);
+
+if(getDayPercent(key)>0){
+
+streak++;
+
+d.setDate(
+d.getDate()-1
+);
+
+}else{
+
+break;
+
+}
+
+if(streak>1000)break;
+
+}
+
+return streak;
+
+}
+
+
+/* =========================
+   أطول سلسلة
+========================= */
+
+function getBestStreak(){
+
+let keys=Object.keys(data)
+.filter(key=>getDayPercent(key)>0)
+.sort();
+
+
+if(!keys.length)return 0;
+
+
+let best=1;
+
+let current=1;
+
+
+for(let i=1;i<keys.length;i++){
+
+let prev=
+new Date(keys[i-1]+"T12:00:00");
+
+let curr=
+new Date(keys[i]+"T12:00:00");
+
+
+let diff=
+Math.round(
+(curr-prev)/86400000
+);
+
+
+if(diff===1){
+
+current++;
+
+best=Math.max(
+best,
+current
+);
+
+}else{
+
+current=1;
+
+}
+
+}
+
+return best;
+
+}
+
+
+/* =========================
+   حماية النصوص
+========================= */
+
+function escapeHTML(text){
+
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   النسخ الاحتياطي
+========================= */
+
+function exportData(){
+
+let backup={
+habits:habits,
+daily:data,
+exportedAt:new Date().toISOString()
+};
+
+
+let text=
+JSON.stringify(
+backup,
+null,
+2
+);
+
+
+if(
+navigator.clipboard &&
+navigator.clipboard.writeText
+){
+
+navigator.clipboard.writeText(text)
+.then(()=>{
+
+alert(
+"تم نسخ بياناتك الاحتياطية ✅"
+);
+
+})
+.catch(()=>{
+
+prompt(
+"انسخ البيانات التالية واحفظها:",
+text
+);
+
+});
+
+}else{
+
+prompt(
+"انسخ البيانات التالية واحفظها:",
+text
+);
+
+}
+
+}
+
+
+/* =========================
+   حذف البيانات
+========================= */
+
+function resetData(){
+
+if(!confirm(
+"تحذير: سيتم حذف جميع العادات والمراجعات والإحصائيات. هل أنت متأكد؟"
+))return;
+
+
+localStorage.removeItem("habits");
+
+localStorage.removeItem("daily");
+
+location.reload();
+
+}
+
+
+/* =========================
+   تشغيل التطبيق
+========================= */
+
+save();
+
+render();
+
 </script>
 
 </body>
