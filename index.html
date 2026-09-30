@@ -6,243 +6,338 @@
 <title>رفيق — متابعتي اليومية</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family:Arial,"Noto Sans Arabic",sans-serif;
-  background:#f5f7fb;
-  color:#172033;
-  padding-bottom:82px;
+  font-family:Arial,"Tahoma",sans-serif;
+  background:#f4f7f5;
+  color:#172b24;
 }
 
 header{
-  background:linear-gradient(135deg,#173b68,#245f9e);
+  background:#073b32;
   color:white;
-  padding:22px 18px;
-  border-radius:0 0 25px 25px;
-  box-shadow:0 4px 15px #0002;
+  padding:18px 15px;
+  text-align:center;
+  position:sticky;
+  top:0;
+  z-index:10;
 }
 
 header h1{
   margin:0;
-  font-size:25px;
+  font-size:22px;
 }
 
 header p{
   margin:6px 0 0;
-  opacity:.9;
+  font-size:13px;
+  opacity:.85;
 }
 
-.container{
-  padding:15px;
+main{
   max-width:700px;
   margin:auto;
+  padding:15px;
+  padding-bottom:95px;
 }
 
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
+.page{display:none}
+.page.active{display:block}
 
 .card{
   background:white;
   border-radius:18px;
   padding:16px;
-  margin-bottom:14px;
-  box-shadow:0 3px 12px #0000000d;
+  margin-bottom:15px;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
 }
 
-.card h2,
-.card h3{
+h2{
   margin-top:0;
+  color:#073b32;
+  font-size:20px;
 }
 
-.btn{
+h3{
+  color:#073b32;
+  margin-bottom:8px;
+}
+
+button{
   border:0;
   border-radius:12px;
-  padding:11px 15px;
-  font-size:15px;
+  padding:11px 14px;
   cursor:pointer;
-  background:#245f9e;
+  font-family:inherit;
+}
+
+.primary{
+  background:#087f5b;
   color:white;
 }
 
-.btn.secondary{
-  background:#e8eef6;
-  color:#173b68;
+.gold{
+  background:#b78a22;
+  color:white;
 }
 
-.btn.danger{
-  background:#c62828;
+.danger{
+  background:#b42318;
+  color:white;
 }
 
 input,select,textarea{
   width:100%;
-  border:1px solid #d9e0ea;
-  border-radius:11px;
   padding:11px;
-  font-size:15px;
-  margin:6px 0 10px;
+  border:1px solid #d8e1dc;
+  border-radius:11px;
+  font-family:inherit;
+  margin-bottom:9px;
   background:white;
 }
 
 textarea{
-  min-height:90px;
+  min-height:80px;
   resize:vertical;
+}
+
+.progress{
+  height:12px;
+  background:#e4ebe7;
+  border-radius:20px;
+  overflow:hidden;
+  margin:10px 0;
+}
+
+.progress div{
+  height:100%;
+  background:#087f5b;
+  border-radius:20px;
 }
 
 .habit{
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:13px;
-  border:1px solid #e3e8ef;
-  border-radius:13px;
-  margin-bottom:9px;
-  background:#fafbfd;
-}
-
-.habit input{
-  width:23px;
-  height:23px;
-  margin:0;
-}
-
-.habit.done{
-  background:#eaf8ef;
-  border-color:#9bd6ad;
-}
-
-.progress{
-  height:15px;
-  background:#e8edf3;
-  border-radius:20px;
-  overflow:hidden;
-}
-
-.progress div{
-  height:100%;
-  background:linear-gradient(90deg,#2e7d32,#66bb6a);
-  border-radius:20px;
-  transition:.3s;
-}
-
-.stat{
-  display:flex;
   justify-content:space-between;
-  align-items:center;
-  padding:11px 0;
-  border-bottom:1px solid #edf0f4;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #edf1ef;
 }
 
-.stat:last-child{
+.habit:last-child{
   border-bottom:0;
 }
 
-.big{
-  font-size:30px;
-  font-weight:bold;
-  color:#245f9e;
-}
-
-.nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  background:white;
-  border-top:1px solid #ddd;
+.habit label{
   display:flex;
-  justify-content:space-around;
-  z-index:100;
-  padding:7px 2px;
-  box-shadow:0 -3px 12px #0001;
+  align-items:center;
+  gap:10px;
+  flex:1;
 }
 
-.nav button{
-  border:0;
-  background:none;
-  font-size:11px;
-  color:#687385;
-  padding:5px 2px;
+.habit input[type="checkbox"]{
+  width:21px;
+  height:21px;
+  margin:0;
+  accent-color:#087f5b;
 }
 
-.nav button.active{
-  color:#245f9e;
+.statGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.stat{
+  background:#f4f7f5;
+  padding:14px;
+  border-radius:14px;
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  font-size:23px;
+  color:#087f5b;
+  margin-top:5px;
+}
+
+.calendarHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.calendarHead button{
+  background:#073b32;
+  color:white;
+  width:42px;
+}
+
+.calendarGrid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+}
+
+.calendarDay{
+  min-height:48px;
+  border-radius:10px;
+  background:#f4f7f5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.calendarDay.today{
+  border:2px solid #087f5b;
+}
+
+.calendarDay.done{
+  background:#d9f2e8;
+  color:#075b42;
   font-weight:bold;
 }
 
-.nav span{
-  display:block;
-  font-size:20px;
-  margin-bottom:2px;
+.calendarDay.selected{
+  background:#087f5b;
+  color:white;
 }
 
-.badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  background:#e8f0fa;
-  color:#245f9e;
-  font-size:12px;
-}
-
-.advice{
-  background:linear-gradient(135deg,#eef7ff,#f4fbf5);
-  border-right:5px solid #245f9e;
-  line-height:1.8;
-}
-
-.memory{
-  background:#fff8e8;
-  border-right:5px solid #e0a51a;
-  line-height:1.8;
+.calendarName{
+  font-size:10px;
+  opacity:.7;
 }
 
 .goal{
-  border:1px solid #e3e8ef;
+  border:1px solid #e0e8e4;
   padding:13px;
   border-radius:14px;
   margin-bottom:10px;
 }
 
-.goal-actions{
+.goalTop{
   display:flex;
-  gap:7px;
-  margin-top:10px;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
 }
 
-.day{
-  border:1px solid #e2e7ee;
+.goalActions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.reminder{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border:1px solid #e0e8e4;
+  padding:12px;
+  border-radius:13px;
+  margin-bottom:9px;
+}
+
+.bottomNav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  border-top:1px solid #dfe7e3;
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  z-index:20;
+  box-shadow:0 -3px 12px rgba(0,0,0,.06);
+}
+
+.bottomNav button{
+  background:white;
+  color:#52645d;
+  border-radius:0;
+  padding:9px 3px;
+  font-size:11px;
+}
+
+.bottomNav button.active{
+  color:#087f5b;
+  font-weight:bold;
+  background:#f1f7f4;
+}
+
+.aiBox{
+  background:#073b32;
+  color:white;
+  border-radius:18px;
+  padding:17px;
+  margin-bottom:15px;
+}
+
+.aiBox h2{
+  color:white;
+}
+
+.aiBox button{
+  width:100%;
+  background:#b78a22;
+  color:white;
+  font-weight:bold;
+}
+
+.aiSection{
+  background:#f7faf8;
+  border-radius:14px;
+  padding:13px;
+  margin-top:10px;
+  color:#172b24;
+}
+
+.aiSection strong{
+  color:#073b32;
+}
+
+.advice{
+  background:#fff8e6;
+  border-right:4px solid #b78a22;
+  padding:13px;
   border-radius:12px;
-  padding:10px;
-  margin-bottom:8px;
+  margin-top:10px;
+  color:#4b3a12;
+  line-height:1.8;
+}
+
+.memoryBox{
+  background:#eef8f4;
+  border-right:4px solid #087f5b;
 }
 
 .small{
-  color:#697386;
-  font-size:13px;
+  font-size:12px;
+  color:#687871;
 }
 
-.center{
+.empty{
+  color:#7a8882;
   text-align:center;
+  padding:10px;
 }
 
-ul{
-  padding-right:22px;
-}
+@media(max-width:500px){
+  .bottomNav button{
+    font-size:9px;
+  }
 
-hr{
-  border:0;
-  border-top:1px solid #edf0f4;
-  margin:15px 0;
+  .statGrid{
+    grid-template-columns:repeat(2,1fr);
+  }
 }
 </style>
 </head>
@@ -250,22 +345,20 @@ hr{
 <body>
 
 <header>
-  <h1>رفيق 🤝</h1>
-  <p>متابعتي اليومية — خطوة صغيرة كل يوم</p>
+  <h1>رفيق — متابعتي اليومية</h1>
+  <p>خطوة صغيرة كل يوم تصنع فرقًا كبيرًا</p>
 </header>
 
-<div class="container">
+<main>
 
-<!-- اليومية -->
+<!-- اليومي -->
 <section id="home" class="page active">
 
   <div class="card">
-    <h2>📅 <span id="todayText"></span></h2>
+    <h2>📅 اليوم</h2>
+    <div id="todayDate"></div>
 
-    <div class="stat">
-      <span>نسبة إنجاز اليوم</span>
-      <strong class="big" id="todayPercent">0%</strong>
-    </div>
+    <h3>نسبة الإنجاز: <span id="todayPercent">0%</span></h3>
 
     <div class="progress">
       <div id="todayProgress" style="width:0%"></div>
@@ -280,18 +373,18 @@ hr{
   <div class="card">
     <h2>📝 مراجعة اليوم</h2>
 
-    <label>ماذا أنجزت اليوم؟</label>
-    <textarea id="reviewDone" placeholder="اكتب ما أنجزته..."></textarea>
+    <label>ما الذي أنجزته اليوم؟</label>
+    <textarea id="achievement" placeholder="اكتب إنجازك..."></textarea>
 
-    <label>ما الشيء الذي قصّرت فيه؟</label>
-    <textarea id="reviewWeakness" placeholder="اكتب باختصار..."></textarea>
+    <label>ما نقطة الضعف اليوم؟</label>
+    <textarea id="weakness" placeholder="ما الشيء الذي قصّرت فيه؟"></textarea>
 
-    <label>ما خطوتك الصغيرة للغد؟</label>
-    <textarea id="reviewTomorrow" placeholder="خطوة واحدة فقط..."></textarea>
+    <label>ماذا ستفعل غدًا؟</label>
+    <textarea id="tomorrow" placeholder="اكتب خطوتك القادمة..."></textarea>
 
     <label>تقييم اليوم</label>
-    <select id="reviewRating">
-      <option value="0">لم أحدد</option>
+    <select id="rating">
+      <option value="0">بدون تقييم</option>
       <option value="1">⭐</option>
       <option value="2">⭐⭐</option>
       <option value="3">⭐⭐⭐</option>
@@ -299,7 +392,7 @@ hr{
       <option value="5">⭐⭐⭐⭐⭐</option>
     </select>
 
-    <button class="btn" onclick="saveReview()">💾 حفظ مراجعة اليوم</button>
+    <button class="primary" onclick="saveReview()">حفظ مراجعة اليوم</button>
   </div>
 
 </section>
@@ -309,8 +402,19 @@ hr{
 <section id="calendar" class="page">
 
   <div class="card">
-    <h2>📅 التقويم</h2>
-    <div id="calendarList"></div>
+
+    <div class="calendarHead">
+      <button onclick="changeMonth(-1)">‹</button>
+      <h2 id="calendarTitle"></h2>
+      <button onclick="changeMonth(1)">›</button>
+    </div>
+
+    <div class="calendarGrid" id="calendarGrid"></div>
+
+  </div>
+
+  <div class="card" id="selectedDayDetails">
+    اختر يومًا من التقويم
   </div>
 
 </section>
@@ -320,27 +424,36 @@ hr{
 <section id="stats" class="page">
 
   <div class="card">
-    <h2>📊 الإحصائيات</h2>
+    <h2>📊 إحصائياتك</h2>
 
-    <div class="stat">
-      <span>إنجاز اليوم</span>
-      <strong id="statToday">0%</strong>
-    </div>
+    <div class="statGrid">
 
-    <div class="stat">
-      <span>متوسط آخر 7 أيام</span>
-      <strong id="statWeek">0%</strong>
-    </div>
+      <div class="stat">
+        الأيام المسجلة
+        <strong id="statDays">0</strong>
+      </div>
 
-    <div class="stat">
-      <span>السلسلة الحالية</span>
-      <strong id="statStreak">0 يوم</strong>
-    </div>
+      <div class="stat">
+        المتوسط
+        <strong id="statAverage">0%</strong>
+      </div>
 
-    <div class="stat">
-      <span>متوسط التقييم</span>
-      <strong id="statRating">0/5</strong>
+      <div class="stat">
+        الاستمرارية
+        <strong id="statStreak">0</strong>
+      </div>
+
+      <div class="stat">
+        متوسط التقييم
+        <strong id="statRating">0</strong>
+      </div>
+
     </div>
+  </div>
+
+  <div class="card">
+    <h2>📅 آخر 7 أيام</h2>
+    <div id="last7Stats"></div>
   </div>
 
 </section>
@@ -350,9 +463,10 @@ hr{
 <section id="goals" class="page">
 
   <div class="card">
+
     <h2>🎯 أهدافي</h2>
 
-    <input id="goalName" placeholder="اسم الهدف">
+    <input id="goalName" placeholder="اكتب هدفك">
 
     <select id="goalCategory">
       <option value="ديني">ديني</option>
@@ -361,12 +475,11 @@ hr{
       <option value="شخصي">شخصي</option>
     </select>
 
-    <button class="btn" onclick="addGoal()">➕ إضافة هدف</button>
+    <button class="primary" onclick="addGoal()">إضافة هدف</button>
+
   </div>
 
-  <div class="card">
-    <div id="goalsList"></div>
-  </div>
+  <div id="goalsList"></div>
 
 </section>
 
@@ -374,13 +487,18 @@ hr{
 <!-- رفيق الذكي -->
 <section id="ai" class="page">
 
-  <div class="card">
+  <div class="aiBox">
+
     <h2>🤖 رفيق الذكي</h2>
-    <p class="small">
-      يحلل عاداتك وأهدافك وآخر 7 أيام ومراجعاتك ليعطيك نصيحة مناسبة.
+
+    <p>
+      رفيق يقرأ تقدمك ويساعدك على معرفة ما يحتاج إلى اهتمام.
     </p>
 
-    <button class="btn" onclick="analyzeAI()">🧠 حلل تقدمي الحالي</button>
+    <button onclick="analyzeAI()">
+      ✨ حلّل تقدمي الآن
+    </button>
+
   </div>
 
   <div id="aiResult"></div>
@@ -392,24 +510,24 @@ hr{
 <section id="reminders" class="page">
 
   <div class="card">
+
     <h2>🔔 التذكيرات</h2>
 
     <input id="reminderName" placeholder="اسم التذكير">
 
     <input id="reminderTime" type="time">
 
-    <button class="btn" onclick="addReminder()">➕ إضافة تذكير</button>
-
-    <hr>
-
-    <button class="btn secondary" onclick="requestNotifications()">
-      🔔 السماح بالإشعارات
+    <button class="primary" onclick="addReminder()">
+      إضافة تذكير
     </button>
+
+    <button class="gold" onclick="requestNotificationPermission()">
+      السماح بالإشعارات
+    </button>
+
   </div>
 
-  <div class="card">
-    <div id="remindersList"></div>
-  </div>
+  <div id="remindersList"></div>
 
 </section>
 
@@ -418,79 +536,61 @@ hr{
 <section id="settings" class="page">
 
   <div class="card">
+
     <h2>⚙️ الإعدادات</h2>
 
-    <h3>➕ إضافة عادة</h3>
-
-    <input id="newHabit" placeholder="مثال: قراءة ١٠ صفحات">
-
-    <button class="btn" onclick="addHabit()">إضافة عادة</button>
-
-    <hr>
-
-    <h3>💾 النسخ الاحتياطي</h3>
-
-    <button class="btn secondary" onclick="backupData()">
-      📋 نسخ بياناتي
+    <button class="primary" onclick="backupData()">
+      💾 نسخ احتياطي
     </button>
 
-    <p class="small">
-      يتم حفظ بياناتك محليًا على الجهاز.
-    </p>
+    <br><br>
 
-    <hr>
-
-    <h3>⚠️ إعادة ضبط البيانات</h3>
-
-    <button class="btn danger" onclick="resetData()">
-      🗑️ إعادة ضبط البيانات
+    <button class="danger" onclick="resetData()">
+      إعادة ضبط البيانات
     </button>
+
   </div>
 
 </section>
 
-</div>
+</main>
 
 
-<!-- القائمة -->
-<nav class="nav">
+<!-- التنقل -->
+<nav class="bottomNav">
 
-  <button onclick="showPage('home',this)" class="active">
-    <span>🏠</span>يومي
+  <button id="nav-home" onclick="show('home')">
+    🏠<br>يومي
   </button>
 
-  <button onclick="showPage('calendar',this)">
-    <span>📅</span>التقويم
+  <button id="nav-calendar" onclick="show('calendar')">
+    📅<br>التقويم
   </button>
 
-  <button onclick="showPage('stats',this)">
-    <span>📊</span>الإحصائيات
+  <button id="nav-stats" onclick="show('stats')">
+    📊<br>الإحصائيات
   </button>
 
-  <button onclick="showPage('goals',this)">
-    <span>🎯</span>أهدافي
+  <button id="nav-goals" onclick="show('goals')">
+    🎯<br>أهدافي
   </button>
 
-  <button onclick="showPage('ai',this)">
-    <span>🤖</span>رفيق الذكي
+  <button id="nav-ai" onclick="show('ai')">
+    🤖<br>رفيق الذكي
   </button>
 
-  <button onclick="showPage('reminders',this)">
-    <span>🔔</span>التذكيرات
+  <button id="nav-reminders" onclick="show('reminders')">
+    🔔<br>التذكيرات
   </button>
 
-  <button onclick="showPage('settings',this)">
-    <span>⚙️</span>الإعدادات
+  <button id="nav-settings" onclick="show('settings')">
+    ⚙️<br>الإعدادات
   </button>
 
 </nav>
 
 
 <script>
-
-/* =========================
-   البيانات
-========================= */
 
 const defaults=[
   "الصلاة والعبادة",
@@ -511,54 +611,30 @@ let habits=
     name:name
   }));
 
-let daily=JSON.parse(localStorage.getItem("daily")||"{}");
-let goals=JSON.parse(localStorage.getItem("goals")||"[]");
-let reminders=JSON.parse(localStorage.getItem("reminders")||"[]");
+let daily=
+  JSON.parse(localStorage.getItem("daily")||"{}");
+
+let goals=
+  JSON.parse(localStorage.getItem("goals")||"[]");
+
+let reminders=
+  JSON.parse(localStorage.getItem("reminders")||"[]");
 
 
-/* =========================
-   التاريخ
-========================= */
-
-function todayKey(){
-  const d=new Date();
-  return d.toISOString().slice(0,10);
-}
-
-function formatDate(key){
-  const d=new Date(key+"T00:00:00");
-
-  return new Intl.DateTimeFormat("ar-SA",{
-    weekday:"long",
-    day:"numeric",
-    month:"long",
-    year:"numeric"
-  }).format(d);
-}
-
-function ensureDay(key){
-
-  if(!daily[key]){
-    daily[key]={
-      done:{},
-      achievement:"",
-      weakness:"",
-      tomorrow:"",
-      rating:0
-    };
-  }
-
-  if(!daily[key].done){
-    daily[key].done={};
-  }
-
-  return daily[key];
-}
+/* ذاكرة رفيق */
+let rafiqMemory=
+  JSON.parse(localStorage.getItem("rafiqMemory")||"null")
+  ||
+  {
+    weaknessHistory:[],
+    tomorrowHistory:[],
+    achievementHistory:[],
+    adviceHistory:[]
+  };
 
 
-/* =========================
-   الحفظ
-========================= */
+let calendarDate=new Date();
+
 
 function saveAll(){
 
@@ -567,40 +643,88 @@ function saveAll(){
   localStorage.setItem("goals",JSON.stringify(goals));
   localStorage.setItem("reminders",JSON.stringify(reminders));
 
+  localStorage.setItem(
+    "rafiqMemory",
+    JSON.stringify(rafiqMemory)
+  );
 }
 
 
-/* =========================
-   نسبة الإنجاز
-========================= */
+function keyDate(d=new Date()){
+
+  return d.getFullYear()+"-"+
+    String(d.getMonth()+1).padStart(2,"0")+"-"+
+    String(d.getDate()).padStart(2,"0");
+
+}
+
+
+function arabicDate(d=new Date()){
+
+  return new Intl.DateTimeFormat(
+    "ar-YE",
+    {
+      weekday:"long",
+      year:"numeric",
+      month:"long",
+      day:"numeric"
+    }
+  ).format(d);
+
+}
+
+
+function ensureDay(key){
+
+  if(!daily[key]){
+
+    daily[key]={
+      habits:{},
+      achievement:"",
+      weakness:"",
+      tomorrow:"",
+      rating:0
+    };
+
+  }
+
+}
+
 
 function getPercent(key){
 
-  const d=ensureDay(key);
+  if(!daily[key]) return 0;
+
+  const completed=habits.filter(
+    h=>daily[key].habits[h.id]
+  ).length;
 
   if(!habits.length) return 0;
 
-  const done=habits.filter(h=>d.done[h.id]).length;
+  return Math.round(
+    completed/habits.length*100
+  );
 
-  return Math.round((done/habits.length)*100);
 }
 
 
-/* =========================
-   الصفحة اليومية
-========================= */
-
 function renderHome(){
 
-  const key=todayKey();
-  const d=ensureDay(key);
+  const key=keyDate();
 
-  document.getElementById("todayText").textContent=formatDate(key);
+  ensureDay(key);
+
+  document.getElementById("todayDate").textContent=
+    arabicDate();
 
   const percent=getPercent(key);
 
-  document.getElementById("todayPercent").textContent=percent+"%";
-  document.getElementById("todayProgress").style.width=percent+"%";
+  document.getElementById("todayPercent").textContent=
+    percent+"%";
+
+  document.getElementById("todayProgress").style.width=
+    percent+"%";
+
 
   const list=document.getElementById("habitsList");
 
@@ -610,951 +734,545 @@ function renderHome(){
 
     const div=document.createElement("div");
 
-    const done=!!d.done[h.id];
-
-    div.className="habit"+(done?" done":"");
+    div.className="habit";
 
     div.innerHTML=`
-      <input type="checkbox"
-        ${done?"checked":""}
-        onchange="toggleHabit('${h.id}',this.checked)">
-      <span>${escapeHTML(h.name)}</span>
+      <label>
+        <input
+          type="checkbox"
+          ${daily[key].habits[h.id]?"checked":""}
+          onchange="toggleHabit('${h.id}',this.checked)"
+        >
+        <span>${escapeHTML(h.name)}</span>
+      </label>
     `;
 
     list.appendChild(div);
 
   });
 
-  document.getElementById("reviewDone").value=d.achievement||"";
-  document.getElementById("reviewWeakness").value=d.weakness||"";
-  document.getElementById("reviewTomorrow").value=d.tomorrow||"";
-  document.getElementById("reviewRating").value=d.rating||0;
+
+  document.getElementById("achievement").value=
+    daily[key].achievement||"";
+
+  document.getElementById("weakness").value=
+    daily[key].weakness||"";
+
+  document.getElementById("tomorrow").value=
+    daily[key].tomorrow||"";
+
+  document.getElementById("rating").value=
+    daily[key].rating||0;
+
 }
 
 
-/* =========================
-   العادات
-========================= */
-
 function toggleHabit(id,value){
 
-  const d=ensureDay(todayKey());
+  const key=keyDate();
 
-  d.done[id]=value;
+  ensureDay(key);
+
+  daily[key].habits[id]=value;
 
   saveAll();
 
   renderHome();
   renderStats();
+
+}
+
+
+function saveReview(){
+
+  const key=keyDate();
+
+  ensureDay(key);
+
+  const achievement=
+    document.getElementById("achievement").value.trim();
+
+  const weakness=
+    document.getElementById("weakness").value.trim();
+
+  const tomorrow=
+    document.getElementById("tomorrow").value.trim();
+
+  const rating=
+    Number(document.getElementById("rating").value);
+
+
+  daily[key].achievement=achievement;
+  daily[key].weakness=weakness;
+  daily[key].tomorrow=tomorrow;
+  daily[key].rating=rating;
+
+
+  /* حفظ ذاكرة الإنجاز */
+  if(achievement){
+
+    rafiqMemory.achievementHistory.push({
+      date:key,
+      text:achievement
+    });
+
+  }
+
+
+  /* حفظ نقطة الضعف */
+  if(weakness){
+
+    rafiqMemory.weaknessHistory.push({
+      date:key,
+      text:weakness
+    });
+
+  }
+
+
+  /* حفظ خطة الغد */
+  if(tomorrow){
+
+    rafiqMemory.tomorrowHistory.push({
+      date:key,
+      text:tomorrow
+    });
+
+  }
+
+
+  /* الاحتفاظ بآخر 30 سجل */
+  rafiqMemory.achievementHistory=
+    rafiqMemory.achievementHistory.slice(-30);
+
+  rafiqMemory.weaknessHistory=
+    rafiqMemory.weaknessHistory.slice(-30);
+
+  rafiqMemory.tomorrowHistory=
+    rafiqMemory.tomorrowHistory.slice(-30);
+
+
+  saveAll();
+
+  alert("تم حفظ مراجعة اليوم وذاكرة رفيق 🧠");
+
+  renderHome();
+
+}
+
+
+function show(page){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+  document
+    .getElementById(page)
+    .classList.add("active");
+
+
+  document
+    .querySelectorAll(".bottomNav button")
+    .forEach(b=>b.classList.remove("active"));
+
+
+  const nav=
+    document.getElementById("nav-"+page);
+
+  if(nav) nav.classList.add("active");
+
+
+  if(page==="calendar") renderCalendar();
+  if(page==="stats") renderStats();
+  if(page==="goals") renderGoals();
+  if(page==="reminders") renderReminders();
+
+}
+
+
+function changeMonth(n){
+
+  calendarDate.setMonth(
+    calendarDate.getMonth()+n
+  );
+
   renderCalendar();
 
 }
 
 
-function addHabit(){
-
-  const input=document.getElementById("newHabit");
-
-  const name=input.value.trim();
-
-  if(!name){
-    alert("اكتب اسم العادة أولاً");
-    return;
-  }
-
-  habits.push({
-    id:"h"+Date.now()+Math.random().toString(36).slice(2),
-    name:name
-  });
-
-  saveAll();
-
-  input.value="";
-
-  renderHome();
-  renderStats();
-
-  alert("تمت إضافة العادة ✅");
-}
-
-
-/* =========================
-   مراجعة اليوم
-========================= */
-
-function saveReview(){
-
-  const d=ensureDay(todayKey());
-
-  d.achievement=document.getElementById("reviewDone").value.trim();
-
-  d.weakness=document.getElementById("reviewWeakness").value.trim();
-
-  d.tomorrow=document.getElementById("reviewTomorrow").value.trim();
-
-  d.rating=Number(document.getElementById("reviewRating").value)||0;
-
-  saveAll();
-
-  alert("تم حفظ مراجعة اليوم ✅");
-
-  analyzeAI();
-}
-
-
-/* =========================
-   آخر 7 أيام
-========================= */
-
-function getLast7Days(){
-
-  const arr=[];
-
-  for(let i=6;i>=0;i--){
-
-    const d=new Date();
-
-    d.setHours(0,0,0,0);
-    d.setDate(d.getDate()-i);
-
-    const key=d.toISOString().slice(0,10);
-
-    arr.push(key);
-  }
-
-  return arr;
-}
-
-
-/* =========================
-   السلسلة
-========================= */
-
-function getCurrentStreak(){
-
-  let streak=0;
-
-  for(let i=0;i<365;i++){
-
-    const d=new Date();
-
-    d.setHours(0,0,0,0);
-    d.setDate(d.getDate()-i);
-
-    const key=d.toISOString().slice(0,10);
-
-    if(getPercent(key)>0){
-      streak++;
-    }else{
-      break;
-    }
-
-  }
-
-  return streak;
-}
-
-
-/* =========================
-   الإحصائيات
-========================= */
-
-function renderStats(){
-
-  const today=getPercent(todayKey());
-
-  const days=getLast7Days();
-
-  const values=days.map(getPercent);
-
-  const avg=Math.round(
-    values.reduce((a,b)=>a+b,0)/values.length
-  );
-
-  const streak=getCurrentStreak();
-
-  const ratings=days
-    .map(k=>Number(ensureDay(k).rating)||0)
-    .filter(v=>v>0);
-
-  const rating=ratings.length
-    ?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)
-    :"0";
-
-  document.getElementById("statToday").textContent=today+"%";
-  document.getElementById("statWeek").textContent=avg+"%";
-  document.getElementById("statStreak").textContent=streak+" يوم";
-  document.getElementById("statRating").textContent=rating+"/5";
-}
-
-
-/* =========================
-   التقويم
-========================= */
-
 function renderCalendar(){
 
-  const box=document.getElementById("calendarList");
+  const year=calendarDate.getFullYear();
+  const month=calendarDate.getMonth();
 
-  box.innerHTML="";
+  document.getElementById("calendarTitle").textContent=
+    new Intl.DateTimeFormat(
+      "ar-YE",
+      {
+        month:"long",
+        year:"numeric"
+      }
+    ).format(calendarDate);
 
-  getLast7Days().reverse().forEach(key=>{
 
-    const p=getPercent(key);
+  const grid=
+    document.getElementById("calendarGrid");
 
-    const d=ensureDay(key);
+  grid.innerHTML="";
+
+
+  const first=
+    new Date(year,month,1);
+
+  const daysInMonth=
+    new Date(year,month+1,0).getDate();
+
+  let start=
+    first.getDay();
+
+  /*
+    تحويل بداية الأسبوع إلى الأحد
+    مع الحفاظ على 7 أعمدة
+  */
+
+  for(let i=0;i<start;i++){
+
+    const empty=document.createElement("div");
+
+    grid.appendChild(empty);
+
+  }
+
+
+  for(let day=1;day<=daysInMonth;day++){
+
+    const d=
+      new Date(year,month,day);
+
+    const key=keyDate(d);
 
     const div=document.createElement("div");
 
-    div.className="day";
+    div.className="calendarDay";
+
+
+    if(key===keyDate()){
+      div.classList.add("today");
+    }
+
+
+    if(getPercent(key)>0){
+      div.classList.add("done");
+    }
+
 
     div.innerHTML=`
-      <strong>${formatDate(key)}</strong>
-      <br>
-      <span class="badge">${p}% إنجاز</span>
-      ${
-        d.tomorrow
-        ? `<p class="small">خطوة الغد: ${escapeHTML(d.tomorrow)}</p>`
-        :""
-      }
+      <span>${day}</span>
+      <span class="calendarName">
+        ${getPercent(key)}%
+      </span>
     `;
 
-    box.appendChild(div);
 
-  });
-}
+    div.onclick=()=>{
+
+      document
+        .querySelectorAll(".calendarDay")
+        .forEach(x=>x.classList.remove("selected"));
+
+      div.classList.add("selected");
+
+      showSelectedDay(key);
+
+    };
 
 
-/* =========================
-   الأهداف
-========================= */
+    grid.appendChild(div);
 
-function addGoal(){
-
-  const name=document.getElementById("goalName").value.trim();
-
-  const category=document.getElementById("goalCategory").value;
-
-  if(!name){
-    alert("اكتب اسم الهدف");
-    return;
   }
 
-  goals.push({
-    id:"g"+Date.now(),
-    name:name,
-    category:category,
-    progress:0
-  });
-
-  saveAll();
-
-  document.getElementById("goalName").value="";
-
-  renderGoals();
 }
 
 
-function renderGoals(){
+function showSelectedDay(key){
 
-  const box=document.getElementById("goalsList");
+  const box=
+    document.getElementById("selectedDayDetails");
 
-  box.innerHTML="";
+  const d=
+    new Date(key+"T00:00:00");
 
-  if(!goals.length){
+  if(!daily[key]){
 
-    box.innerHTML="<p class='small'>لا توجد أهداف بعد.</p>";
+    box.innerHTML=`
+      <h3>${arabicDate(d)}</h3>
+      <p>لا توجد بيانات لهذا اليوم.</p>
+    `;
 
     return;
-  }
-
-  goals.forEach(g=>{
-
-    const div=document.createElement("div");
-
-    div.className="goal";
-
-    div.innerHTML=`
-      <strong>${escapeHTML(g.name)}</strong>
-      <span class="badge">${escapeHTML(g.category)}</span>
-
-      <p>${g.progress}%</p>
-
-      <div class="progress">
-        <div style="width:${g.progress}%"></div>
-      </div>
-
-      <div class="goal-actions">
-
-        <button class="btn"
-          onclick="increaseGoal('${g.id}')">
-          +5%
-        </button>
-
-        <button class="btn danger"
-          onclick="deleteGoal('${g.id}')">
-          حذف
-        </button>
-
-      </div>
-    `;
-
-    box.appendChild(div);
-
-  });
-}
-
-
-function increaseGoal(id){
-
-  const g=goals.find(x=>x.id===id);
-
-  if(!g)return;
-
-  g.progress=Math.min(100,g.progress+5);
-
-  saveAll();
-
-  renderGoals();
-}
-
-
-function deleteGoal(id){
-
-  if(!confirm("هل تريد حذف هذا الهدف؟"))return;
-
-  goals=goals.filter(g=>g.id!==id);
-
-  saveAll();
-
-  renderGoals();
-}
-
-
-/* =========================
-   ذاكرة رفيق
-========================= */
-
-function getMemory(){
-
-  const days=getLast7Days();
-
-  const completedHabits={};
-
-  habits.forEach(h=>{
-    completedHabits[h.id]=0;
-  });
-
-  let totalCompleted=0;
-
-  let recordedDays=0;
-
-  let ratingTotal=0;
-
-  let ratingCount=0;
-
-  const weaknesses=[];
-
-  const tomorrowPlans=[];
-
-  days.forEach(key=>{
-
-    const d=ensureDay(key);
-
-    const percent=getPercent(key);
-
-    if(percent>0){
-      recordedDays++;
-    }
-
-    habits.forEach(h=>{
-
-      if(d.done[h.id]){
-
-        completedHabits[h.id]++;
-        totalCompleted++;
-
-      }
-
-    });
-
-    if(d.rating){
-
-      ratingTotal+=Number(d.rating);
-      ratingCount++;
-
-    }
-
-    if(d.weakness){
-      weaknesses.push(d.weakness);
-    }
-
-    if(d.tomorrow){
-      tomorrowPlans.push(d.tomorrow);
-    }
-
-  });
-
-
-  let strongest=null;
-
-  let weakest=null;
-
-  habits.forEach(h=>{
-
-    const count=completedHabits[h.id]||0;
-
-    if(!strongest || count>strongest.count){
-
-      strongest={
-        name:h.name,
-        count:count
-      };
-
-    }
-
-    if(!weakest || count<weakest.count){
-
-      weakest={
-        name:h.name,
-        count:count
-      };
-
-    }
-
-  });
-
-
-  const avgRating=ratingCount
-    ?ratingTotal/ratingCount
-    :0;
-
-
-  const goalAverage=goals.length
-    ?goals.reduce((a,g)=>a+(Number(g.progress)||0),0)/goals.length
-    :0;
-
-
-  return {
-    recordedDays,
-    totalCompleted,
-    strongest,
-    weakest,
-    avgRating,
-    goalAverage,
-    weaknesses,
-    tomorrowPlans
-  };
-
-}
-
-
-/* =========================
-   تحليل الاتجاه
-========================= */
-
-function getTrend(){
-
-  const days=getLast7Days();
-
-  const first=days.slice(0,3).map(getPercent);
-
-  const last=days.slice(4,7).map(getPercent);
-
-  const firstAvg=
-    first.reduce((a,b)=>a+b,0)/first.length;
-
-  const lastAvg=
-    last.reduce((a,b)=>a+b,0)/last.length;
-
-  if(lastAvg>firstAvg+5){
-    return "يتحسن";
-  }
-
-  if(lastAvg<firstAvg-5){
-    return "ينخفض";
-  }
-
-  return "مستقر";
-}
-
-
-/* =========================
-   نصيحة رفيق الذكية
-========================= */
-
-function generateSmartAdvice(){
-
-  const today=getPercent(todayKey());
-
-  const days=getLast7Days();
-
-  const values=days.map(getPercent);
-
-  const weeklyAvg=Math.round(
-    values.reduce((a,b)=>a+b,0)/values.length
-  );
-
-  const streak=getCurrentStreak();
-
-  const memory=getMemory();
-
-  const trend=getTrend();
-
-  let advice="";
-
-  if(today>=75){
-
-    advice=
-      "ممتاز جدًا اليوم 🔥 حافظ على هذا المستوى، ولا تحاول إضافة أشياء كثيرة. الاستمرار أهم من الضغط على نفسك.";
-
-  }else if(today>=40){
-
-    if(memory.weakest){
-
-      advice=
-        `أنت في منتصف الطريق تقريبًا. ركّز الآن على عادة «${memory.weakest.name}» لأنها الأقل حضورًا في آخر 7 أيام.`;
-
-    }else{
-
-      advice=
-        "إنجازك جيد اليوم. أكمل عادة واحدة إضافية فقط إذا كان لديك وقت وطاقة.";
-
-    }
-
-  }else if(today>0){
-
-    advice=
-      "ابدأ اليوم بعادة واحدة سهلة فقط. بعد إنجازها، أضف عادة ثانية. المهم الآن هو بناء الاستمرارية.";
-
-  }else if(streak>0){
-
-    advice=
-      `لا تجعل يومك ينقطع. لديك سلسلة ${streak} يوم، فابدأ الآن بأسهل عادة للمحافظة عليها.`;
-
-  }else if(memory.strongest && memory.strongest.count>0){
-
-    advice=
-      `ابدأ بعادة «${memory.strongest.name}» لأنها الأكثر التزامًا عندك، ثم انتقل إلى عادة أخرى.`;
-
-  }else{
-
-    advice=
-      "ابدأ بخطوة صغيرة جدًا اليوم. عادة واحدة تكفي كبداية.";
 
   }
 
 
-  if(
-    memory.recordedDays>=3 &&
-    weeklyAvg<20
-  ){
-
-    advice=
-      "آخر 7 أيام تحتاج إلى بداية أبسط. اختر عادتين أساسيتين فقط اليوم، وركّز على إنجازهما بدل محاولة إنجاز كل شيء.";
-
-  }
-
-
-  if(
-    memory.recordedDays>=3 &&
-    trend==="يتحسن" &&
-    weeklyAvg>=20
-  ){
-
-    advice=
-      "تقدمك في تحسن 📈. لا تغيّر الخطة كثيرًا الآن؛ استمر على نفس الإيقاع وأضف خطوة صغيرة فقط.";
-
-  }
-
-
-  if(
-    memory.recordedDays>=3 &&
-    trend==="ينخفض" &&
-    weeklyAvg>=20
-  ){
-
-    advice=
-      "لاحظنا انخفاضًا في آخر الأيام. ارجع إلى أسهل عادة عندك اليوم، ثم ابنِ الإنجاز من جديد خطوة خطوة.";
-
-  }
-
-
-  if(
-    goals.length>0 &&
-    memory.goalAverage>=75
-  ){
-
-    advice=
-      "أهدافك متقدمة بشكل جيد 🎯. اختر الهدف الأقرب إلى الاكتمال وخذ اليوم خطوة واحدة لإنهائه.";
-
-  }
-
-
-  if(
-    goals.length>0 &&
-    memory.goalAverage<20
-  ){
-
-    advice=
-      "أهدافك ما زالت في البداية. لا تحاول العمل عليها كلها؛ اختر هدفًا واحدًا وخذ فيه خطوة صغيرة اليوم.";
-
-  }
-
-  return advice;
-}
-
-
-/* =========================
-   تحليل رفيق الذكي
-========================= */
-
-function analyzeAI(){
-
-  const result=document.getElementById("aiResult");
-
-  const days=getLast7Days();
-
-  const values=days.map(getPercent);
-
-  const today=getPercent(todayKey());
-
-  const weeklyAvg=Math.round(
-    values.reduce((a,b)=>a+b,0)/values.length
-  );
-
-  const positiveDays=values.filter(v=>v>0).length;
-
-  const streak=getCurrentStreak();
-
-  const memory=getMemory();
-
-  const trend=getTrend();
-
-  const reviews=days
-    .map(k=>ensureDay(k))
-    .filter(d=>d.rating>0);
-
-  const avgRating=reviews.length
-    ?(
-      reviews.reduce((a,d)=>a+Number(d.rating),0)
-      /reviews.length
-    ).toFixed(1)
-    :"0";
-
-  let strengths=[];
-
-  let attention=[];
-
-
-  if(today>0){
-    strengths.push("بدأت يومك وأنجزت جزءًا من عاداتك.");
-  }
-
-  if(streak>=2){
-    strengths.push(`لديك سلسلة مستمرة لمدة ${streak} أيام.`);
-  }
-
-  if(trend==="يتحسن"){
-    strengths.push("الاتجاه العام في الأيام الأخيرة يتحسن.");
-  }
-
-  if(memory.strongest && memory.strongest.count>0){
-    strengths.push(
-      `أكثر عادة التزمت بها خلال آخر 7 أيام: ${memory.strongest.name}.`
-    );
-  }
-
-  if(!strengths.length){
-    strengths.push("لم يبدأ نمط واضح بعد، وهذه فرصة جيدة للبدء من اليوم.");
-  }
-
-
-  if(memory.weakest){
-
-    attention.push(
-      `العادة الأقل إنجازًا خلال آخر 7 أيام: ${memory.weakest.name}.`
-    );
-
-  }
-
-  if(trend==="ينخفض"){
-
-    attention.push(
-      "هناك انخفاض في متوسط الإنجاز مقارنة ببداية الفترة."
-    );
-
-  }
-
-  if(weeklyAvg<30){
-
-    attention.push(
-      "الأولوية الآن هي بناء الاستمرارية بعادات قليلة وسهلة."
-    );
-
-  }
-
-  if(!attention.length){
-
-    attention.push("لا توجد مشكلة واضحة تحتاج إلى تدخل كبير الآن.");
-  }
-
-
-  const advice=generateSmartAdvice();
-
-
-  let goalHTML="";
-
-  if(goals.length){
-
-    goalHTML=goals.map(g=>`
-
-      <div class="day">
-
-        <strong>${escapeHTML(g.name)}</strong>
-
-        <span class="badge">
-          ${escapeHTML(g.category)}
-        </span>
-
-        <br>
-
-        التقدم: ${g.progress}%
-
-      </div>
-
-    `).join("");
-
-  }else{
-
-    goalHTML="<p class='small'>لم تضف أهدافًا بعد.</p>";
-
-  }
-
-
-  let memoryHTML="";
-
-  if(memory.weaknesses.length){
-
-    memoryHTML=`
-      <p>
-        📝 رفيق يتذكر أنك ذكرت في مراجعاتك السابقة:
-      </p>
-
-      <ul>
-        ${memory.weaknesses.slice(-3).map(x=>
-          `<li>${escapeHTML(x)}</li>`
-        ).join("")}
-      </ul>
-    `;
-
-  }else{
-
-    memoryHTML=
-      "<p>لم تسجل نقاط ضعف في المراجعات السابقة بعد.</p>";
-
-  }
-
-
-  result.innerHTML=`
-
-    <div class="card">
-
-      <h3>📊 ملخصك الحالي</h3>
-
-      <div class="stat">
-        <span>إنجاز اليوم</span>
-        <strong>${today}%</strong>
-      </div>
-
-      <div class="stat">
-        <span>متوسط آخر 7 أيام</span>
-        <strong>${weeklyAvg}%</strong>
-      </div>
-
-      <div class="stat">
-        <span>أيام فيها إنجاز</span>
-        <strong>${positiveDays}/7</strong>
-      </div>
-
-      <div class="stat">
-        <span>السلسلة الحالية</span>
-        <strong>${streak} يوم</strong>
-      </div>
-
-      <div class="stat">
-        <span>متوسط التقييم</span>
-        <strong>${avgRating}/5</strong>
-      </div>
-
-      <div class="stat">
-        <span>الاتجاه</span>
-        <strong>${trend}</strong>
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <h3>📈 تقدمك يومًا بيوم</h3>
-
-      ${days.map(key=>`
-
-        <div class="stat">
-
-          <span>${formatDate(key)}</span>
-
-          <strong>${getPercent(key)}%</strong>
-
-        </div>
-
-      `).join("")}
-
-    </div>
-
-
-    <div class="card">
-
-      <h3>💪 نقاط القوة</h3>
-
-      <ul>
-        ${strengths.map(x=>`<li>${x}</li>`).join("")}
-      </ul>
-
-    </div>
-
-
-    <div class="card">
-
-      <h3>⚠️ ما يحتاج اهتمامًا</h3>
-
-      <ul>
-        ${attention.map(x=>`<li>${x}</li>`).join("")}
-      </ul>
-
-    </div>
-
-
-    <div class="card memory">
-
-      <h3>🧠 ذاكرة رفيق</h3>
-
-      ${memoryHTML}
-
-      ${
-        memory.tomorrowPlans.length
-        ?`
-          <p>
-            آخر خطوة للغد سجلتها:
-          </p>
-
-          <strong>
-            ${escapeHTML(
-              memory.tomorrowPlans[memory.tomorrowPlans.length-1]
-            )}
-          </strong>
-        `
-        :""
-      }
-
-    </div>
-
-
-    <div class="card">
-
-      <h3>🎯 أهدافك</h3>
-
-      ${goalHTML}
-
-    </div>
-
-
-    <div class="card advice">
-
-      <h3>💡 توصية رفيق اليوم</h3>
-
-      <p>${advice}</p>
-
-    </div>
+  const percent=getPercent(key);
+
+  const completed=
+    habits
+      .filter(h=>daily[key].habits[h.id])
+      .map(h=>h.name);
+
+
+  box.innerHTML=`
+
+    <h3>${arabicDate(d)}</h3>
+
+    <p>
+      نسبة الإنجاز:
+      <strong>${percent}%</strong>
+    </p>
+
+    <p>
+      <strong>العادات المكتملة:</strong><br>
+      ${completed.length?
+        completed.map(escapeHTML).join("، "):
+        "لا توجد"}
+    </p>
+
+    <p>
+      <strong>الإنجاز:</strong><br>
+      ${escapeHTML(daily[key].achievement||"لا يوجد")}
+    </p>
+
+    <p>
+      <strong>نقطة الضعف:</strong><br>
+      ${escapeHTML(daily[key].weakness||"لا يوجد")}
+    </p>
+
+    <p>
+      <strong>الغد:</strong><br>
+      ${escapeHTML(daily[key].tomorrow||"لا يوجد")}
+    </p>
+
+    <p>
+      <strong>التقييم:</strong>
+      ${daily[key].rating?
+        "⭐".repeat(Number(daily[key].rating)):
+        "بدون تقييم"}
+    </p>
 
   `;
 
 }
 
 
-/* =========================
-   التذكيرات
-========================= */
+function renderStats(){
 
-function addReminder(){
+  const keys=
+    Object.keys(daily)
+    .filter(k=>daily[k]);
 
-  const name=document.getElementById("reminderName").value.trim();
+  const recorded=
+    keys.filter(k=>getPercent(k)>0);
 
-  const time=document.getElementById("reminderTime").value;
 
-  if(!name || !time){
+  document.getElementById("statDays").textContent=
+    recorded.length;
 
-    alert("اكتب اسم التذكير والوقت");
 
-    return;
+  let average=0;
+
+  if(recorded.length){
+
+    average=Math.round(
+      recorded.reduce(
+        (sum,k)=>sum+getPercent(k),0
+      )/recorded.length
+    );
+
   }
 
-  reminders.push({
-    id:"r"+Date.now(),
-    name:name,
-    time:time,
-    active:true,
-    last:null
-  });
-
-  saveAll();
-
-  document.getElementById("reminderName").value="";
-  document.getElementById("reminderTime").value="";
-
-  renderReminders();
-}
+  document.getElementById("statAverage").textContent=
+    average+"%";
 
 
-function renderReminders(){
+  document.getElementById("statStreak").textContent=
+    getCurrentStreak();
 
-  const box=document.getElementById("remindersList");
+
+  const ratings=
+    recorded
+      .map(k=>Number(daily[k].rating||0))
+      .filter(x=>x>0);
+
+
+  let avgRating=0;
+
+  if(ratings.length){
+
+    avgRating=
+      (
+        ratings.reduce((a,b)=>a+b,0)/
+        ratings.length
+      ).toFixed(1);
+
+  }
+
+
+  document.getElementById("statRating").textContent=
+    avgRating;
+
+
+  const box=
+    document.getElementById("last7Stats");
 
   box.innerHTML="";
 
-  if(!reminders.length){
 
-    box.innerHTML="<p class='small'>لا توجد تذكيرات.</p>";
-
-    return;
-  }
-
-  reminders.forEach(r=>{
+  getLast7Days().forEach(d=>{
 
     const div=document.createElement("div");
 
-    div.className="day";
+    div.className="habit";
+
+    div.innerHTML=`
+      <span>${arabicDate(d.date)}</span>
+      <strong>${d.percent}%</strong>
+    `;
+
+    box.appendChild(div);
+
+  });
+
+}
+
+
+function getCurrentStreak(){
+
+  let streak=0;
+
+  const d=new Date();
+
+  while(true){
+
+    const key=keyDate(d);
+
+    if(getPercent(key)>0){
+
+      streak++;
+
+      d.setDate(d.getDate()-1);
+
+    }else{
+
+      break;
+
+    }
+
+  }
+
+  return streak;
+
+}
+
+
+function addGoal(){
+
+  const name=
+    document.getElementById("goalName").value.trim();
+
+  const category=
+    document.getElementById("goalCategory").value;
+
+
+  if(!name){
+
+    alert("اكتب الهدف أولًا");
+
+    return;
+
+  }
+
+
+  goals.push({
+    name:name,
+    category:category,
+    progress:0
+  });
+
+
+  document.getElementById("goalName").value="";
+
+  saveAll();
+
+  renderGoals();
+
+}
+
+
+function renderGoals(){
+
+  const box=
+    document.getElementById("goalsList");
+
+  box.innerHTML="";
+
+
+  if(!goals.length){
+
+    box.innerHTML=
+      '<div class="card empty">لا توجد أهداف بعد.</div>';
+
+    return;
+
+  }
+
+
+  goals.forEach((g,i)=>{
+
+    const div=document.createElement("div");
+
+    div.className="card goal";
 
     div.innerHTML=`
 
-      <strong>${escapeHTML(r.name)}</strong>
+      <div class="goalTop">
 
-      <span class="badge">${r.time}</span>
+        <strong>
+          ${escapeHTML(g.name)}
+        </strong>
+
+        <span class="small">
+          ${escapeHTML(g.category)}
+        </span>
+
+      </div>
+
+      <div class="progress">
+        <div style="width:${g.progress}%"></div>
+      </div>
 
       <p>
+        التقدم:
+        <strong>${g.progress}%</strong>
+      </p>
+
+      <div class="goalActions">
+
         <button
-          class="btn secondary"
-          onclick="toggleReminder('${r.id}')">
-          ${r.active?"🔔 يعمل":"🔕 متوقف"}
+          class="primary"
+          onclick="increaseGoal(${i})">
+          +5%
         </button>
 
         <button
-          class="btn danger"
-          onclick="deleteReminder('${r.id}')">
+          class="danger"
+          onclick="deleteGoal(${i})">
           حذف
         </button>
-      </p>
+
+      </div>
 
     `;
 
@@ -1565,52 +1283,172 @@ function renderReminders(){
 }
 
 
-function toggleReminder(id){
+function increaseGoal(i){
 
-  const r=reminders.find(x=>x.id===id);
+  goals[i].progress=
+    Math.min(100,goals[i].progress+5);
 
-  if(!r)return;
+  saveAll();
 
-  r.active=!r.active;
+  renderGoals();
+
+}
+
+
+function deleteGoal(i){
+
+  if(!confirm("هل تريد حذف هذا الهدف؟")) return;
+
+  goals.splice(i,1);
+
+  saveAll();
+
+  renderGoals();
+
+}
+
+
+function addReminder(){
+
+  const name=
+    document.getElementById("reminderName").value.trim();
+
+  const time=
+    document.getElementById("reminderTime").value;
+
+
+  if(!name || !time){
+
+    alert("أدخل اسم التذكير والوقت");
+
+    return;
+
+  }
+
+
+  reminders.push({
+    name:name,
+    time:time,
+    active:true
+  });
+
+
+  document.getElementById("reminderName").value="";
+  document.getElementById("reminderTime").value="";
+
 
   saveAll();
 
   renderReminders();
+
 }
 
 
-function deleteReminder(id){
+function renderReminders(){
 
-  reminders=reminders.filter(r=>r.id!==id);
+  const box=
+    document.getElementById("remindersList");
+
+  box.innerHTML="";
+
+
+  if(!reminders.length){
+
+    box.innerHTML=
+      '<div class="card empty">لا توجد تذكيرات.</div>';
+
+    return;
+
+  }
+
+
+  reminders.forEach((r,i)=>{
+
+    const div=document.createElement("div");
+
+    div.className="card reminder";
+
+    div.innerHTML=`
+
+      <div>
+        <strong>${escapeHTML(r.name)}</strong>
+        <div class="small">${r.time}</div>
+      </div>
+
+      <div class="goalActions">
+
+        <button
+          class="${r.active?"primary":"gold"}"
+          onclick="toggleReminder(${i})">
+          ${r.active?"مفعّل":"متوقف"}
+        </button>
+
+        <button
+          class="danger"
+          onclick="deleteReminder(${i})">
+          حذف
+        </button>
+
+      </div>
+
+    `;
+
+    box.appendChild(div);
+
+  });
+
+}
+
+
+function toggleReminder(i){
+
+  reminders[i].active=
+    !reminders[i].active;
 
   saveAll();
 
   renderReminders();
+
 }
 
 
-function requestNotifications(){
+function deleteReminder(i){
+
+  reminders.splice(i,1);
+
+  saveAll();
+
+  renderReminders();
+
+}
+
+
+function requestNotificationPermission(){
 
   if(!("Notification" in window)){
 
-    alert("المتصفح لا يدعم الإشعارات.");
+    alert("هذا المتصفح لا يدعم الإشعارات.");
 
     return;
+
   }
 
-  Notification.requestPermission().then(permission=>{
 
-    if(permission==="granted"){
+  Notification
+    .requestPermission()
+    .then(permission=>{
 
-      alert("تم السماح بالإشعارات ✅");
+      if(permission==="granted"){
 
-    }else{
+        alert("تم السماح بالإشعارات 🔔");
 
-      alert("لم يتم السماح بالإشعارات.");
+      }else{
 
-    }
+        alert("لم يتم السماح بالإشعارات.");
 
-  });
+      }
+
+    });
 
 }
 
@@ -1619,38 +1457,26 @@ function checkReminders(){
 
   const now=new Date();
 
-  const hh=String(now.getHours()).padStart(2,"0");
-  const mm=String(now.getMinutes()).padStart(2,"0");
+  const currentTime=
+    String(now.getHours()).padStart(2,"0")+":"+
+    String(now.getMinutes()).padStart(2,"0");
 
-  const time=hh+":"+mm;
-
-  const day=todayKey();
 
   reminders.forEach(r=>{
 
     if(
       r.active &&
-      r.time===time &&
-      r.last!==day
+      r.time===currentTime &&
+      "Notification" in window &&
+      Notification.permission==="granted"
     ){
 
-      r.last=day;
-
-      saveAll();
-
-      if(
-        "Notification" in window &&
-        Notification.permission==="granted"
-      ){
-
-        new Notification(
-          "رفيق 🤝",
-          {
-            body:r.name
-          }
-        );
-
-      }
+      new Notification(
+        "رفيق 🔔",
+        {
+          body:r.name
+        }
+      );
 
     }
 
@@ -1659,9 +1485,565 @@ function checkReminders(){
 }
 
 
+setInterval(
+  checkReminders,
+  30000
+);
+
+
+function getLast7Days(){
+
+  const result=[];
+
+  for(let i=6;i>=0;i--){
+
+    const d=new Date();
+
+    d.setDate(
+      d.getDate()-i
+    );
+
+    const key=keyDate(d);
+
+    result.push({
+      date:d,
+      key:key,
+      percent:getPercent(key)
+    });
+
+  }
+
+  return result;
+
+}
+
+
 /* =========================
-   النسخ الاحتياطي
+   رفيق الذكي + الذاكرة
 ========================= */
+
+function analyzeAI(){
+
+  const days=getLast7Days();
+
+
+  const recorded=
+    days.filter(d=>d.percent>0);
+
+
+  const totalPercent=
+    days.reduce(
+      (sum,d)=>sum+d.percent,
+      0
+    );
+
+
+  const weeklyAverage=
+    Math.round(totalPercent/7);
+
+
+  const recordedAverage=
+    recorded.length
+      ? Math.round(
+          recorded.reduce(
+            (sum,d)=>sum+d.percent,
+            0
+          )/recorded.length
+        )
+      :0;
+
+
+  const streak=
+    getCurrentStreak();
+
+
+  const ratings=
+    days
+      .map(d=>{
+        const x=daily[d.key];
+        return x?Number(x.rating||0):0;
+      })
+      .filter(x=>x>0);
+
+
+  const avgRating=
+    ratings.length
+      ?(
+        ratings.reduce((a,b)=>a+b,0)/
+        ratings.length
+       ).toFixed(1)
+      :0;
+
+
+  /* تحليل العادات */
+
+  const habitStats=
+    habits.map(h=>{
+
+      const done=
+        days.filter(
+          d=>
+            daily[d.key] &&
+            daily[d.key].habits[h.id]
+        ).length;
+
+      return{
+        name:h.name,
+        done:done,
+        percent:Math.round(done/7*100)
+      };
+
+    });
+
+
+  const strongest=
+    [...habitStats]
+      .sort((a,b)=>b.done-a.done)[0];
+
+
+  const weakest=
+    [...habitStats]
+      .sort((a,b)=>a.done-b.done)[0];
+
+
+  /* الأهداف */
+
+  const goalAverage=
+    goals.length
+      ?Math.round(
+        goals.reduce(
+          (sum,g)=>sum+Number(g.progress||0),
+          0
+        )/goals.length
+      )
+      :0;
+
+
+  /* الاتجاه */
+
+  const firstHalf=
+    days.slice(0,3)
+      .reduce((a,d)=>a+d.percent,0)/3;
+
+
+  const secondHalf=
+    days.slice(4)
+      .reduce((a,d)=>a+d.percent,0)/3;
+
+
+  let trend="مستقر";
+
+
+  if(secondHalf-firstHalf>=10){
+    trend="يتحسن";
+  }else if(firstHalf-secondHalf>=10){
+    trend="يتراجع";
+  }
+
+
+  /* =========================
+     ذاكرة رفيق
+  ========================= */
+
+  const weaknessHistory=
+    rafiqMemory.weaknessHistory
+      .filter(x=>x && x.text)
+      .slice(-30);
+
+
+  const tomorrowHistory=
+    rafiqMemory.tomorrowHistory
+      .filter(x=>x && x.text)
+      .slice(-30);
+
+
+  const achievementHistory=
+    rafiqMemory.achievementHistory
+      .filter(x=>x && x.text)
+      .slice(-30);
+
+
+  /*
+    البحث عن نقطة ضعف متكررة
+    باستخدام التطابق النصي البسيط
+  */
+
+  let recurringWeakness="";
+
+
+  const weaknessCounts={};
+
+
+  weaknessHistory.forEach(item=>{
+
+    const text=
+      item.text.trim();
+
+    if(!text) return;
+
+    weaknessCounts[text]=
+      (weaknessCounts[text]||0)+1;
+
+  });
+
+
+  const repeated=
+    Object.entries(weaknessCounts)
+      .sort((a,b)=>b[1]-a[1]);
+
+
+  if(
+    repeated.length &&
+    repeated[0][1]>=2
+  ){
+
+    recurringWeakness=
+      repeated[0][0];
+
+  }
+
+
+  const lastTomorrow=
+    tomorrowHistory.length
+      ?tomorrowHistory[tomorrowHistory.length-1].text
+      :"";
+
+
+  const lastAchievement=
+    achievementHistory.length
+      ?achievementHistory[achievementHistory.length-1].text
+      :"";
+
+
+  /* =========================
+     النصيحة الذكية
+  ========================= */
+
+  let advice="";
+
+
+  const todayPercent=
+    getPercent(keyDate());
+
+
+  if(todayPercent>=75){
+
+    advice=
+      "ممتاز جدًا 👏 إنجازك اليوم قوي. حافظ على هذا المستوى ولا تضغط على نفسك بإضافة أشياء كثيرة.";
+
+  }else if(todayPercent>=40){
+
+    advice=
+      "أنت بدأت اليوم بشكل جيد. ركّز الآن على عادة واحدة متبقية، ثم توقف عن إضافة المهام.";
+
+  }else if(todayPercent>0){
+
+    advice=
+      "بداية جيدة 👍 أكمل عادة واحدة سهلة فقط، ثم اعتبر اليوم ناجحًا.";
+
+  }else if(streak>0){
+
+    advice=
+      "حافظ على الاستمرارية. لا تحتاج إلى يوم مثالي؛ ابدأ الآن بعادة واحدة فقط حتى لا تنقطع السلسلة.";
+
+  }else if(strongest && strongest.done>0){
+
+    advice=
+      "ابدأ بالعادة التي تعرف أنك تستطيع إنجازها. الخطوة الصغيرة أفضل من الانتظار.";
+
+  }else if(weeklyAverage<20 && recorded.length>=3){
+
+    advice=
+      "الأسبوع يحتاج إلى بداية أبسط. اختر عادتين فقط واجعل هدفك الأساسي هو الاستمرار.";
+
+  }else if(
+    trend==="يتحسن" &&
+    weeklyAverage>=20
+  ){
+
+    advice=
+      "تقدمك يتحسن 📈. استمر بنفس الأسلوب ولا تغيّر أشياء كثيرة في الوقت نفسه.";
+
+  }else if(
+    trend==="يتراجع" &&
+    weeklyAverage>=20
+  ){
+
+    advice=
+      "هناك تراجع بسيط. ارجع إلى أسهل عادة لديك واستعد الإيقاع خطوة بخطوة.";
+
+  }else if(
+    goals.length &&
+    goalAverage>=75
+  ){
+
+    advice=
+      "أهدافك تتقدم بشكل جيد 🎯. ركّز على أقرب هدف لإكماله.";
+
+  }else if(
+    goals.length &&
+    goalAverage<20
+  ){
+
+    advice=
+      "لا تحاول إنجاز كل أهدافك معًا. اختر هدفًا واحدًا وخطوة صغيرة اليوم.";
+
+  }else{
+
+    advice=
+      "ابدأ اليوم بعادة واحدة سهلة فقط. بعد إنجازها، أضف عادة ثانية. المهم الآن هو بناء الاستمرارية.";
+
+  }
+
+
+  /* =========================
+     دمج الذاكرة في النصيحة
+  ========================= */
+
+  if(recurringWeakness){
+
+    advice+=
+      " رفيق لاحظ أن «"+
+      recurringWeakness+
+      "» تكرر في مراجعاتك، فاجعل خطوتك القادمة بسيطة لمعالجة هذا الأمر.";
+
+  }else if(lastTomorrow){
+
+    advice+=
+      " وغدًا ابدأ بالخطوة التي كتبتها لنفسك: «"+
+      lastTomorrow+
+      "».";
+
+  }
+
+
+  rafiqMemory.adviceHistory.push({
+    date:keyDate(),
+    text:advice
+  });
+
+
+  rafiqMemory.adviceHistory=
+    rafiqMemory.adviceHistory.slice(-30);
+
+
+  saveAll();
+
+
+  /* =========================
+     عرض التحليل
+  ========================= */
+
+  const result=
+    document.getElementById("aiResult");
+
+
+  result.innerHTML=`
+
+    <div class="aiSection">
+
+      <strong>📊 ملخص آخر 7 أيام</strong>
+
+      <p>
+        متوسط الأسبوع:
+        <strong>${weeklyAverage}%</strong>
+      </p>
+
+      <p>
+        متوسط الأيام المسجلة:
+        <strong>${recordedAverage}%</strong>
+      </p>
+
+      <p>
+        أيام مسجلة:
+        <strong>${recorded.length} من 7</strong>
+      </p>
+
+      <p>
+        الاستمرارية الحالية:
+        <strong>${streak} يوم</strong>
+      </p>
+
+      <p>
+        متوسط التقييم:
+        <strong>${avgRating}</strong>
+      </p>
+
+    </div>
+
+
+    <div class="aiSection">
+
+      <strong>📈 تقدمك يومًا بيوم</strong>
+
+      ${days.map(d=>`
+
+        <div class="habit">
+
+          <span>
+            ${arabicDate(d.date)}
+          </span>
+
+          <strong>
+            ${d.percent}%
+          </strong>
+
+        </div>
+
+      `).join("")}
+
+    </div>
+
+
+    <div class="aiSection">
+
+      <strong>💪 نقاط القوة</strong>
+
+      <p>
+        أقوى عادة حاليًا:
+        <strong>
+          ${strongest?
+            escapeHTML(strongest.name):
+            "لا توجد بيانات كافية"}
+        </strong>
+      </p>
+
+      <p>
+        نسبة الالتزام بها:
+        <strong>
+          ${strongest?strongest.percent:0}%
+        </strong>
+      </p>
+
+      ${
+        lastAchievement
+        ?`
+          <p>
+            آخر إنجاز تتذكره رفيق:
+            <strong>
+              ${escapeHTML(lastAchievement)}
+            </strong>
+          </p>
+        `
+        :""
+      }
+
+    </div>
+
+
+    <div class="aiSection">
+
+      <strong>⚠️ ما يحتاج اهتمامًا</strong>
+
+      <p>
+        العادة التي تحتاج اهتمامًا:
+        <strong>
+          ${weakest?
+            escapeHTML(weakest.name):
+            "لا توجد بيانات كافية"}
+        </strong>
+      </p>
+
+      <p>
+        نسبة الالتزام بها:
+        <strong>
+          ${weakest?weakest.percent:0}%
+        </strong>
+      </p>
+
+      <p>
+        اتجاهك الحالي:
+        <strong>${trend}</strong>
+      </p>
+
+    </div>
+
+
+    <div class="aiSection">
+
+      <strong>🎯 أهدافك</strong>
+
+      <p>
+        عدد الأهداف:
+        <strong>${goals.length}</strong>
+      </p>
+
+      <p>
+        متوسط تقدم الأهداف:
+        <strong>${goalAverage}%</strong>
+      </p>
+
+    </div>
+
+
+    <div class="aiSection memoryBox">
+
+      <strong>🧠 ذاكرة رفيق</strong>
+
+      ${
+        recurringWeakness
+        ?`
+          <p>
+            🔁 نقطة ضعف متكررة:
+            <strong>
+              ${escapeHTML(recurringWeakness)}
+            </strong>
+          </p>
+        `
+        :`
+          <p>
+            🔁 لا توجد نقطة ضعف متكررة واضحة حتى الآن.
+          </p>
+        `
+      }
+
+
+      ${
+        lastTomorrow
+        ?`
+          <p>
+            📌 آخر خطوة كتبتها للغد:
+            <strong>
+              ${escapeHTML(lastTomorrow)}
+            </strong>
+          </p>
+        `
+        :`
+          <p>
+            📌 لم تكتب بعد خطوة للغد.
+          </p>
+        `
+      }
+
+
+      <p>
+        📝 عدد مراجعاتك المحفوظة:
+        <strong>
+          ${Math.max(
+            achievementHistory.length,
+            weaknessHistory.length,
+            tomorrowHistory.length
+          )}
+        </strong>
+      </p>
+
+    </div>
+
+
+    <div class="advice">
+
+      <strong>💡 توصية رفيق اليوم</strong>
+
+      <div>
+        ${escapeHTML(advice)}
+      </div>
+
+    </div>
+
+  `;
+
+}
+
 
 function backupData(){
 
@@ -1670,93 +2052,61 @@ function backupData(){
     daily:daily,
     goals:goals,
     reminders:reminders,
-    exportedAt:new Date().toISOString()
+    rafiqMemory:rafiqMemory,
+    backupDate:new Date().toISOString()
   };
 
-  const text=JSON.stringify(data,null,2);
 
-  navigator.clipboard.writeText(text)
-    .then(()=>{
-      alert("تم نسخ بياناتك ✅");
-    })
-    .catch(()=>{
-      alert("تعذر النسخ تلقائيًا.");
-    });
+  const blob=
+    new Blob(
+      [JSON.stringify(data,null,2)],
+      {type:"application/json"}
+    );
+
+
+  const url=
+    URL.createObjectURL(blob);
+
+
+  const a=document.createElement("a");
+
+  a.href=url;
+
+  a.download=
+    "rafiq-backup-"+keyDate()+".json";
+
+  a.click();
+
+
+  URL.revokeObjectURL(url);
 
 }
 
 
-/* =========================
-   إعادة الضبط
-========================= */
-
 function resetData(){
 
-  if(!confirm("تحذير: سيتم حذف بيانات رفيق من هذا الجهاز. هل أنت متأكد؟")){
-    return;
-  }
+  if(
+    !confirm(
+      "هل أنت متأكد؟ سيتم حذف بيانات رفيق من هذا الجهاز."
+    )
+  ) return;
+
 
   localStorage.removeItem("habits");
   localStorage.removeItem("daily");
   localStorage.removeItem("goals");
   localStorage.removeItem("reminders");
+  localStorage.removeItem("rafiqMemory");
+
 
   location.reload();
-}
-
-
-/* =========================
-   التنقل
-========================= */
-
-function showPage(id,button){
-
-  document.querySelectorAll(".page")
-    .forEach(p=>p.classList.remove("active"));
-
-  document.getElementById(id)
-    .classList.add("active");
-
-  document.querySelectorAll(".nav button")
-    .forEach(b=>b.classList.remove("active"));
-
-  button.classList.add("active");
-
-
-  if(id==="home"){
-    renderHome();
-  }
-
-  if(id==="calendar"){
-    renderCalendar();
-  }
-
-  if(id==="stats"){
-    renderStats();
-  }
-
-  if(id==="goals"){
-    renderGoals();
-  }
-
-  if(id==="reminders"){
-    renderReminders();
-  }
-
-  if(id==="ai"){
-    analyzeAI();
-  }
 
 }
 
 
-/* =========================
-   حماية النص
-========================= */
+function escapeHTML(value){
 
-function escapeHTML(text){
-
-  return String(text)
+  return String(value)
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
@@ -1766,25 +2116,16 @@ function escapeHTML(text){
 }
 
 
-/* =========================
-   التشغيل
-========================= */
+document
+  .getElementById("nav-home")
+  .classList.add("active");
 
-function init(){
 
-  ensureDay(todayKey());
-
-  renderHome();
-  renderCalendar();
-  renderStats();
-  renderGoals();
-  renderReminders();
-
-  setInterval(checkReminders,30000);
-
-}
-
-init();
+renderHome();
+renderCalendar();
+renderStats();
+renderGoals();
+renderReminders();
 
 </script>
 
