@@ -479,7 +479,6 @@ nav button.active{
 </div>
 </section>
 
-
 <section id="calendar" class="page">
 
 <div class="card">
@@ -507,7 +506,6 @@ nav button.active{
 <div class="card" id="selectedDay"></div>
 
 </section>
-
 
 <section id="stats" class="page">
 
@@ -550,7 +548,6 @@ nav button.active{
 
 </section>
 
-
 <section id="goals" class="page">
 
 <div class="card">
@@ -588,7 +585,6 @@ oninput="goalProgressValue.textContent=this.value+'%'"
 
 </section>
 
-
 <section id="ai" class="page">
 
 <div class="aiBox">
@@ -608,7 +604,6 @@ oninput="goalProgressValue.textContent=this.value+'%'"
 <div id="aiResult"></div>
 
 </section>
-
 
 <section id="reminders" class="page">
 
@@ -638,7 +633,6 @@ oninput="goalProgressValue.textContent=this.value+'%'"
 
 </section>
 
-
 <section id="settings" class="page">
 
 <div class="card">
@@ -664,7 +658,6 @@ oninput="goalProgressValue.textContent=this.value+'%'"
 </section>
 
 </main>
-
 
 <nav>
 
@@ -697,7 +690,6 @@ oninput="goalProgressValue.textContent=this.value+'%'"
 </button>
 
 </nav>
-
 
 <script>
 
@@ -737,6 +729,7 @@ if(!Array.isArray(habits)){
     {id:"work",name:"العمل"},
     {id:"sleep",name:"النوم"}
   ];
+
   localStorage.setItem("habits",JSON.stringify(habits));
 }
 
@@ -877,7 +870,7 @@ function toggleHabit(id,value){
   renderHome();
   renderStats();
 
-  if(document.getElementById("ai").classList.contains("active")){
+  if($("ai").classList.contains("active")){
     analyzeAI();
   }
 }
@@ -1010,7 +1003,7 @@ function saveReview(){
 
   alert("تم حفظ مراجعة اليوم وتحديث ذاكرة رفيق ✅");
 
-  if(document.getElementById("ai").classList.contains("active")){
+  if($("ai").classList.contains("active")){
     analyzeAI();
   }
 }
@@ -1054,6 +1047,7 @@ function getWeeklyStats(){
   const recorded=
     records.filter(r=>{
       const d=daily[r.key];
+
       return d &&
       (
         Object.keys(d.done||{}).length ||
@@ -1091,6 +1085,7 @@ function getHabitStats(){
     let done=0;
 
     keys.forEach(key=>{
+
       if(
         daily[key] &&
         daily[key].done &&
@@ -1098,6 +1093,7 @@ function getHabitStats(){
       ){
         done++;
       }
+
     });
 
     return {
@@ -1197,6 +1193,7 @@ function getPlanProgress(plan){
     !Array.isArray(plan.steps) ||
     !plan.steps.length
   ){
+
     return {
       completed:0,
       total:0,
@@ -1204,6 +1201,7 @@ function getPlanProgress(plan){
       remaining:0,
       complete:false
     };
+
   }
 
   const total=plan.steps.length;
@@ -1240,15 +1238,20 @@ function archiveCompletedPlan(key){
   if(!exists){
 
     rafiqMemory.planHistory.push({
+
       date:key,
+
       steps:plan.steps.map(s=>({
         text:s.text,
         done:true
       })),
+
       completed:progress.completed,
       total:progress.total,
       percent:100,
+
       completedAt:new Date().toISOString()
+
     });
 
     rafiqMemory.planHistory=
@@ -1289,30 +1292,36 @@ function upsertDailyPlan(key,steps,reason){
 
   if(plan){
 
-    const old=Array.isArray(plan.steps)
+    const old=
+      Array.isArray(plan.steps)
       ?plan.steps
       :[];
 
     plan.reason=
       reason||plan.reason||"";
 
-    plan.steps=steps.map((text,i)=>({
+    plan.steps=steps.map((text,i)=>{
 
-      id:i+1,
+      const sameText=
+        old.find(
+          s=>normalizeArabic(s.text)===
+             normalizeArabic(text)
+        );
 
-      text,
+      return {
+        id:i+1,
+        text,
+        done:sameText
+          ?!!sameText.done
+          :false
+      };
 
-      done:old[i]
-        ?!!old[i].done
-        :false
-
-    }));
+    });
 
   }else{
 
     plan={
       date:key,
-
       reason:reason||"",
 
       steps:steps.map((text,i)=>({
@@ -1322,15 +1331,13 @@ function upsertDailyPlan(key,steps,reason){
       })),
 
       createdAt:new Date().toISOString()
-
     };
 
     rafiqMemory.dailyPlans.push(plan);
   }
 
   rafiqMemory.dailyPlans=
-    rafiqMemory.dailyPlans
-      .slice(-30);
+    rafiqMemory.dailyPlans.slice(-30);
 
   saveAll();
 
@@ -1351,6 +1358,8 @@ function togglePlanStep(index){
 
   const progress=getPlanProgress(plan);
 
+  renderAIPlan();
+
   if(progress.complete){
 
     archiveCompletedPlan(todayKey());
@@ -1363,11 +1372,8 @@ function togglePlanStep(index){
       );
     },50);
 
-  }else{
-
-    renderAIPlan();
-
   }
+
 }
 
 function buildDailyPlan(
@@ -1382,6 +1388,7 @@ function buildDailyPlan(
 ){
 
   const key=todayKey();
+
   const steps=[];
   let reason="";
 
@@ -1420,8 +1427,10 @@ function buildDailyPlan(
     );
 
     if(!reason){
+
       reason=
         "رفيق أعطى الأولوية لنقطة ضعف تكررت لديك.";
+
     }
 
   }
@@ -1438,8 +1447,10 @@ function buildDailyPlan(
     );
 
     if(!reason){
+
       reason=
         "رفيق اختار لك عادة غير مكتملة اليوم.";
+
     }
 
   }
@@ -1457,9 +1468,12 @@ function buildDailyPlan(
     );
 
     if(!reason){
+
       reason=
         "أداؤك اليوم جيد؛ رفيق يركز على الاستمرار.";
+
     }
+
   }
 
   if(
@@ -1558,7 +1572,7 @@ function renderAIPlan(){
 
   if(
     !plan ||
-    !plan.steps ||
+    !Array.isArray(plan.steps) ||
     !plan.steps.length
   ){
     return "";
@@ -1641,7 +1655,8 @@ function analyzeAI(){
 
   const stats=getWeeklyStats();
 
-  const todayPercent=getPercent(todayKey());
+  const todayPercent=
+    getPercent(todayKey());
 
   const weakest=
     getTodayUnfinishedHabit();
@@ -1849,9 +1864,7 @@ function analyzeAI(){
 
   if(memoryAdvice.length){
 
-    advice+=
-      " "+
-      memoryAdvice.join(" ");
+    advice+=" "+memoryAdvice.join(" ");
 
   }
 
@@ -1866,12 +1879,10 @@ function analyzeAI(){
     goalAverage
   );
 
-  const adviceEntry={
+  rafiqMemory.adviceHistory.push({
     date:todayKey(),
     text:advice
-  };
-
-  rafiqMemory.adviceHistory.push(adviceEntry);
+  });
 
   rafiqMemory.adviceHistory=
     rafiqMemory.adviceHistory.slice(-30);
@@ -1903,14 +1914,17 @@ function analyzeAI(){
 
       <p>
         اتجاه الأداء:
-        <strong>${
+        <strong>
+        ${
           trend==="improving"
           ?"📈 يتحسن"
           :
           trend==="declining"
           ?"📉 يتراجع"
-          :"➖ مستقر"
-        }</strong>
+          :
+          "➖ مستقر"
+        }
+        </strong>
       </p>
 
     </div>
@@ -1951,7 +1965,9 @@ function analyzeAI(){
           🏆 آخر إنجاز يتذكره رفيق:
           «${esc(lastAchievementItem.text)}»
           <br>
-          <span class="small">${esc(lastAchievementItem.date)}</span>
+          <span class="small">
+            ${esc(lastAchievementItem.date)}
+          </span>
         </p>`
         :""
       }
@@ -1963,7 +1979,9 @@ function analyzeAI(){
           🎯 آخر خطوة للغد:
           «${esc(lastTomorrowItem.text)}»
           <br>
-          <span class="small">${esc(lastTomorrowItem.date)}</span>
+          <span class="small">
+            ${esc(lastTomorrowItem.date)}
+          </span>
         </p>`
         :""
       }
@@ -1972,34 +1990,63 @@ function analyzeAI(){
         rafiqMemory.planHistory.length
         ?
         `<div class="memoryPlan">
+
           📋 آخر خطة مكتملة:
+
           <strong>
-            ${rafiqMemory.planHistory[rafiqMemory.planHistory.length-1].percent}%
+            ${
+              rafiqMemory.planHistory[
+                rafiqMemory.planHistory.length-1
+              ].percent
+            }%
           </strong>
-          في ${esc(rafiqMemory.planHistory[rafiqMemory.planHistory.length-1].date)}
+
+          في
+
+          ${
+            esc(
+              rafiqMemory.planHistory[
+                rafiqMemory.planHistory.length-1
+              ].date
+            )
+          }
+
           <br>
+
           <span class="small">
+
             أكملتها في
-            ${rafiqMemory.planHistory[rafiqMemory.planHistory.length-1].completed}
+
+            ${
+              rafiqMemory.planHistory[
+                rafiqMemory.planHistory.length-1
+              ].completed
+            }
+
             خطوات.
+
           </span>
+
         </div>`
         :""
       }
 
       <p class="small">
+
         عدد ذكريات الضعف:
         ${rafiqMemory.weaknessHistory.length}
+
         • عدد الخطط اليومية:
         ${rafiqMemory.dailyPlans.length}
+
         • الخطط المكتملة:
         ${rafiqMemory.planHistory.length}
+
       </p>
 
     </div>
 
   `;
-
 }
 
 function show(id){
@@ -2020,12 +2067,23 @@ function show(id){
   if(nav)
     nav.classList.add("active");
 
-  if(id==="home")renderHome();
-  if(id==="calendar")renderCalendar();
-  if(id==="stats")renderStats();
-  if(id==="goals")renderGoals();
-  if(id==="ai")analyzeAI();
-  if(id==="reminders")renderReminders();
+  if(id==="home")
+    renderHome();
+
+  if(id==="calendar")
+    renderCalendar();
+
+  if(id==="stats")
+    renderStats();
+
+  if(id==="goals")
+    renderGoals();
+
+  if(id==="ai")
+    analyzeAI();
+
+  if(id==="reminders")
+    renderReminders();
 }
 
 function renderStats(){
@@ -2051,7 +2109,8 @@ function renderStats(){
       ratings.reduce((a,b)=>a+b,0)/
       ratings.length
     ).toFixed(1)
-    :"0";
+    :
+    "0";
 
   $("statRating").textContent=avgRating;
 
@@ -2066,19 +2125,23 @@ function renderStats(){
           <span>${esc(r.key)}</span>
 
           <span>
+
             ${r.percent}%
+
             ${
               r.rating
-              ?" • "+"⭐".repeat(r.rating)
-              :""
+              ?
+              " • "+"⭐".repeat(r.rating)
+              :
+              ""
             }
+
           </span>
 
         </div>
 
       `)
       .join("");
-
 }
 
 function addGoal(){
@@ -2086,15 +2149,19 @@ function addGoal(){
   const name=$("goalName").value.trim();
 
   if(!name){
+
     alert("اكتب اسم الهدف أولًا");
     return;
+
   }
 
   goals.push({
+
     id:Date.now(),
     name,
     category:$("goalCategory").value,
     progress:Number($("goalProgress").value)
+
   });
 
   $("goalName").value="";
@@ -2110,7 +2177,9 @@ function renderGoals(){
   if(!goals.length){
 
     $("goalList").innerHTML=
-      `<div class="card empty">لا توجد أهداف بعد.</div>`;
+      `<div class="card empty">
+        لا توجد أهداف بعد.
+      </div>`;
 
     return;
   }
@@ -2123,6 +2192,7 @@ function renderGoals(){
         <div class="goalTop">
 
           <div>
+
             <div class="goalName">
               ${esc(g.name)}
             </div>
@@ -2130,14 +2200,19 @@ function renderGoals(){
             <div class="goalCat">
               ${esc(g.category)}
             </div>
+
           </div>
 
-          <strong>${Number(g.progress||0)}%</strong>
+          <strong>
+            ${Number(g.progress||0)}%
+          </strong>
 
         </div>
 
         <div class="goalProgress">
-          <div style="width:${Number(g.progress||0)}%"></div>
+          <div
+            style="width:${Number(g.progress||0)}%"
+          ></div>
         </div>
 
         <input
@@ -2193,10 +2268,12 @@ function addReminder(){
   }
 
   reminders.push({
+
     id:Date.now(),
     name,
     time,
     active:true
+
   });
 
   $("reminderName").value="";
@@ -2224,11 +2301,17 @@ function renderReminders(){
       <div class="reminder">
 
         <div>
-          <strong>${esc(r.name)}</strong>
+
+          <strong>
+            ${esc(r.name)}
+          </strong>
+
           <br>
+
           <span class="small">
             ${esc(r.time)}
           </span>
+
         </div>
 
         <div>
@@ -2314,8 +2397,7 @@ function checkReminders(){
     ":"+
     String(now.getMinutes()).padStart(2,"0");
 
-  const today=
-    todayKey();
+  const today=todayKey();
 
   reminders.forEach(r=>{
 
@@ -2461,31 +2543,73 @@ function showSelectedDay(key){
     </p>
 
     <p>
-      <strong>ما تم إنجازه:</strong><br>
-      ${d.achievement
-        ?esc(d.achievement)
-        :"لا يوجد"}
+
+      <strong>
+        ما تم إنجازه:
+      </strong>
+
+      <br>
+
+      ${
+        d.achievement
+        ?
+        esc(d.achievement)
+        :
+        "لا يوجد"
+      }
+
     </p>
 
     <p>
-      <strong>ما يحتاج اهتمامًا:</strong><br>
-      ${d.weakness
-        ?esc(d.weakness)
-        :"لا يوجد"}
+
+      <strong>
+        ما يحتاج اهتمامًا:
+      </strong>
+
+      <br>
+
+      ${
+        d.weakness
+        ?
+        esc(d.weakness)
+        :
+        "لا يوجد"
+      }
+
     </p>
 
     <p>
-      <strong>الخطة التالية:</strong><br>
-      ${d.tomorrow
-        ?esc(d.tomorrow)
-        :"لا يوجد"}
+
+      <strong>
+        الخطة التالية:
+      </strong>
+
+      <br>
+
+      ${
+        d.tomorrow
+        ?
+        esc(d.tomorrow)
+        :
+        "لا يوجد"
+      }
+
     </p>
 
     <p>
-      <strong>التقييم:</strong>
-      ${d.rating
-        ?"⭐".repeat(d.rating)
-        :"لا يوجد"}
+
+      <strong>
+        التقييم:
+      </strong>
+
+      ${
+        d.rating
+        ?
+        "⭐".repeat(d.rating)
+        :
+        "لا يوجد"
+      }
+
     </p>
 
     <button onclick="editDayReview('${key}')">
@@ -2505,23 +2629,37 @@ function editDayReview(key){
       ✏️ تعديل مراجعة ${esc(key)}
     </div>
 
-    <label>ما الذي أنجزته؟</label>
+    <label>
+      ما الذي أنجزته؟
+    </label>
 
-    <textarea id="editAchievement">${esc(d.achievement||"")}</textarea>
+    <textarea id="editAchievement">
+${esc(d.achievement||"")}</textarea>
 
-    <label>ما الذي يحتاج اهتمامًا؟</label>
+    <label>
+      ما الذي يحتاج اهتمامًا؟
+    </label>
 
-    <textarea id="editWeakness">${esc(d.weakness||"")}</textarea>
+    <textarea id="editWeakness">
+${esc(d.weakness||"")}</textarea>
 
-    <label>ماذا ستفعل غدًا؟</label>
+    <label>
+      ماذا ستفعل غدًا؟
+    </label>
 
-    <textarea id="editTomorrow">${esc(d.tomorrow||"")}</textarea>
+    <textarea id="editTomorrow">
+${esc(d.tomorrow||"")}</textarea>
 
-    <label>تقييم اليوم</label>
+    <label>
+      تقييم اليوم
+    </label>
 
     <select id="editRating">
 
-      <option value="0">اختر التقييم</option>
+      <option value="0">
+        اختر التقييم
+      </option>
+
       <option value="1">⭐</option>
       <option value="2">⭐⭐</option>
       <option value="3">⭐⭐⭐</option>
@@ -2576,7 +2714,7 @@ function saveEditedDay(key){
 function backupData(){
 
   const data={
-    version:3,
+    version:4,
     exportedAt:new Date().toISOString(),
     habits,
     daily,
@@ -2592,15 +2730,19 @@ function backupData(){
 
     navigator.clipboard.writeText(text)
       .then(()=>{
+
         alert(
           "تم نسخ بيانات رفيق إلى الحافظة ✅"
         );
+
       })
       .catch(()=>{
+
         prompt(
           "انسخ بياناتك واحفظها في مكان آمن:",
           text
         );
+
       });
 
   }else{
