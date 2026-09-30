@@ -27,7 +27,7 @@ header p{margin:0;opacity:.85}
 
 main{
 padding:18px;
-padding-bottom:90px;
+padding-bottom:95px;
 }
 
 .card{
@@ -107,16 +107,18 @@ right:0;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:8px 2px;
+padding:7px 2px;
 box-shadow:0 -3px 15px #0002;
 z-index:100;
+overflow-x:auto;
 }
 
 nav button{
 background:transparent;
 color:#555;
-padding:7px 2px;
-font-size:10px;
+padding:6px 3px;
+font-size:9px;
+min-width:55px;
 }
 
 nav button.active{
@@ -159,9 +161,7 @@ justify-content:space-between;
 margin-bottom:15px;
 }
 
-.calendar-head button{
-padding:9px 13px;
-}
+.calendar-head button{padding:9px 13px}
 
 .month-title{
 font-size:18px;
@@ -301,9 +301,7 @@ margin-bottom:10px;
 border:1px solid #edf0ee;
 }
 
-.reminder-info{
-flex:1;
-}
+.reminder-info{flex:1}
 
 .reminder-name{
 font-weight:bold;
@@ -326,12 +324,44 @@ padding:7px 9px;
 font-size:12px;
 }
 
-.on{
-background:#0b806d;
+.on{background:#0b806d}
+.off{background:#777}
+
+.ai-box{
+background:#eef8f4;
+border:1px solid #cde9df;
+border-radius:17px;
+padding:16px;
+margin-bottom:12px;
 }
 
-.off{
-background:#777;
+.ai-title{
+font-size:19px;
+font-weight:bold;
+color:#075b4d;
+margin-bottom:8px;
+}
+
+.ai-number{
+font-size:30px;
+font-weight:bold;
+color:#075b4d;
+}
+
+.ai-item{
+background:white;
+border-radius:13px;
+padding:12px;
+margin:8px 0;
+border-right:4px solid #0b806d;
+}
+
+.ai-warning{
+border-right-color:#e8a928;
+}
+
+.ai-success{
+border-right-color:#0b806d;
 }
 
 .empty{
@@ -351,6 +381,7 @@ padding:20px;
 
 <main>
 
+<!-- يومي -->
 <section id="home">
 
 <div class="card">
@@ -410,6 +441,7 @@ placeholder="مثلاً: 8">
 </section>
 
 
+<!-- التقويم -->
 <section id="calendar" class="hidden">
 
 <div class="card">
@@ -444,6 +476,7 @@ placeholder="مثلاً: 8">
 </section>
 
 
+<!-- الإحصائيات -->
 <section id="stats" class="hidden">
 
 <div class="card">
@@ -490,6 +523,7 @@ placeholder="مثلاً: 8">
 </section>
 
 
+<!-- الأهداف -->
 <section id="goals" class="hidden">
 
 <div class="card">
@@ -513,6 +547,29 @@ placeholder="مثلاً: 8">
 </section>
 
 
+<!-- رفيق الذكي -->
+<section id="ai" class="hidden">
+
+<div class="card">
+
+<h2>🤖 رفيق الذكي</h2>
+
+<p>
+تحليل بسيط مبني على بياناتك المحفوظة في التطبيق.
+</p>
+
+<button class="add" onclick="analyzeAI()">
+✨ حلّل تقدمي الآن
+</button>
+
+</div>
+
+<div id="aiResult"></div>
+
+</section>
+
+
+<!-- التذكيرات -->
 <section id="reminders" class="hidden">
 
 <div class="card">
@@ -536,14 +593,13 @@ onclick="requestNotificationPermission()">
 </div>
 
 <div class="card">
-
 <div id="remindersList"></div>
-
 </div>
 
 </section>
 
 
+<!-- الإعدادات -->
 <section id="settings" class="hidden">
 
 <div class="card">
@@ -583,6 +639,7 @@ style="background:#9b2020">
 </main>
 
 
+<!-- القائمة -->
 <nav>
 
 <button class="active" onclick="show('home',this)">
@@ -599,6 +656,10 @@ style="background:#9b2020">
 
 <button onclick="show('goals',this)">
 🎯<br>أهدافي
+</button>
+
+<button onclick="show('ai',this)">
+🤖<br>رفيق الذكي
 </button>
 
 <button onclick="show('reminders',this)">
@@ -700,6 +761,10 @@ let reminders=
 JSON.parse(localStorage.getItem("reminders")||"[]");
 
 
+/* =========================
+   الحفظ
+========================= */
+
 function save(){
 
 localStorage.setItem(
@@ -726,7 +791,7 @@ JSON.stringify(reminders)
 
 
 /* =========================
-   الصفحة الرئيسية
+   التاريخ
 ========================= */
 
 document.getElementById("date").textContent=
@@ -842,7 +907,6 @@ renderManage();
 renderStats();
 renderGoals();
 renderReminders();
-renderCalendar();
 
 }
 
@@ -997,6 +1061,7 @@ btn.classList.add("active");
 if(id==="calendar")renderCalendar();
 if(id==="stats")renderStats();
 if(id==="goals")renderGoals();
+if(id==="ai")analyzeAI();
 if(id==="reminders")renderReminders();
 
 }
@@ -1041,7 +1106,6 @@ year:"numeric"
 box.innerHTML="";
 
 let year=calendarDate.getFullYear();
-
 let month=calendarDate.getMonth();
 
 let firstDay=
@@ -1195,15 +1259,19 @@ dates.forEach(key=>{
 let p=getDayPercent(key);
 
 if(p>0){
+
 totalPercent+=p;
 recordedDays++;
+
 }
 
 let r=Number(data[key].rating);
 
 if(r>=1&&r<=10){
+
 ratingTotal+=r;
 ratingCount++;
+
 }
 
 });
@@ -1228,8 +1296,6 @@ document.getElementById("ratingAverage")
 document.getElementById("bestStreak")
 .textContent=getBestStreak();
 
-renderHabitStats();
-
 }
 
 
@@ -1237,6 +1303,8 @@ function renderHabitStats(){
 
 let box=
 document.getElementById("habitStats");
+
+if(!box)return;
 
 if(!habits.length){
 
@@ -1305,10 +1373,13 @@ let key=localDateKey(d);
 if(getDayPercent(key)>0){
 
 streak++;
+
 d.setDate(d.getDate()-1);
 
 }else{
+
 break;
+
 }
 
 if(streak>1000)break;
@@ -1523,15 +1594,9 @@ renderGoals();
 }
 
 
-/* =========================
-   حذف هدف
-========================= */
-
 function deleteGoal(id){
 
-if(!confirm(
-"هل تريد حذف هذا الهدف؟"
-))return;
+if(!confirm("هل تريد حذف هذا الهدف؟"))return;
 
 goals=
 goals.filter(g=>g.id!==id);
@@ -1682,10 +1747,6 @@ renderReminders();
 }
 
 
-/* =========================
-   إشعارات الهاتف
-========================= */
-
 function requestNotificationPermission(){
 
 if(!("Notification" in window)){
@@ -1707,9 +1768,7 @@ alert("تم تفعيل الإشعارات 🔔");
 
 }else{
 
-alert(
-"لم يتم السماح بالإشعارات."
-);
+alert("لم يتم السماح بالإشعارات.");
 
 }
 
@@ -1717,10 +1776,6 @@ alert(
 
 }
 
-
-/* =========================
-   فحص التذكيرات
-========================= */
 
 function checkReminders(){
 
@@ -1776,6 +1831,319 @@ alert(
 }
 
 setInterval(checkReminders,30000);
+
+
+/* =========================
+   🤖 رفيق الذكي
+========================= */
+
+function analyzeAI(){
+
+let box=
+document.getElementById("aiResult");
+
+if(!box)return;
+
+let todayPercent=getDayPercent(today);
+
+let streak=getCurrentStreak();
+
+let totalDays=0;
+let percentSum=0;
+
+let ratingSum=0;
+let ratingCount=0;
+
+let habitCounts={};
+
+habits.forEach(h=>{
+habitCounts[h.id]={
+name:h.name,
+done:0,
+days:0
+};
+});
+
+
+Object.keys(data).forEach(key=>{
+
+let p=getDayPercent(key);
+
+if(p>0){
+
+totalDays++;
+percentSum+=p;
+
+}
+
+let rating=Number(data[key].rating);
+
+if(rating>=1&&rating<=10){
+
+ratingSum+=rating;
+ratingCount++;
+
+}
+
+if(data[key].done){
+
+habits.forEach(h=>{
+
+habitCounts[h.id].days++;
+
+if(data[key].done.includes(h.id)){
+
+habitCounts[h.id].done++;
+
+}
+
+});
+
+}
+
+});
+
+
+let average=
+totalDays?
+Math.round(percentSum/totalDays):0;
+
+let ratingAverage=
+ratingCount?
+(ratingSum/ratingCount).toFixed(1):0;
+
+
+let habitResults=
+Object.values(habitCounts)
+.map(h=>{
+
+let p=
+h.days?
+Math.round(h.done/h.days*100):0;
+
+return {
+name:h.name,
+percent:p
+};
+
+});
+
+
+let strongest=
+[...habitResults]
+.sort((a,b)=>b.percent-a.percent)[0];
+
+let weakest=
+[...habitResults]
+.sort((a,b)=>a.percent-b.percent)[0];
+
+
+let goalAverage=0;
+
+if(goals.length){
+
+goalAverage=Math.round(
+goals.reduce(
+(sum,g)=>sum+Number(g.progress||0),0
+)/goals.length
+);
+
+}
+
+
+let advice="";
+
+if(todayPercent===100){
+
+advice=
+"رائع جدًا! أكملت عادات اليوم بالكامل. حافظ على هذا الإيقاع.";
+
+}else if(todayPercent>=60){
+
+advice=
+"يومك جيد. ركّز على عادة أو عادتين متبقيتين قبل نهاية اليوم.";
+
+}else if(todayPercent>0){
+
+advice=
+"بدأت اليوم بشكل جيد. اختر عادة واحدة فقط وأكملها الآن.";
+
+}else{
+
+advice=
+"لم تسجل إنجازًا اليوم بعد. ابدأ بأصغر عادة ممكنة لمدة 5 دقائق.";
+
+}
+
+
+let goalAdvice="";
+
+if(goals.length){
+
+if(goalAverage>=75){
+
+goalAdvice=
+"أهدافك في تقدم جيد. استمر بخطوات صغيرة وثابتة.";
+
+}else if(goalAverage>0){
+
+goalAdvice=
+"لديك أهداف بدأت فيها. خصص خطوة صغيرة يومية لأحد أهدافك.";
+
+}else{
+
+goalAdvice=
+"لم تبدأ تقدم أهدافك بعد. اختر هدفًا واحدًا وابدأ بنسبة بسيطة.";
+
+}
+
+}else{
+
+goalAdvice=
+"أضف هدفًا واحدًا على الأقل حتى أستطيع متابعة تقدمك.";
+
+}
+
+
+box.innerHTML=`
+
+<div class="ai-box">
+
+<div class="ai-title">
+📊 ملخصك الحالي
+</div>
+
+<div class="stat">
+<div class="ai-number">${todayPercent}%</div>
+إنجاز اليوم
+</div>
+
+<div class="stat">
+<div class="ai-number">${average}%</div>
+متوسط الإنجاز
+</div>
+
+<div class="stat">
+<div class="ai-number">${streak}</div>
+السلسلة الحالية
+</div>
+
+<div class="stat">
+<div class="ai-number">${ratingAverage}</div>
+متوسط التقييم
+</div>
+
+</div>
+
+
+<div class="ai-box">
+
+<div class="ai-title">
+💪 نقاط القوة
+</div>
+
+<div class="ai-item ai-success">
+
+${
+strongest && strongest.percent>0
+?
+"أكثر عادة ملتزم بها حاليًا: <b>"+
+escapeHTML(strongest.name)+
+"</b> بنسبة <b>"+
+strongest.percent+
+"%</b>."
+:
+"لم تتوفر بيانات كافية لتحديد عادة قوية بعد."
+}
+
+</div>
+
+<div class="ai-item ai-success">
+
+🔥 السلسلة الحالية:
+<b>${streak}</b> يوم
+
+</div>
+
+</div>
+
+
+<div class="ai-box">
+
+<div class="ai-title">
+⚠️ ما يحتاج اهتمامًا
+</div>
+
+<div class="ai-item ai-warning">
+
+${
+weakest
+?
+"العادة التي تحتاج متابعة أكبر حاليًا: <b>"+
+escapeHTML(weakest.name)+
+"</b> بنسبة <b>"+
+weakest.percent+
+"%</b>."
+:
+"أضف بعض العادات وسأبدأ بتحليلها."
+}
+
+</div>
+
+</div>
+
+
+<div class="ai-box">
+
+<div class="ai-title">
+🎯 أهدافك
+</div>
+
+<div class="ai-item">
+
+عدد الأهداف:
+<b>${goals.length}</b>
+
+<br><br>
+
+متوسط تقدم الأهداف:
+<b>${goalAverage}%</b>
+
+</div>
+
+<div class="ai-item ai-success">
+
+${goalAdvice}
+
+</div>
+
+</div>
+
+
+<div class="ai-box">
+
+<div class="ai-title">
+💡 توصية رفيق اليوم
+</div>
+
+<div class="ai-item ai-success">
+
+${advice}
+
+</div>
+
+<div class="ai-item">
+
+🎯 اقتراح عملي:
+اختر <b>مهمة واحدة</b> فقط الآن، وأنجزها قبل الانتقال إلى المهمة التالية.
+
+</div>
+
+</div>
+
+`;
+
+}
 
 
 /* =========================
@@ -1878,6 +2246,8 @@ ensureDay(today);
 save();
 
 render();
+
+analyzeAI();
 
 </script>
 
