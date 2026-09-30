@@ -392,7 +392,7 @@ rafiqMemory.adviceHistory
 rafiqMemory.dailyPlanHistory=
 Array.isArray(rafiqMemory.dailyPlanHistory)
 ?
-rafiiqMemory.dailyPlanHistory
+rafiqMemory.dailyPlanHistory
 :[];
 
 let calendarDate=new Date();
@@ -684,13 +684,23 @@ habitState[key]={};
 
 }
 
+/* التخزين الأساسي */
+
 d.done[habitId]=checked;
+
+/* التخزين المستقل */
 
 habitState[key][habitId]=checked;
 
+/* التأكد من حفظ اليوم */
+
 daily[key]=d;
 
+/* الحفظ الفوري */
+
 saveAll();
+
+/* تحديث الشاشة */
 
 renderHome();
 
@@ -1186,6 +1196,10 @@ Number(d.rating)||0
 `;
 
 }
+
+/* =========================
+   تعديل مراجعة أي يوم
+========================= */
 
 function editDayReview(key){
 
@@ -1871,67 +1885,6 @@ function getTodayPlan(){
 return rafiqMemory.dailyPlanHistory.find(
 p=>p.date===keyDate()
 )||null;
-
-}
-
-/* =====================================================
-   🧠 التطوير الأول:
-   تحليل تنفيذ خطة الأمس
-===================================================== */
-
-function getYesterdayPlanAnalysis(){
-
-const yesterday=new Date();
-
-yesterday.setDate(
-yesterday.getDate()-1
-);
-
-const key=keyDate(yesterday);
-
-const plan=
-rafiqMemory.dailyPlanHistory.find(
-p=>p.date===key
-);
-
-if(
-!plan||
-!Array.isArray(plan.steps)||
-!plan.steps.length
-){
-
-return null;
-
-}
-
-const total=plan.steps.length;
-
-const done=
-plan.steps.filter(
-step=>step.done===true
-).length;
-
-const percent=
-Math.round(
-(done/total)*100
-);
-
-const incomplete=
-plan.steps.filter(
-step=>step.done!==true
-);
-
-return{
-
-date:key,
-total,
-done,
-percent,
-completed:
-percent===100,
-incomplete
-
-};
 
 }
 
@@ -3167,10 +3120,15 @@ if(
 return;
 
 localStorage.removeItem("habits");
+
 localStorage.removeItem("daily");
+
 localStorage.removeItem("habitState");
+
 localStorage.removeItem("goals");
+
 localStorage.removeItem("reminders");
+
 localStorage.removeItem("rafiqMemory");
 
 location.reload();
