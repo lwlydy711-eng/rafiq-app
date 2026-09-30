@@ -854,6 +854,12 @@ function ensureDay(key){
   return daily[key];
 }
 
+
+/*
+  لا ننشئ يومًا جديدًا عند مجرد
+  قراءة التقويم أو الإحصائيات.
+*/
+
 function getPercent(key){
 
   const d=daily[key];
@@ -869,7 +875,6 @@ function getPercent(key){
   return Math.round(
     done/habits.length*100
   );
-
 }
 
 
@@ -927,52 +932,15 @@ function renderHome(){
     d.rating||0;
 }
 
-
-/* =========================
-   حفظ العادة — إصلاح
-========================= */
-
 function toggleHabit(id,value){
 
-  const key=todayKey();
+  const d=ensureDay(todayKey());
 
-  if(!daily[key]){
+  d.done[id]=!!value;
 
-    daily[key]={
-      done:{},
-      achievement:"",
-      weakness:"",
-      tomorrow:"",
-      rating:0
-    };
-
-  }
-
-  if(!daily[key].done){
-
-    daily[key].done={};
-
-  }
-
-  daily[key].done[id]=!!value;
-
-  /*
-    حفظ مباشر للبيانات
-    قبل إعادة رسم الصفحة.
-  */
-
-  localStorage.setItem(
-    "daily",
-    JSON.stringify(daily)
-  );
-
-  localStorage.setItem(
-    "habits",
-    JSON.stringify(habits)
-  );
+  saveAll();
 
   renderHome();
-
   renderStats();
 
   if(
@@ -982,10 +950,15 @@ function toggleHabit(id,value){
       .contains("active")
   ){
 
+    /*
+      تحديث التحليل مسموح،
+      لكن الخطة نفسها أصبحت محمية
+      من إعادة ضبط الإنجازات.
+    */
+
     analyzeAI();
 
   }
-
 }
 
 
@@ -1204,7 +1177,10 @@ function getWeeklyStats(){
   const records=
     keys.map(key=>{
 
-      const d=ensureDay(key);
+      const d=daily[key]||{
+        done:{},
+        rating:0
+      };
 
       return {
         key:key,
@@ -1281,7 +1257,6 @@ function getHabitStats(){
     };
 
   });
-
 }
 
 function getTodayUnfinishedHabit(){
@@ -1475,6 +1450,14 @@ function archiveCompletedPlan(key){
   saveAll();
 }
 
+
+/*
+  الإصلاح:
+  - الحفاظ على إنجاز كل خطوة حسب نصها.
+  - عدم إعادة إنشاء الخطة المكتملة.
+  - عدم فقدان العلامات إذا تغير ترتيب الخطوات.
+*/
+
 function upsertDailyPlan(
   key,
   steps,
@@ -1515,14 +1498,28 @@ function upsertDailyPlan(
   let plan=
     getDailyPlan(key);
 
+  /*
+    إذا كانت الخطة الحالية مكتملة،
+    لا نلمسها إطلاقًا.
+  */
+
   if(
     plan &&
-    getPlanProgress(plan).complete
+    Array.isArray(plan.steps) &&
+    plan.steps.length>0 &&
+    plan.steps.every(
+      step=>!!step.done
+    )
   ){
 
     return plan;
 
   }
+
+  /*
+    حفظ حالة الإنجاز حسب نص الخطوة
+    وليس حسب رقمها.
+  */
 
   const oldDone={};
 
@@ -1562,7 +1559,8 @@ function upsertDailyPlan(
     plan.reason=
       reason||plan.reason||"";
 
-    plan.steps=newSteps;
+    plan.steps=
+      newSteps;
 
     plan.updatedAt=
       new Date().toISOString();
@@ -1570,6 +1568,7 @@ function upsertDailyPlan(
   }else{
 
     plan={
+
       date:key,
 
       reason:
@@ -1582,6 +1581,7 @@ function upsertDailyPlan(
 
       updatedAt:
         new Date().toISOString()
+
     };
 
     rafiqMemory.dailyPlans.push(plan);
@@ -1613,9 +1613,17 @@ function buildDailyPlan(
   const existing=
     getDailyPlan(key);
 
+  /*
+    لا نعيد بناء الخطة المكتملة.
+  */
+
   if(
     existing &&
-    getPlanProgress(existing).complete
+    Array.isArray(existing.steps) &&
+    existing.steps.length>0 &&
+    existing.steps.every(
+      step=>!!step.done
+    )
   ){
 
     return existing;
@@ -1637,6 +1645,10 @@ function buildDailyPlan(
     lastTomorrowItem &&
     lastTomorrowItem.date!==key;
 
+  /*
+    1 — خطة الغد السابقة
+  */
+
   if(
     lastTomorrowIsOld &&
     lastTomorrow
@@ -1648,6 +1660,10 @@ function buildDailyPlan(
       "رفيق بدأ بالخطة التي كتبتها لنفسك سابقًا.";
 
   }
+
+  /*
+    2 — نقطة الضعف المتكررة
+  */
 
   if(
     recurringWeakness &&
@@ -1676,6 +1692,10 @@ function buildDailyPlan(
 
   }
 
+  /*
+    3 — العادة غير المكتملة
+  */
+
   if(
     weakest &&
     todayPercent<100 &&
@@ -1697,6 +1717,10 @@ function buildDailyPlan(
 
   }
 
+  /*
+    4 — المحافظة على العادة الأقوى
+  */
+
   if(
     todayPercent>=75 &&
     strongest &&
@@ -1717,6 +1741,10 @@ function buildDailyPlan(
     }
 
   }
+
+  /*
+    5 — إذا لم توجد خطة
+  */
 
   if(
     todayPercent===0 &&
@@ -1746,6 +1774,10 @@ function buildDailyPlan(
 
   }
 
+  /*
+    6 — خطوة إضافية بسيطة
+  */
+
   if(
     steps.length===0 &&
     todayPercent<100
@@ -1759,6 +1791,10 @@ function buildDailyPlan(
       "رفيق يحافظ على الاستمرارية بخطوة بسيطة.";
 
   }
+
+  /*
+    7 — الاستفادة من آخر إنجاز
+  */
 
   if(
     steps.length<3 &&
@@ -1782,6 +1818,10 @@ function buildDailyPlan(
     }
 
   }
+
+  /*
+    8 — مراجعة نهاية اليوم
+  */
 
   if(steps.length<3){
 
@@ -1857,6 +1897,13 @@ function togglePlanStep(index){
     );
 
   }
+
+  /*
+    مهم:
+    لا نستدعي analyzeAI هنا،
+    حتى لا يعاد بناء الخطة أثناء
+    تنفيذ المستخدم لها.
+  */
 
   renderAIPlan();
 }
@@ -2184,6 +2231,11 @@ function analyzeAI(){
     advice+=" "+memoryAdvice.join(" ");
 
   }
+
+  /*
+    إنشاء أو تحديث الخطة.
+    الخطة الموجودة ستحتفظ بحالة خطواتها.
+  */
 
   buildDailyPlan(
     todayPercent,
@@ -2871,7 +2923,15 @@ function renderCalendar(){
       0
     );
 
-  const start=first.getDay();
+  /*
+    أيام الأسبوع في الشبكة:
+    الأحد → الاثنين → ... → السبت
+    و getDay() يعيد الأحد = 0،
+    لذلك لا نغيّر القيمة.
+  */
+
+  const start=
+    first.getDay();
 
   const total=
     last.getDate();
