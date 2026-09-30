@@ -725,6 +725,7 @@ function keyDate(d=new Date()){
   return d.getFullYear()+"-"+
     String(d.getMonth()+1).padStart(2,"0")+"-"+
     String(d.getDate()).padStart(2,"0");
+
 }
 
 
@@ -755,6 +756,7 @@ function ensureDay(key){
   }
 
   return daily[key];
+
 }
 
 
@@ -1505,20 +1507,13 @@ function saveEditedDay(key){
     );
 
 
-  /*
-     🧠 تحديث ذاكرة رفيق
-     بدل إضافة نسخة مكررة
-  */
-
   rememberReview(key,d);
 
   saveAll();
 
-
   renderCalendar();
 
   showSelectedDay(key);
-
 
   alert(
     "تم حفظ مراجعة هذا اليوم وتحديث ذاكرة رفيق ✅"
@@ -1560,7 +1555,8 @@ function renderStats(){
     ?
     Math.round(
       positive.reduce(
-        (a,b)=>a+b.percent,
+        (a,b)=>
+          a+b.percent,
         0
       )/positive.length
     )
@@ -1579,7 +1575,8 @@ function renderStats(){
     ?
     (
       ratings.reduce(
-        (a,b)=>a+b.rating,
+        (a,b)=>
+          a+b.rating,
         0
       )/ratings.length
     ).toFixed(1)
@@ -2348,7 +2345,7 @@ function analyzeAI(){
 
 
   /* =========================
-     🧠 ذاكرة رفيق
+     🧠 قراءة الذاكرة
   ========================= */
 
   const recurringWeakness=
@@ -2380,30 +2377,23 @@ function analyzeAI(){
     "";
 
 
+  const todayKey=
+    keyDate();
+
+
+  const todayPercent=
+    getPercent(todayKey);
+
+
   let advice="";
 
   let adviceTitle=
     "💡 توصية رفيق اليوم";
 
 
-  const todayPercent=
-    getPercent(keyDate());
-
-
-  const todayData=
-    daily[keyDate()]||null;
-
-
-  const completedToday=
-    todayData &&
-    todayData.done
-    ?
-    habits.filter(
-      h=>todayData.done[h.id]
-    )
-    :
-    [];
-
+  /* =========================
+     النصيحة الأساسية
+  ========================= */
 
   if(todayPercent>=75){
 
@@ -2487,6 +2477,10 @@ function analyzeAI(){
   }
 
 
+  /* =========================
+     📊 التحليل الأسبوعي
+  ========================= */
+
   if(
     weeklyAverage<20 &&
     recorded.length>=3
@@ -2548,25 +2542,64 @@ function analyzeAI(){
   }
 
 
-  /*
-     إضافة الذاكرة إلى التوصية
-  */
+  /* =========================
+     🧠 استخدام الذاكرة فعليًا
+  ========================= */
 
   if(recurringWeakness){
 
     advice +=
-      " رفيق لاحظ أن «"+
+      " رفيق يتذكر أن «"+
       recurringWeakness.text+
-      "» تكررت في مراجعاتك، لذلك اجعلها غدًا أول نقطة تعالجها بخطوة صغيرة.";
+      "» تكررت "+
+      recurringWeakness.count+
+      " مرات، لذلك لن نتجاهلها اليوم. اجعلها نقطة تركيز صغيرة، وليس مهمة كبيرة.";
 
   }
 
 
-  /*
-     حفظ آخر نصيحة في الذاكرة
-  */
+  if(
+    lastTomorrow &&
+    todayPercent<75
+  ){
 
-  const todayKey=keyDate();
+    advice +=
+      " وآخر خطوة سجلتها للغد كانت: «"+
+      lastTomorrow+
+      "». إذا كانت ما زالت مناسبة لك، اجعلها إحدى خطواتك اليوم.";
+
+  }
+
+
+  if(
+    lastAchievement &&
+    todayPercent<75
+  ){
+
+    advice +=
+      " وتذكر أن لديك إنجازًا سابقًا محفوظًا: «"+
+      lastAchievement+
+      "». استخدمه كنقطة بداية، ولا تبدأ من الصفر.";
+
+  }
+
+
+  if(
+    recurringWeakness &&
+    todayPercent<40
+  ){
+
+    advice +=
+      " اقتراح رفيق الآن: خصص 10 إلى 20 دقيقة فقط لمعالجة «"+
+      recurringWeakness.text+
+      "»، ثم توقف أو انتقل لعادة أخرى. الهدف هو كسر التكرار بخطوة صغيرة.";
+
+  }
+
+
+  /* =========================
+     💾 حفظ النصيحة
+  ========================= */
 
   const lastAdvice=
     rafiqMemory
