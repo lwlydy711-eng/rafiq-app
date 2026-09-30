@@ -1590,4 +1590,43 @@ render();
 </script>
 
 </body>
+   <script>
+/* =========================
+   التذكيرات
+========================= */
+
+function addReminder(){
+
+let name=prompt(
+"ما الذي تريد تذكيرك به؟\nمثال: قراءة القرآن"
+);
+
+if(!name || !name.trim()) return;
+
+let time=prompt(
+"ما وقت التذكير؟\nمثال: 06:30"
+);
+
+if(!time) return;
+
+let reminders=
+JSON.parse(localStorage.getItem("reminders")||"[]");
+
+reminders.push({
+id:"reminder_"+Date.now(),
+name:name.trim(),
+time:time,
+active:true
+});
+
+localStorage.setItem(
+"reminders",
+JSON.stringify(reminders)
+);
+
+alert("تمت إضافة التذكير 🔔");
+
+}
+
+</script>
 </html>
