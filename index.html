@@ -22,15 +22,8 @@ padding:25px 18px;
 border-radius:0 0 25px 25px;
 }
 
-h1{
-margin:0 0 6px;
-font-size:28px;
-}
-
-header p{
-margin:0;
-opacity:.85;
-}
+h1{margin:0 0 6px;font-size:28px}
+header p{margin:0;opacity:.85}
 
 main{
 padding:18px;
@@ -50,6 +43,7 @@ height:12px;
 background:#e4e9e7;
 border-radius:20px;
 overflow:hidden;
+margin:8px 0;
 }
 
 .bar{
@@ -67,9 +61,7 @@ padding:13px 5px;
 border-bottom:1px solid #eee;
 }
 
-.habit:last-child{
-border:0;
-}
+.habit:last-child{border:0}
 
 .check{
 width:30px;
@@ -117,7 +109,7 @@ right:0;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:9px 5px;
+padding:8px 3px;
 box-shadow:0 -3px 15px #0002;
 z-index:100;
 }
@@ -125,8 +117,8 @@ z-index:100;
 nav button{
 background:transparent;
 color:#555;
-padding:8px 5px;
-font-size:12px;
+padding:7px 3px;
+font-size:11px;
 }
 
 nav button.active{
@@ -162,9 +154,7 @@ font-size:15px;
 background:white;
 }
 
-.hidden{
-display:none;
-}
+.hidden{display:none}
 
 /* التقويم */
 
@@ -207,7 +197,6 @@ align-items:center;
 justify-content:center;
 font-size:14px;
 cursor:pointer;
-position:relative;
 border:1px solid transparent;
 }
 
@@ -221,24 +210,9 @@ border:2px solid #075b4d;
 font-weight:bold;
 }
 
-.day.green{
-background:#bfe8d9;
-color:#075b4d;
-}
-
-.day.yellow{
-background:#fff0b8;
-color:#705800;
-}
-
-.day.red{
-background:#ffd0d0;
-color:#9b2020;
-}
-
-.day.selected{
-box-shadow:0 0 0 3px #075b4d55;
-}
+.day.green{background:#bfe8d9;color:#075b4d}
+.day.yellow{background:#fff0b8;color:#705800}
+.day.red{background:#ffd0d0;color:#9b2020}
 
 .legend{
 display:flex;
@@ -261,49 +235,73 @@ border-radius:50%;
 display:inline-block;
 }
 
-.dot.green{
-background:#66bd9e;
+.dot.green{background:#66bd9e}
+.dot.yellow{background:#e8c84c}
+.dot.red{background:#e97979}
+
+/* الأهداف */
+
+.goal{
+background:#f7f9f8;
+border-radius:15px;
+padding:15px;
+margin-bottom:12px;
+border:1px solid #edf0ee;
 }
 
-.dot.yellow{
-background:#e8c84c;
+.goal-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
 }
 
-.dot.red{
-background:#e97979;
+.goal-name{
+font-size:17px;
+font-weight:bold;
 }
 
-.day-details{
-margin-top:15px;
-border-top:1px solid #eee;
-padding-top:15px;
-}
-
-.detail-item{
-padding:9px 0;
-border-bottom:1px solid #eee;
-}
-
-.detail-item:last-child{
-border:0;
-}
-
-.badge{
-display:inline-block;
+.goal-category{
+font-size:12px;
+background:#e5f2ee;
+color:#075b4d;
 padding:5px 9px;
 border-radius:8px;
-font-size:12px;
-background:#f1f5f3;
 }
 
-.danger{
+.goal-progress{
+height:10px;
+background:#e3e8e6;
+border-radius:20px;
+overflow:hidden;
+margin:10px 0;
+}
+
+.goal-progress-bar{
+height:100%;
+background:#0b806d;
+width:0%;
+}
+
+.goal-actions{
+display:flex;
+gap:7px;
+margin-top:10px;
+}
+
+.goal-actions button{
+padding:8px 10px;
+font-size:13px;
+}
+
+.delete{
 background:#9b2020;
 }
 
-.empty-message{
+.empty{
 text-align:center;
 color:#777;
-padding:15px;
+padding:20px;
 }
 </style>
 </head>
@@ -317,7 +315,7 @@ padding:15px;
 
 <main>
 
-<!-- الصفحة الرئيسية -->
+<!-- يومي -->
 
 <section id="home">
 
@@ -334,44 +332,32 @@ padding:15px;
 <div class="bar" id="bar"></div>
 </div>
 
-<p style="margin-bottom:0">
+<p>
 🔥 السلسلة الحالية:
 <b id="streak">0</b> يوم
 </p>
 </div>
 
-
 <div class="card">
-
 <h3>✅ عادات اليوم</h3>
-
 <div id="habits"></div>
 
 <button class="add" onclick="addHabit()">
 ＋ إضافة عادة
 </button>
-
 </div>
 
-
 <div class="card">
-
 <h3>📝 مراجعة اليوم</h3>
 
-<textarea
-id="achievement"
-placeholder="أهم إنجاز اليوم">
-</textarea>
+<textarea id="achievement"
+placeholder="أهم إنجاز اليوم"></textarea>
 
-<textarea
-id="weakness"
-placeholder="ما الذي قصّرت فيه؟">
-</textarea>
+<textarea id="weakness"
+placeholder="ما الذي قصّرت فيه؟"></textarea>
 
-<textarea
-id="tomorrow"
-placeholder="أهم مهمة غدًا">
-</textarea>
+<textarea id="tomorrow"
+placeholder="أهم مهمة غدًا"></textarea>
 
 <label>⭐ تقييم اليوم من 1 إلى 10</label>
 
@@ -385,7 +371,6 @@ placeholder="مثلاً: 8">
 <button onclick="saveReview()">
 حفظ المراجعة
 </button>
-
 </div>
 
 </section>
@@ -398,17 +383,12 @@ placeholder="مثلاً: 8">
 <div class="card">
 
 <div class="calendar-head">
-
 <button onclick="changeMonth(-1)">‹</button>
-
 <div class="month-title" id="monthTitle"></div>
-
 <button onclick="changeMonth(1)">›</button>
-
 </div>
 
 <div class="calendar">
-
 <div class="weekday">الأحد</div>
 <div class="weekday">الإثنين</div>
 <div class="weekday">الثلاثاء</div>
@@ -416,40 +396,19 @@ placeholder="مثلاً: 8">
 <div class="weekday">الخميس</div>
 <div class="weekday">الجمعة</div>
 <div class="weekday">السبت</div>
-
 </div>
 
-<div
-class="calendar"
-id="calendarDays">
-</div>
+<div class="calendar" id="calendarDays"></div>
 
 <div class="legend">
-
-<span>
-<i class="dot green"></i>
-مكتمل
-</span>
-
-<span>
-<i class="dot yellow"></i>
-متوسط
-</span>
-
-<span>
-<i class="dot red"></i>
-ضعيف
-</span>
-
+<span><i class="dot green"></i> مكتمل</span>
+<span><i class="dot yellow"></i> متوسط</span>
+<span><i class="dot red"></i> ضعيف</span>
 </div>
 
-<div
-id="dayDetails"
-class="day-details hidden">
-</div>
+<div id="dayDetails"></div>
 
 </div>
-
 </section>
 
 
@@ -493,12 +452,35 @@ class="day-details hidden">
 
 </div>
 
+<div class="card">
+<h3>📈 أداء العادات</h3>
+<div id="habitStats"></div>
+</div>
+
+</section>
+
+
+<!-- الأهداف -->
+
+<section id="goals" class="hidden">
 
 <div class="card">
 
-<h3>📈 أداء العادات</h3>
+<h2>🎯 أهدافي</h2>
 
-<div id="habitStats"></div>
+<p>
+الأهداف التي أريد تحقيقها خطوة بخطوة.
+</p>
+
+<button class="add" onclick="addGoal()">
+＋ إضافة هدف جديد
+</button>
+
+</div>
+
+<div class="card">
+
+<div id="goalsList"></div>
 
 </div>
 
@@ -523,20 +505,19 @@ class="day-details hidden">
 
 </div>
 
-
 <div class="card">
 
 <h3>💾 البيانات</h3>
 
-<p>
-بياناتك محفوظة على هذا الجهاز.
-</p>
+<p>بياناتك محفوظة على هذا الجهاز.</p>
 
 <button onclick="exportData()">
 نسخ احتياطي
 </button>
 
-<button onclick="resetData()" style="background:#9b2020">
+<button
+onclick="resetData()"
+style="background:#9b2020">
 حذف البيانات
 </button>
 
@@ -547,37 +528,28 @@ class="day-details hidden">
 </main>
 
 
-<!-- القائمة السفلية -->
+<!-- القائمة -->
 
 <nav>
 
-<button
-class="active"
-onclick="show('home',this)">
-🏠
-<br>
-يومي
+<button class="active" onclick="show('home',this)">
+🏠<br>يومي
 </button>
 
-<button
-onclick="show('calendar',this)">
-📅
-<br>
-التقويم
+<button onclick="show('calendar',this)">
+📅<br>التقويم
 </button>
 
-<button
-onclick="show('stats',this)">
-📊
-<br>
-الإحصائيات
+<button onclick="show('stats',this)">
+📊<br>الإحصائيات
 </button>
 
-<button
-onclick="show('settings',this)">
-⚙️
-<br>
-الإعدادات
+<button onclick="show('goals',this)">
+🎯<br>أهدافي
+</button>
+
+<button onclick="show('settings',this)">
+⚙️<br>الإعدادات
 </button>
 
 </nav>
@@ -586,10 +558,10 @@ onclick="show('settings',this)">
 <script>
 
 /* =========================
-   العادات الافتراضية
+   العادات
 ========================= */
 
-const defaults = [
+const defaults=[
 "الصلاة والعبادة",
 "القرآن 15 دقيقة",
 "المشي",
@@ -600,115 +572,43 @@ const defaults = [
 "النوم"
 ];
 
+let oldHabits=
+JSON.parse(localStorage.getItem("habits")||"null");
 
-/* =========================
-   أدوات التاريخ
-========================= */
-
-function localDateKey(date = new Date()){
-
-let y = date.getFullYear();
-
-let m = String(date.getMonth()+1).padStart(2,"0");
-
-let d = String(date.getDate()).padStart(2,"0");
-
-return `${y}-${m}-${d}`;
-
-}
-
-
-/* =========================
-   تحميل البيانات
-========================= */
-
-let oldHabits =
-JSON.parse(localStorage.getItem("habits") || "null");
-
-let habits =
-oldHabits || defaults.map((name,index)=>({
+let habits=
+oldHabits||defaults.map((name,index)=>({
 id:"habit_"+Date.now()+"_"+index,
 name:name
 }));
 
+if(oldHabits && oldHabits.length &&
+typeof oldHabits[0]==="string"){
 
-/*
-تحويل العادات القديمة إلى عادات
-بمعرّفات ثابتة
-*/
-
-if(oldHabits && oldHabits.length){
-
-if(typeof oldHabits[0] === "string"){
-
-habits = oldHabits.map((name,index)=>({
+habits=oldHabits.map((name,index)=>({
 id:"habit_old_"+index+"_"+Date.now(),
 name:name
 }));
 
 }
 
-}
-
-
-let data =
-JSON.parse(localStorage.getItem("daily") || "{}");
-
-
-let today = localDateKey();
-
-
-if(!data[today]){
-
-data[today] = {
-done:[],
-achievement:"",
-weakness:"",
-tomorrow:"",
-rating:""
-};
-
-}
-
 
 /* =========================
-   حفظ البيانات
+   البيانات اليومية
 ========================= */
 
-function save(){
+let data=
+JSON.parse(localStorage.getItem("daily")||"{}");
 
-localStorage.setItem(
-"habits",
-JSON.stringify(habits)
-);
+function localDateKey(date=new Date()){
 
-localStorage.setItem(
-"daily",
-JSON.stringify(data)
-);
+let y=date.getFullYear();
+let m=String(date.getMonth()+1).padStart(2,"0");
+let d=String(date.getDate()).padStart(2,"0");
 
+return `${y}-${m}-${d}`;
 }
 
-
-/* =========================
-   التاريخ في الصفحة الرئيسية
-========================= */
-
-document.getElementById("date").textContent =
-new Date().toLocaleDateString(
-"ar-YE",
-{
-weekday:"long",
-year:"numeric",
-month:"long",
-day:"numeric"
-}
-);
-
-
-/* =========================
-   إنشاء سجل اليوم
-========================= */
+let today=localDateKey();
 
 function ensureDay(key){
 
@@ -728,7 +628,51 @@ rating:""
 
 
 /* =========================
-   حساب إنجاز يوم
+   الأهداف
+========================= */
+
+let goals=
+JSON.parse(localStorage.getItem("goals")||"[]");
+
+
+function save(){
+
+localStorage.setItem(
+"habits",
+JSON.stringify(habits)
+);
+
+localStorage.setItem(
+"daily",
+JSON.stringify(data)
+);
+
+localStorage.setItem(
+"goals",
+JSON.stringify(goals)
+);
+
+}
+
+
+/* =========================
+   الصفحة الرئيسية
+========================= */
+
+document.getElementById("date").textContent=
+new Date().toLocaleDateString(
+"ar-YE",
+{
+weekday:"long",
+year:"numeric",
+month:"long",
+day:"numeric"
+}
+);
+
+
+/* =========================
+   نسبة اليوم
 ========================= */
 
 function getDayPercent(key){
@@ -739,43 +683,41 @@ let total=habits.length;
 
 if(total===0)return 0;
 
-let done=data[key].done || [];
+let done=data[key].done||[];
 
-let validDone=done.filter(id =>
+let valid=done.filter(id=>
 habits.some(h=>h.id===id)
 );
 
-return Math.round(
-validDone.length / total * 100
-);
-
+return Math.round(valid.length/total*100);
 }
 
 
 /* =========================
-   عرض الصفحة الرئيسية
+   عرض التطبيق
 ========================= */
 
 function render(){
+
+ensureDay(today);
 
 let box=document.getElementById("habits");
 
 box.innerHTML="";
 
-
 habits.forEach(h=>{
 
-let d =
-(data[today].done || []).includes(h.id);
+let done=
+data[today].done.includes(h.id);
 
-box.innerHTML += `
+box.innerHTML+=`
 
-<div class="habit ${d?'done':''}">
+<div class="habit ${done?'done':''}">
 
 <button
 class="check"
 onclick="toggle('${h.id}')">
-${d?'✓':''}
+${done?'✓':''}
 </button>
 
 <span class="name">
@@ -791,56 +733,45 @@ ${escapeHTML(h.name)}
 
 let total=habits.length;
 
-let done=(data[today].done || [])
-.filter(id=>habits.some(h=>h.id===id))
-.length;
+let doneCount=
+data[today].done.filter(id=>
+habits.some(h=>h.id===id)
+).length;
 
-
-let p=total
-?Math.round(done/total*100)
-:0;
-
+let p=total?
+Math.round(doneCount/total*100):0;
 
 document.getElementById("percent")
 .textContent=p+"%";
 
-
 document.getElementById("bar")
 .style.width=p+"%";
 
-
 document.getElementById("todayDone")
-.textContent=done;
-
+.textContent=doneCount;
 
 document.getElementById("todayTotal")
 .textContent=total;
 
-
 document.getElementById("achievement")
 .value=data[today].achievement||"";
-
 
 document.getElementById("weakness")
 .value=data[today].weakness||"";
 
-
 document.getElementById("tomorrow")
 .value=data[today].tomorrow||"";
-
 
 document.getElementById("rating")
 .value=data[today].rating||"";
 
-
-renderManage();
-
-renderStats();
-
-renderCalendar();
-
 document.getElementById("streak")
 .textContent=getCurrentStreak();
+
+renderManage();
+renderStats();
+renderGoals();
+renderCalendar();
 
 }
 
@@ -853,24 +784,17 @@ function toggle(id){
 
 ensureDay(today);
 
-let a=data[today].done || [];
+let a=data[today].done;
 
 let n=a.indexOf(id);
 
 if(n>=0){
-
 a.splice(n,1);
-
 }else{
-
 a.push(id);
-
 }
 
-data[today].done=a;
-
 save();
-
 render();
 
 }
@@ -882,25 +806,18 @@ render();
 
 function addHabit(){
 
-let n=prompt(
-"اكتب اسم العادة الجديدة:"
-);
+let n=prompt("اكتب اسم العادة الجديدة:");
 
-if(n && n.trim()){
+if(n&&n.trim()){
 
 habits.push({
-
-id:
-"habit_"+Date.now()+"_"+Math.random()
+id:"habit_"+Date.now()+"_"+Math.random()
 .toString(36)
 .substring(2,8),
-
 name:n.trim()
-
 });
 
 save();
-
 render();
 
 }
@@ -918,16 +835,11 @@ let h=habits.find(x=>x.id===id);
 
 if(!h)return;
 
-if(confirm(
-"هل تريد حذف عادة: "+h.name+" ؟"
-)){
+if(confirm("هل تريد حذف عادة: "+h.name+" ؟")){
 
-habits=habits.filter(
-x=>x.id!==id
-);
+habits=habits.filter(x=>x.id!==id);
 
 save();
-
 render();
 
 }
@@ -935,16 +847,10 @@ render();
 }
 
 
-/* =========================
-   إدارة العادات
-========================= */
-
 function renderManage(){
 
 document.getElementById("manage")
-.innerHTML=
-
-habits.map(h=>`
+.innerHTML=habits.map(h=>`
 
 <div class="habit">
 
@@ -953,7 +859,7 @@ ${escapeHTML(h.name)}
 </span>
 
 <button
-class="danger"
+class="delete"
 onclick="deleteHabit('${h.id}')">
 حذف
 </button>
@@ -966,41 +872,34 @@ onclick="deleteHabit('${h.id}')">
 
 
 /* =========================
-   مراجعة اليوم
+   المراجعة
 ========================= */
 
 function saveReview(){
 
 ensureDay(today);
 
-data[today].achievement =
+data[today].achievement=
 document.getElementById("achievement").value;
 
-data[today].weakness =
+data[today].weakness=
 document.getElementById("weakness").value;
 
-data[today].tomorrow =
+data[today].tomorrow=
 document.getElementById("tomorrow").value;
 
-let rating =
-document.getElementById("rating").value;
+let rating=
+Number(document.getElementById("rating").value);
 
-if(rating){
-
-rating=Math.max(
-1,
-Math.min(10,Number(rating))
-);
-
-}
-
+if(rating>=1 && rating<=10){
 data[today].rating=rating;
+}else{
+data[today].rating="";
+}
 
 save();
 
-alert(
-"تم حفظ مراجعة اليوم ✅"
-);
+alert("تم حفظ مراجعة اليوم ✅");
 
 render();
 
@@ -1008,42 +907,27 @@ render();
 
 
 /* =========================
-   التنقل بين الصفحات
+   التنقل
 ========================= */
 
 function show(id,btn){
 
-document
-.querySelectorAll("main section")
-.forEach(x=>
-x.classList.add("hidden")
-);
+document.querySelectorAll("main section")
+.forEach(x=>x.classList.add("hidden"));
 
-document
-.getElementById(id)
+document.getElementById(id)
 .classList.remove("hidden");
 
-
-document
-.querySelectorAll("nav button")
-.forEach(x=>
-x.classList.remove("active")
-);
+document.querySelectorAll("nav button")
+.forEach(x=>x.classList.remove("active"));
 
 btn.classList.add("active");
 
+if(id==="calendar")renderCalendar();
 
-if(id==="calendar"){
+if(id==="stats")renderStats();
 
-renderCalendar();
-
-}
-
-if(id==="stats"){
-
-renderStats();
-
-}
+if(id==="goals")renderGoals();
 
 }
 
@@ -1067,16 +951,13 @@ renderCalendar();
 
 function renderCalendar(){
 
-let title=document.getElementById(
-"monthTitle"
-);
+let title=
+document.getElementById("monthTitle");
 
-let box=document.getElementById(
-"calendarDays"
-);
+let box=
+document.getElementById("calendarDays");
 
-if(!title || !box)return;
-
+if(!title||!box)return;
 
 title.textContent=
 calendarDate.toLocaleDateString(
@@ -1087,33 +968,24 @@ year:"numeric"
 }
 );
 
-
 box.innerHTML="";
-
 
 let year=calendarDate.getFullYear();
 
 let month=calendarDate.getMonth();
 
-
 let firstDay=
-new Date(year,month,1)
-.getDay();
-
+new Date(year,month,1).getDay();
 
 let daysInMonth=
-new Date(year,month+1,0)
-.getDate();
-
+new Date(year,month+1,0).getDate();
 
 for(let i=0;i<firstDay;i++){
 
-box.innerHTML+=`
-<div class="day empty"></div>
-`;
+box.innerHTML+=
+`<div class="day empty"></div>`;
 
 }
-
 
 for(let day=1;day<=daysInMonth;day++){
 
@@ -1122,30 +994,16 @@ new Date(year,month,day);
 
 let key=localDateKey(date);
 
-let percent=getDayPercent(key);
+let p=getDayPercent(key);
 
 let cls="";
 
-if(percent>=80){
-
-cls="green";
-
-}else if(percent>=40){
-
-cls="yellow";
-
-}else if(percent>0){
-
-cls="red";
-
-}
-
+if(p>=80)cls="green";
+else if(p>=40)cls="yellow";
+else if(p>0)cls="red";
 
 let isToday=
-key===today
-?"today"
-:"";
-
+key===today?"today":"";
 
 box.innerHTML+=`
 
@@ -1164,31 +1022,22 @@ ${day}
 }
 
 
-/* =========================
-   تفاصيل اليوم
-========================= */
-
 function showDayDetails(key){
 
 ensureDay(key);
 
-let box=document.getElementById(
-"dayDetails"
-);
+let box=
+document.getElementById("dayDetails");
 
 let percent=getDayPercent(key);
 
-let done=data[key].done || [];
+let done=data[key].done||[];
 
-let doneNames=habits
-.filter(h=>done.includes(h.id))
-.map(h=>h.name);
+let completed=habits
+.filter(h=>done.includes(h.id));
 
-
-let missingNames=habits
-.filter(h=>!done.includes(h.id))
-.map(h=>h.name);
-
+let missing=habits
+.filter(h=>!done.includes(h.id));
 
 let dateText=
 new Date(key+"T12:00:00")
@@ -1202,11 +1051,9 @@ day:"numeric"
 }
 );
 
-
-box.classList.remove("hidden");
-
-
 box.innerHTML=`
+
+<div class="card">
 
 <h3>📅 ${dateText}</h3>
 
@@ -1215,79 +1062,42 @@ box.innerHTML=`
 <strong>${percent}%</strong>
 </p>
 
-<div class="detail-item">
-
-<b>✅ العادات المكتملة</b>
-
 <p>
+<b>✅ العادات المكتملة</b><br>
 ${
-doneNames.length
-?doneNames.map(x=>
-`<span class="badge">${escapeHTML(x)}</span>`
-).join(" ")
+completed.length
+?completed.map(h=>escapeHTML(h.name)).join("، ")
 :"لا توجد"
 }
 </p>
 
-</div>
-
-
-<div class="detail-item">
-
-<b>⭕ العادات غير المكتملة</b>
-
 <p>
+<b>⭕ العادات غير المكتملة</b><br>
 ${
-missingNames.length
-?missingNames.map(x=>
-`<span class="badge">${escapeHTML(x)}</span>`
-).join(" ")
+missing.length
+?missing.map(h=>escapeHTML(h.name)).join("، ")
 :"تم إكمال جميع العادات 🎉"
 }
 </p>
 
-</div>
-
-
-<div class="detail-item">
-
-<b>📝 أهم إنجاز</b>
-
 <p>
-${escapeHTML(data[key].achievement || "لم يتم تسجيله")}
+<b>📝 أهم إنجاز</b><br>
+${escapeHTML(data[key].achievement||"لم يتم تسجيله")}
 </p>
 
-</div>
-
-
-<div class="detail-item">
-
-<b>ما الذي قصّرت فيه؟</b>
-
 <p>
-${escapeHTML(data[key].weakness || "لم يتم تسجيله")}
+<b>ما الذي قصّرت فيه؟</b><br>
+${escapeHTML(data[key].weakness||"لم يتم تسجيله")}
 </p>
 
-</div>
-
-
-<div class="detail-item">
-
-<b>🎯 مهمة الغد</b>
-
 <p>
-${escapeHTML(data[key].tomorrow || "لم يتم تسجيلها")}
+<b>🎯 مهمة الغد</b><br>
+${escapeHTML(data[key].tomorrow||"لم يتم تسجيلها")}
 </p>
 
-</div>
-
-
-<div class="detail-item">
-
-<b>⭐ تقييم اليوم</b>
-
 <p>
-${data[key].rating || "لم يتم التقييم"} / 10
+<b>⭐ تقييم اليوم:</b>
+${data[key].rating||"لم يتم التقييم"} / 10
 </p>
 
 </div>
@@ -1313,7 +1123,6 @@ let ratingTotal=0;
 
 let ratingCount=0;
 
-
 dates.forEach(key=>{
 
 let p=getDayPercent(key);
@@ -1321,60 +1130,45 @@ let p=getDayPercent(key);
 if(p>0){
 
 totalPercent+=p;
-
 recordedDays++;
 
 }
 
 let r=Number(data[key].rating);
 
-if(r>=1 && r<=10){
+if(r>=1&&r<=10){
 
 ratingTotal+=r;
-
 ratingCount++;
 
 }
 
 });
 
-
 let average=
-recordedDays
-?Math.round(totalPercent/recordedDays)
-:0;
-
+recordedDays?
+Math.round(totalPercent/recordedDays):0;
 
 let ratingAverage=
-ratingCount
-?(ratingTotal/ratingCount).toFixed(1)
-:0;
-
+ratingCount?
+(ratingTotal/ratingCount).toFixed(1):0;
 
 document.getElementById("days")
 .textContent=recordedDays;
 
-
 document.getElementById("average")
 .textContent=average+"%";
-
 
 document.getElementById("ratingAverage")
 .textContent=ratingAverage;
 
-
 document.getElementById("bestStreak")
 .textContent=getBestStreak();
-
 
 renderHabitStats();
 
 }
 
-
-/* =========================
-   إحصائيات كل عادة
-========================= */
 
 function renderHabitStats(){
 
@@ -1384,20 +1178,16 @@ document.getElementById("habitStats");
 if(!habits.length){
 
 box.innerHTML=
-'<div class="empty-message">لا توجد عادات</div>';
+'<div class="empty">لا توجد عادات</div>';
 
 return;
 
 }
 
-
-box.innerHTML=
-habits.map(h=>{
+box.innerHTML=habits.map(h=>{
 
 let recorded=0;
-
 let done=0;
-
 
 Object.keys(data).forEach(key=>{
 
@@ -1406,21 +1196,16 @@ if(data[key].done){
 recorded++;
 
 if(data[key].done.includes(h.id)){
-
 done++;
-
 }
 
 }
 
 });
 
-
-let percent=
-recorded
-?Math.round(done/recorded*100)
-:0;
-
+let p=
+recorded?
+Math.round(done/recorded*100):0;
 
 return `
 
@@ -1430,7 +1215,7 @@ return `
 ${escapeHTML(h.name)}
 </span>
 
-<b>${percent}%</b>
+<b>${p}%</b>
 
 </div>
 
@@ -1442,7 +1227,7 @@ ${escapeHTML(h.name)}
 
 
 /* =========================
-   السلسلة الحالية
+   السلسلة
 ========================= */
 
 function getCurrentStreak(){
@@ -1450,7 +1235,6 @@ function getCurrentStreak(){
 let streak=0;
 
 let d=new Date();
-
 
 while(true){
 
@@ -1460,9 +1244,7 @@ if(getDayPercent(key)>0){
 
 streak++;
 
-d.setDate(
-d.getDate()-1
-);
+d.setDate(d.getDate()-1);
 
 }else{
 
@@ -1479,48 +1261,36 @@ return streak;
 }
 
 
-/* =========================
-   أطول سلسلة
-========================= */
-
 function getBestStreak(){
 
-let keys=Object.keys(data)
+let keys=
+Object.keys(data)
 .filter(key=>getDayPercent(key)>0)
 .sort();
 
-
 if(!keys.length)return 0;
-
 
 let best=1;
 
 let current=1;
 
-
 for(let i=1;i<keys.length;i++){
 
-let prev=
+let previous=
 new Date(keys[i-1]+"T12:00:00");
 
-let curr=
+let currentDate=
 new Date(keys[i]+"T12:00:00");
-
 
 let diff=
 Math.round(
-(curr-prev)/86400000
+(currentDate-previous)/86400000
 );
-
 
 if(diff===1){
 
 current++;
-
-best=Math.max(
-best,
-current
-);
+best=Math.max(best,current);
 
 }else{
 
@@ -1536,17 +1306,190 @@ return best;
 
 
 /* =========================
-   حماية النصوص
+   الأهداف
 ========================= */
 
-function escapeHTML(text){
+function addGoal(){
 
-return String(text)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+let name=prompt(
+"ما اسم الهدف؟\nمثال: حفظ جزء عم"
+);
+
+if(!name||!name.trim())return;
+
+
+let category=prompt(
+"اختر التصنيف:\n1 ديني\n2 صحتي\n3 مستقبلي\n4 شخصي"
+);
+
+let categories={
+"1":"ديني",
+"2":"صحتي",
+"3":"مستقبلي",
+"4":"شخصي"
+};
+
+category=categories[category]||"شخصي";
+
+
+let target=prompt(
+"ما نسبة التقدم الحالية؟\nاكتب رقمًا من 0 إلى 100"
+);
+
+target=Number(target);
+
+if(isNaN(target))target=0;
+
+target=Math.max(
+0,
+Math.min(100,target)
+);
+
+
+goals.push({
+
+id:"goal_"+Date.now(),
+
+name:name.trim(),
+
+category:category,
+
+progress:target,
+
+start:"",
+
+end:"",
+
+created:localDateKey()
+
+});
+
+
+save();
+
+renderGoals();
+
+alert("تمت إضافة الهدف 🎯");
+
+}
+
+
+function renderGoals(){
+
+let box=
+document.getElementById("goalsList");
+
+if(!box)return;
+
+if(!goals.length){
+
+box.innerHTML=`
+<div class="empty">
+لا توجد أهداف حتى الآن.<br>
+ابدأ بإضافة أول هدف لك 🎯
+</div>
+`;
+
+return;
+
+}
+
+
+box.innerHTML=
+goals.map(g=>`
+
+<div class="goal">
+
+<div class="goal-top">
+
+<div class="goal-name">
+${escapeHTML(g.name)}
+</div>
+
+<span class="goal-category">
+${escapeHTML(g.category)}
+</span>
+
+</div>
+
+<p>
+التقدم:
+<b>${g.progress}%</b>
+</p>
+
+<div class="goal-progress">
+
+<div
+class="goal-progress-bar"
+style="width:${g.progress}%">
+</div>
+
+</div>
+
+<div class="goal-actions">
+
+<button onclick="increaseGoal('${g.id}')">
+＋ تقدم
+</button>
+
+<button
+class="delete"
+onclick="deleteGoal('${g.id}')">
+حذف
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function increaseGoal(id){
+
+let goal=goals.find(g=>g.id===id);
+
+if(!goal)return;
+
+let value=prompt(
+"اكتب نسبة التقدم الجديدة من 0 إلى 100",
+goal.progress
+);
+
+if(value===null)return;
+
+value=Number(value);
+
+if(isNaN(value))return;
+
+goal.progress=
+Math.max(0,Math.min(100,value));
+
+save();
+
+renderGoals();
+
+}
+
+
+/* =========================
+   حذف هدف
+========================= */
+
+function deleteGoal(id){
+
+if(!confirm(
+"هل تريد حذف هذا الهدف؟"
+))return;
+
+goals=
+goals.filter(g=>g.id!==id);
+
+save();
+
+renderGoals();
 
 }
 
@@ -1560,9 +1503,9 @@ function exportData(){
 let backup={
 habits:habits,
 daily:data,
+goals:goals,
 exportedAt:new Date().toISOString()
 };
-
 
 let text=
 JSON.stringify(
@@ -1571,33 +1514,26 @@ null,
 2
 );
 
-
 if(
 navigator.clipboard &&
 navigator.clipboard.writeText
 ){
 
 navigator.clipboard.writeText(text)
-.then(()=>{
-
-alert(
+.then(()=>alert(
 "تم نسخ بياناتك الاحتياطية ✅"
-);
-
-})
+))
 .catch(()=>{
-
 prompt(
-"انسخ البيانات التالية واحفظها:",
+"انسخ البيانات واحفظها:",
 text
 );
-
 });
 
 }else{
 
 prompt(
-"انسخ البيانات التالية واحفظها:",
+"انسخ البيانات واحفظها:",
 text
 );
 
@@ -1613,13 +1549,12 @@ text
 function resetData(){
 
 if(!confirm(
-"تحذير: سيتم حذف جميع العادات والمراجعات والإحصائيات. هل أنت متأكد؟"
+"تحذير: سيتم حذف جميع العادات والمراجعات والأهداف والإحصائيات. هل أنت متأكد؟"
 ))return;
 
-
 localStorage.removeItem("habits");
-
 localStorage.removeItem("daily");
+localStorage.removeItem("goals");
 
 location.reload();
 
@@ -1627,8 +1562,26 @@ location.reload();
 
 
 /* =========================
-   تشغيل التطبيق
+   حماية النص
 ========================= */
+
+function escapeHTML(text){
+
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   تشغيل
+========================= */
+
+ensureDay(today);
 
 save();
 
