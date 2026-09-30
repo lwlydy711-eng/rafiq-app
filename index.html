@@ -92,9 +92,7 @@ color:white;
 font-size:15px;
 }
 
-button:active{
-transform:scale(.97);
-}
+button:active{transform:scale(.97)}
 
 .add{
 width:100%;
@@ -109,7 +107,7 @@ right:0;
 background:white;
 display:flex;
 justify-content:space-around;
-padding:8px 3px;
+padding:8px 2px;
 box-shadow:0 -3px 15px #0002;
 z-index:100;
 }
@@ -117,8 +115,8 @@ z-index:100;
 nav button{
 background:transparent;
 color:#555;
-padding:7px 3px;
-font-size:11px;
+padding:7px 2px;
+font-size:10px;
 }
 
 nav button.active{
@@ -142,9 +140,7 @@ font-weight:bold;
 color:#075b4d;
 }
 
-textarea,
-input,
-select{
+textarea,input,select{
 width:100%;
 padding:12px;
 border:1px solid #ddd;
@@ -155,8 +151,6 @@ background:white;
 }
 
 .hidden{display:none}
-
-/* التقويم */
 
 .calendar-head{
 display:flex;
@@ -239,8 +233,6 @@ display:inline-block;
 .dot.yellow{background:#e8c84c}
 .dot.red{background:#e97979}
 
-/* الأهداف */
-
 .goal{
 background:#f7f9f8;
 border-radius:15px;
@@ -280,7 +272,6 @@ margin:10px 0;
 .goal-progress-bar{
 height:100%;
 background:#0b806d;
-width:0%;
 }
 
 .goal-actions{
@@ -296,6 +287,51 @@ font-size:13px;
 
 .delete{
 background:#9b2020;
+}
+
+.reminder{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+background:#f7f9f8;
+border-radius:15px;
+padding:14px;
+margin-bottom:10px;
+border:1px solid #edf0ee;
+}
+
+.reminder-info{
+flex:1;
+}
+
+.reminder-name{
+font-weight:bold;
+font-size:16px;
+}
+
+.reminder-time{
+color:#075b4d;
+font-size:13px;
+margin-top:4px;
+}
+
+.reminder-actions{
+display:flex;
+gap:5px;
+}
+
+.reminder-actions button{
+padding:7px 9px;
+font-size:12px;
+}
+
+.on{
+background:#0b806d;
+}
+
+.off{
+background:#777;
 }
 
 .empty{
@@ -314,8 +350,6 @@ padding:20px;
 </header>
 
 <main>
-
-<!-- يومي -->
 
 <section id="home">
 
@@ -376,8 +410,6 @@ placeholder="مثلاً: 8">
 </section>
 
 
-<!-- التقويم -->
-
 <section id="calendar" class="hidden">
 
 <div class="card">
@@ -411,8 +443,6 @@ placeholder="مثلاً: 8">
 </div>
 </section>
 
-
-<!-- الإحصائيات -->
 
 <section id="stats" class="hidden">
 
@@ -460,8 +490,6 @@ placeholder="مثلاً: 8">
 </section>
 
 
-<!-- الأهداف -->
-
 <section id="goals" class="hidden">
 
 <div class="card">
@@ -479,15 +507,42 @@ placeholder="مثلاً: 8">
 </div>
 
 <div class="card">
-
 <div id="goalsList"></div>
-
 </div>
 
 </section>
 
 
-<!-- الإعدادات -->
+<section id="reminders" class="hidden">
+
+<div class="card">
+
+<h2>🔔 التذكيرات</h2>
+
+<p>
+أضف تذكيرًا لعاداتك ومهامك اليومية.
+</p>
+
+<button class="add" onclick="addReminder()">
+＋ إضافة تذكير
+</button>
+
+<button
+class="add"
+onclick="requestNotificationPermission()">
+🔔 تفعيل إشعارات الهاتف
+</button>
+
+</div>
+
+<div class="card">
+
+<div id="remindersList"></div>
+
+</div>
+
+</section>
+
 
 <section id="settings" class="hidden">
 
@@ -528,8 +583,6 @@ style="background:#9b2020">
 </main>
 
 
-<!-- القائمة -->
-
 <nav>
 
 <button class="active" onclick="show('home',this)">
@@ -546,6 +599,10 @@ style="background:#9b2020">
 
 <button onclick="show('goals',this)">
 🎯<br>أهدافي
+</button>
+
+<button onclick="show('reminders',this)">
+🔔<br>التذكيرات
 </button>
 
 <button onclick="show('settings',this)">
@@ -635,6 +692,14 @@ let goals=
 JSON.parse(localStorage.getItem("goals")||"[]");
 
 
+/* =========================
+   التذكيرات
+========================= */
+
+let reminders=
+JSON.parse(localStorage.getItem("reminders")||"[]");
+
+
 function save(){
 
 localStorage.setItem(
@@ -650,6 +715,11 @@ JSON.stringify(data)
 localStorage.setItem(
 "goals",
 JSON.stringify(goals)
+);
+
+localStorage.setItem(
+"reminders",
+JSON.stringify(reminders)
 );
 
 }
@@ -771,6 +841,7 @@ document.getElementById("streak")
 renderManage();
 renderStats();
 renderGoals();
+renderReminders();
 renderCalendar();
 
 }
@@ -924,10 +995,9 @@ document.querySelectorAll("nav button")
 btn.classList.add("active");
 
 if(id==="calendar")renderCalendar();
-
 if(id==="stats")renderStats();
-
 if(id==="goals")renderGoals();
+if(id==="reminders")renderReminders();
 
 }
 
@@ -1116,11 +1186,8 @@ function renderStats(){
 let dates=Object.keys(data);
 
 let totalPercent=0;
-
 let recordedDays=0;
-
 let ratingTotal=0;
-
 let ratingCount=0;
 
 dates.forEach(key=>{
@@ -1128,19 +1195,15 @@ dates.forEach(key=>{
 let p=getDayPercent(key);
 
 if(p>0){
-
 totalPercent+=p;
 recordedDays++;
-
 }
 
 let r=Number(data[key].rating);
 
 if(r>=1&&r<=10){
-
 ratingTotal+=r;
 ratingCount++;
-
 }
 
 });
@@ -1233,7 +1296,6 @@ ${escapeHTML(h.name)}
 function getCurrentStreak(){
 
 let streak=0;
-
 let d=new Date();
 
 while(true){
@@ -1243,13 +1305,10 @@ let key=localDateKey(d);
 if(getDayPercent(key)>0){
 
 streak++;
-
 d.setDate(d.getDate()-1);
 
 }else{
-
 break;
-
 }
 
 if(streak>1000)break;
@@ -1271,7 +1330,6 @@ Object.keys(data)
 if(!keys.length)return 0;
 
 let best=1;
-
 let current=1;
 
 for(let i=1;i<keys.length;i++){
@@ -1317,7 +1375,6 @@ let name=prompt(
 
 if(!name||!name.trim())return;
 
-
 let category=prompt(
 "اختر التصنيف:\n1 ديني\n2 صحتي\n3 مستقبلي\n4 شخصي"
 );
@@ -1330,7 +1387,6 @@ let categories={
 };
 
 category=categories[category]||"شخصي";
-
 
 let target=prompt(
 "ما نسبة التقدم الحالية؟\nاكتب رقمًا من 0 إلى 100"
@@ -1345,7 +1401,6 @@ target=Math.max(
 Math.min(100,target)
 );
 
-
 goals.push({
 
 id:"goal_"+Date.now(),
@@ -1356,14 +1411,9 @@ category:category,
 
 progress:target,
 
-start:"",
-
-end:"",
-
 created:localDateKey()
 
 });
-
 
 save();
 
@@ -1393,7 +1443,6 @@ box.innerHTML=`
 return;
 
 }
-
 
 box.innerHTML=
 goals.map(g=>`
@@ -1495,16 +1544,258 @@ renderGoals();
 
 
 /* =========================
+   التذكيرات
+========================= */
+
+function addReminder(){
+
+let name=prompt(
+"ما الذي تريد أن تتذكره؟\nمثال: قراءة القرآن"
+);
+
+if(!name||!name.trim())return;
+
+let time=prompt(
+"اكتب وقت التذكير بصيغة 24 ساعة\nمثال: 06:30"
+);
+
+if(!time)return;
+
+if(!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(time)){
+
+alert("الوقت غير صحيح.\nاستخدم مثال: 06:30");
+
+return;
+
+}
+
+reminders.push({
+
+id:"reminder_"+Date.now(),
+
+name:name.trim(),
+
+time:time,
+
+active:true,
+
+lastTriggered:""
+
+});
+
+save();
+
+renderReminders();
+
+alert("تمت إضافة التذكير 🔔");
+
+}
+
+
+function renderReminders(){
+
+let box=
+document.getElementById("remindersList");
+
+if(!box)return;
+
+if(!reminders.length){
+
+box.innerHTML=`
+<div class="empty">
+لا توجد تذكيرات حتى الآن.<br>
+أضف أول تذكير لك 🔔
+</div>
+`;
+
+return;
+
+}
+
+box.innerHTML=
+reminders.map(r=>`
+
+<div class="reminder">
+
+<div class="reminder-info">
+
+<div class="reminder-name">
+${escapeHTML(r.name)}
+</div>
+
+<div class="reminder-time">
+⏰ ${escapeHTML(r.time)}
+</div>
+
+</div>
+
+<div class="reminder-actions">
+
+<button
+class="${r.active?'on':'off'}"
+onclick="toggleReminder('${r.id}')">
+${r.active?'تشغيل':'متوقف'}
+</button>
+
+<button
+class="delete"
+onclick="deleteReminder('${r.id}')">
+حذف
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function toggleReminder(id){
+
+let r=
+reminders.find(x=>x.id===id);
+
+if(!r)return;
+
+r.active=!r.active;
+
+save();
+
+renderReminders();
+
+}
+
+
+function deleteReminder(id){
+
+if(!confirm("هل تريد حذف هذا التذكير؟"))return;
+
+reminders=
+reminders.filter(r=>r.id!==id);
+
+save();
+
+renderReminders();
+
+}
+
+
+/* =========================
+   إشعارات الهاتف
+========================= */
+
+function requestNotificationPermission(){
+
+if(!("Notification" in window)){
+
+alert(
+"هذا المتصفح لا يدعم إشعارات الويب."
+);
+
+return;
+
+}
+
+Notification.requestPermission()
+.then(permission=>{
+
+if(permission==="granted"){
+
+alert("تم تفعيل الإشعارات 🔔");
+
+}else{
+
+alert(
+"لم يتم السماح بالإشعارات."
+);
+
+}
+
+});
+
+}
+
+
+/* =========================
+   فحص التذكيرات
+========================= */
+
+function checkReminders(){
+
+let now=new Date();
+
+let hh=
+String(now.getHours()).padStart(2,"0");
+
+let mm=
+String(now.getMinutes()).padStart(2,"0");
+
+let current=hh+":"+mm;
+
+let dateKey=localDateKey();
+
+reminders.forEach(r=>{
+
+if(
+r.active &&
+r.time===current &&
+r.lastTriggered!==dateKey+"_"+current
+){
+
+r.lastTriggered=
+dateKey+"_"+current;
+
+save();
+
+if(
+"Notification" in window &&
+Notification.permission==="granted"
+){
+
+new Notification(
+"رفيق 🔔",
+{
+body:r.name
+}
+);
+
+}else{
+
+alert(
+"🔔 تذكير رفيق\n\n"+r.name
+);
+
+}
+
+}
+
+});
+
+}
+
+setInterval(checkReminders,30000);
+
+
+/* =========================
    النسخ الاحتياطي
 ========================= */
 
 function exportData(){
 
 let backup={
+
 habits:habits,
+
 daily:data,
+
 goals:goals,
+
+reminders:reminders,
+
 exportedAt:new Date().toISOString()
+
 };
 
 let text=
@@ -1549,12 +1840,13 @@ text
 function resetData(){
 
 if(!confirm(
-"تحذير: سيتم حذف جميع العادات والمراجعات والأهداف والإحصائيات. هل أنت متأكد؟"
+"تحذير: سيتم حذف جميع العادات والمراجعات والأهداف والتذكيرات والإحصائيات. هل أنت متأكد؟"
 ))return;
 
 localStorage.removeItem("habits");
 localStorage.removeItem("daily");
 localStorage.removeItem("goals");
+localStorage.removeItem("reminders");
 
 location.reload();
 
@@ -1578,7 +1870,7 @@ return String(text)
 
 
 /* =========================
-   تشغيل
+   التشغيل
 ========================= */
 
 ensureDay(today);
@@ -1590,43 +1882,4 @@ render();
 </script>
 
 </body>
-   <script>
-/* =========================
-   التذكيرات
-========================= */
-
-function addReminder(){
-
-let name=prompt(
-"ما الذي تريد تذكيرك به؟\nمثال: قراءة القرآن"
-);
-
-if(!name || !name.trim()) return;
-
-let time=prompt(
-"ما وقت التذكير؟\nمثال: 06:30"
-);
-
-if(!time) return;
-
-let reminders=
-JSON.parse(localStorage.getItem("reminders")||"[]");
-
-reminders.push({
-id:"reminder_"+Date.now(),
-name:name.trim(),
-time:time,
-active:true
-});
-
-localStorage.setItem(
-"reminders",
-JSON.stringify(reminders)
-);
-
-alert("تمت إضافة التذكير 🔔");
-
-}
-
-</script>
 </html>
