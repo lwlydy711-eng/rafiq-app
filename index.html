@@ -179,13 +179,42 @@ nav button{min-width:68px;font-size:10px}
 </section>
 
 <section id="settings" class="page">
+
 <div class="card">
+
 <div class="title">⚙️ الإعدادات</div>
-<button onclick="backupData()">📋 نسخ بياناتي</button>
-<br><br>
-<button class="danger" onclick="resetData()">🗑️ إعادة ضبط البيانات</button>
-<p class="small">بياناتك الحالية محفوظة على هذا الجهاز.</p>
+
+<div class="title" style="font-size:17px">
+📝 إدارة العادات
 </div>
+
+<input
+id="newHabitName"
+placeholder="اكتب اسم العادة الجديدة"
+>
+
+<button onclick="addHabit()">
+➕ إضافة عادة
+</button>
+
+<div id="habitManageList" style="margin-top:12px"></div>
+
+<hr style="border:0;border-top:1px solid #edf1ef;margin:18px 0">
+
+<button onclick="backupData()">📋 نسخ بياناتي</button>
+
+<br><br>
+
+<button class="danger" onclick="resetData()">
+🗑️ إعادة ضبط البيانات
+</button>
+
+<p class="small">
+بياناتك الحالية محفوظة على هذا الجهاز.
+</p>
+
+</div>
+
 </section>
 
 </main>
@@ -684,27 +713,207 @@ habitState[key]={};
 
 }
 
-/* التخزين الأساسي */
-
 d.done[habitId]=checked;
-
-/* التخزين المستقل */
 
 habitState[key][habitId]=checked;
 
-/* التأكد من حفظ اليوم */
-
 daily[key]=d;
 
-/* الحفظ الفوري */
-
 saveAll();
-
-/* تحديث الشاشة */
 
 renderHome();
 
 renderStats();
+
+}
+
+/* =====================================================
+   إدارة العادات
+===================================================== */
+
+function addHabit(){
+
+const input=
+document.getElementById(
+"newHabitName"
+);
+
+const name=
+input.value.trim();
+
+if(!name){
+
+alert(
+"اكتب اسم العادة أولًا."
+);
+
+return;
+
+}
+
+const exists=
+habits.some(
+h=>
+normalizeArabic(h.name)===
+normalizeArabic(name)
+);
+
+if(exists){
+
+alert(
+"هذه العادة موجودة بالفعل."
+);
+
+return;
+
+}
+
+habits.push({
+
+id:
+"h"+
+Date.now()+
+"_"+ 
+Math.random()
+.toString(36)
+.slice(2,8),
+
+name:name
+
+});
+
+saveAll();
+
+input.value="";
+
+renderHome();
+
+renderStats();
+
+renderHabitManageList();
+
+alert(
+"تمت إضافة العادة ✅"
+);
+
+}
+
+function deleteHabit(index){
+
+if(
+index<0||
+index>=habits.length
+){
+
+return;
+
+}
+
+const name=
+habits[index].name;
+
+if(
+!confirm(
+'هل تريد حذف عادة "'+
+name+
+'"؟'
+)
+){
+
+return;
+
+}
+
+const id=
+String(
+habits[index].id
+);
+
+habits.splice(
+index,
+1
+);
+
+/* حذف حالة هذه العادة من الأيام */
+
+Object.keys(daily).forEach(key=>{
+
+if(
+daily[key] &&
+daily[key].done
+){
+
+delete daily[key].done[id];
+
+}
+
+});
+
+/* حذف الحالة المستقلة */
+
+Object.keys(habitState).forEach(key=>{
+
+if(
+habitState[key]
+){
+
+delete habitState[key][id];
+
+}
+
+});
+
+saveAll();
+
+renderHome();
+
+renderStats();
+
+renderHabitManageList();
+
+alert(
+"تم حذف العادة 🗑️"
+);
+
+}
+
+function renderHabitManageList(){
+
+const box=
+document.getElementById(
+"habitManageList"
+);
+
+if(!box)return;
+
+if(!habits.length){
+
+box.innerHTML=
+'<div class="empty">لا توجد عادات.</div>';
+
+return;
+
+}
+
+box.innerHTML=
+habits.map((h,i)=>`
+
+<div class="habit">
+
+<label style="flex:1">
+${escapeHTML(h.name)}
+</label>
+
+<button
+class="danger"
+onclick="deleteHabit(${i})"
+>
+🗑️ حذف
+</button>
+
+</div>
+
+`).join("");
 
 }
 
@@ -930,6 +1139,9 @@ renderReminders();
 
 if(page==="ai")
 analyzeAI();
+
+if(page==="settings")
+renderHabitManageList();
 
 }
 
@@ -3168,7 +3380,9 @@ renderGoals();
 
 renderReminders();
 
+renderHabitManageList();
+
 </script>
 
 </body>
-</html>
+   </html>
